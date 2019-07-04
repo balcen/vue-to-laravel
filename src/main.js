@@ -4,37 +4,20 @@ import App from './App.vue'
 Vue.config.productionTip = false
 
 import VueRouter from 'vue-router'
-Vue.use(VueRouter);
+Vue.use(VueRouter)
+
+import VueAxios from 'vue-axios'
+import axios from 'axios'
+Vue.use(VueAxios, axios)
 
 import ClientsComponent from './components/ClientsComponent'
 import ProductsComponent from './components/ProductsComponent'
 import OrdersComponent from './components/OrdersComponent'
-import BillsComponent from './components/BillsComponent'
+import InvoicesComponent from './components/InvoicesComponent'
 import IndexComponent from './components/IndexComponent'
 import UploadComponent from './components/UploadComponent'
 
 const routes = [
-  {
-    name: 'clients',
-    path: '/clients',
-    component: ClientsComponent
-
-  },
-  {
-    name: 'products',
-    path: '/products',
-    component: ProductsComponent
-  },
-  {
-    name: 'orders',
-    path: '/orders',
-    component: OrdersComponent
-  },
-  {
-    name: 'bills',
-    path: '/bills',
-    component: BillsComponent
-  },
   {
     name: 'upload',
     path: '/upload',
@@ -43,12 +26,33 @@ const routes = [
   {
     name: 'index',
     path: '/index',
-    component: IndexComponent
+    component: IndexComponent,
+    children: [
+        {
+        name: 'clients',
+        path: '/index/clients',
+        component: ClientsComponent
+
+        },
+        {
+        name: 'products',
+        path: '/index/products',
+        component: ProductsComponent
+        },
+        {
+        name: 'orders',
+        path: '/index/orders',
+        component: OrdersComponent
+        },
+        {
+        name: 'invoices',
+        path: '/index/invoices',
+        component: InvoicesComponent
+        }
+    ]
   }
 ]
 
-const router = new VueRouter({ mode: 'history', routes: routes });
+const router = new VueRouter({ mode: 'history', routes: routes })
 
-new Vue({
-  render: h => h(App),
-}).$mount('#app')
+new Vue(Vue.util.extend({router},App)).$mount('#app')

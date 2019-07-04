@@ -1,27 +1,31 @@
 <template>
-  <v-app>
-    <v-toolbar app>
-      <v-toolbar-title class="headline text-uppercase">
-        <span>TSCL</span>
-        <span class="font-weight-light">TRUST-SEARCH</span>
-      </v-toolbar-title>
-      <v-spacer></v-spacer>
-    </v-toolbar>
+    <v-app>
+        <v-toolbar app>
+            <v-toolbar-title class="headline text-uppercase">
+                <span>TSCL</span>
+                <span class="font-weight-light">TRUST-SEARCH</span>
+            </v-toolbar-title>
+            <v-toolbar-items class="hidden-sm-and-down">
+                <v-btn to="/upload" flat>UPLOAD</v-btn>
+                <v-btn to="/index" flat>DATA</v-btn>
+            </v-toolbar-items>
+            <v-spacer></v-spacer>
+            <v-toolbar-items class="hidden-sm-and-down">
+                <v-btn icon><v-icon>person</v-icon></v-btn>
+            </v-toolbar-items>
+        </v-toolbar>
 
-    <v-content>
-      <Crud/>
-    </v-content>
-  </v-app>
+        <v-content>
+            <v-container fluid>
+                    <router-view></router-view>
+            </v-container>
+        </v-content>
+    </v-app>
 </template>
 
 <script>
-import Crud from './components/Crud'
-
 export default {
   name: 'App',
-  components: {
-    Crud
-  },
   data () {
     return {
       //

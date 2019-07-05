@@ -76,6 +76,9 @@ export default {
             ],
         }
     },
+    created () {
+        this.getInvoices();
+    },
     methods: {
         getInvoices () {
             let uri = 'http://172.16.110.7:8888/api/invoices'

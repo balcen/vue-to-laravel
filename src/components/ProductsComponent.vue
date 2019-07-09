@@ -74,7 +74,8 @@ export default {
         getProducts () {
             let uri = 'http://172.16.110.7:8888/api/products'
             this.axios.get(uri).then(response => {
-                this.products = response.data
+                this.products = response.data;
+                console.log(this.products);
             }).catch(error => {
                 console.log(error.message)
             })

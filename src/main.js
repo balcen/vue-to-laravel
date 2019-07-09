@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import './plugins/vuetify'
 import App from './App.vue'
-Vue.config.productionTip = false
+Vue.config.devtools = true;
 
 import VueRouter from 'vue-router'
 Vue.use(VueRouter)

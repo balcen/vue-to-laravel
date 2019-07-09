@@ -33,7 +33,7 @@
                     </template>
 
                     <template v-slot:no-data>
-                        <v-alert :value="true" color="error" icon="warning">
+                        <v-alert :value="showAlert" color="error" icon="warning">
                             抱歉，這裡沒有任何資料 :(
                         </v-alert>
                     </template>
@@ -48,6 +48,7 @@
 export default {
     data () {
         return {
+            showAlert: false,
             seletecd: [],
             pagination: { rowsPerPage: 25, sortBy: 'id' },
             orders: [],
@@ -82,9 +83,14 @@ export default {
                 this.orders = response.data
             }).catch(error => {
                 console.log(error.message)
-            })
+            });
+
+            setTimeout(function() {
+                this.showAlert = true;
+            },500);
         },
         delayedShow () {
+
 
         }
     }

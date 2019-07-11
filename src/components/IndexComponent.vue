@@ -21,15 +21,18 @@
                 ></v-text-field>
             </v-flex>
             <v-flex shrink>
-                <v-btn flat icon><v-icon>add</v-icon></v-btn>
-                <v-btn :color="color" flat icon><v-icon>delete</v-icon></v-btn>
+                <v-btn @click.stop="toggleDialog(true)" flat icon><v-icon>add</v-icon></v-btn>
+                <v-btn flat icon><v-icon>delete</v-icon></v-btn>
             </v-flex>
         </v-layout>
         <v-layout overflow-auto>
             <v-flex xs12>
                 <router-view
+                  :key="$route.fullPath"
                   :search="search"
+                  :dialog="dialog"
                   @selectedChange="selectedChange"
+                  @toggleDialog="toggleDialog"
                 ></router-view>
             </v-flex>
         </v-layout>
@@ -42,16 +45,18 @@ export default {
         return {
             activeBtn: 1,
             search: '',
-            color: ''
+            color: '',
+            dialog: false
         }
     },
     computed: {
 
     },
     methods: {
-        selectedChange (seleted) {
+        toggleDialog (bol) {
+            this.dialog = bol;
+        },
 
-        }
     }
 }
 </script>

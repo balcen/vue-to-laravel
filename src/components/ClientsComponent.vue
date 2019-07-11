@@ -6,69 +6,199 @@
           v-model="selected"
           :headers="headers"
           :items="clients"
+          :item-key="id"
+          :search="search"
           :pagination.sync="pagination"
           select-all
           class="elevation-1"
         >
-            <v-progress-linear v-slot:process color="blue" indeterminate></v-progress-linear>
-            <template v-slot:items="props">
-                <td>
-                    <v-checkbox v-model="props.selected" primary hide-details></v-checkbox>
-                </td>
-                <td>{{ props.item.c_tax_id }}</td>
-                <td class="text-xs-right">{{ props.item.c_name }}</td>
-                <td class="text-xs-right">{{ props.item.c_type }}</td>
-                <td class="text-xs-right">{{ props.item.c_contact }}</td>
-                <td class="text-xs-right">{{ props.item.c_phone }}</td>
-                <td class="text-xs-right">{{ props.item.c_mail }}</td>
-            </template>
+          <v-progress-linear v-slot:process color="blue" indeterminate></v-progress-linear>
+          <template v-slot:items="props">
+            <td>
+              <v-checkbox v-model="props.selected" primary hide-details></v-checkbox>
+            </td>
+            <td>{{ props.item.c_tax_id }}</td>
+            <td class="text-xs-right">{{ props.item.c_name }}</td>
+            <td class="text-xs-right">{{ props.item.c_type }}</td>
+            <td class="text-xs-right">{{ props.item.c_contact }}</td>
+            <td class="text-xs-right">{{ props.item.c_phone }}</td>
+            <td class="text-xs-right">{{ props.item.c_mail }}</td>
+            <td class="justify-center layout px-0">
+              <v-icon
+                small
+                class="mr-2"
+                @click="editedItem(props.item)"
+              >
+                edit
+              </v-icon>
+              <v-icon
+                small
+                @click="deleteItem(props.item)"
+              >
+                delete
+              </v-icon>
+            </td>
 
-            <template v-slot:no-data>
-                <v-alert :value="true" color="error" icon="warning">
-                    抱歉，這裡沒有任何資料 :(
-                </v-alert>
-            </template>
+          </template>
+          <template v-slot:no-data>
+            <v-alert :value="noDataAlert" color="error" icon="warning">
+              抱歉，這裡沒有任何資料 :(
+            </v-alert>
+          </template>
         </v-data-table>
       </v-flex>
     </v-layout>
+    <v-dialog
+      v-model="dialog"
+      max-width="800px"
+      persistent
+    >
+      <v-card>
+        <v-card-title class="headline">
+          {{ formTitle }}
+          </v-card-title>
+          <v-card-text>
+            <v-container grid-list-md>
+              <v-layout wrap>
+                <v-flex xs12 sm6 md4>
+                  <v-text-field v-model="editItem.c_tax_id" label="客戶統編"></v-text-field>
+                </v-flex>
+                <v-flex xs12 sm6 md4>
+                  <v-text-field v-model="editItem.c_name" label="客戶名稱"></v-text-field>
+                </v-flex>
+                <v-flex xs12 sm6 md4>
+                  <v-text-field v-model="editItem.c_type" label="客戶類型"></v-text-field>
+                </v-flex>
+                <v-flex xs12 sm6 md4>
+                  <v-text-field v-model="editItem.c_contact" label="聯絡人"></v-text-field>
+                </v-flex>
+                  <v-flex xs12 sm6 md4>
+                <v-text-field v-model="editItem.c_phone" label="聯絡電話"></v-text-field>
+                  </v-flex>
+                <v-flex xs12 sm6 md4>
+                  <v-text-field v-model="editItem.c_mail" label="電子信箱"></v-text-field>
+                </v-flex>
+              </v-layout>
+            </v-container>
+          </v-card-text>
+
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="blue darken-1" flat @click="close">Cancel</v-btn>
+            <v-btn color="blue darken-1" flat @click="save">Save</v-btn>
+          </v-card-actions>
+        </v-card>
+    </v-dialog>
   </div>
 </template>
 
 <script>
 export default {
-    data() {
-        return {
-            selected: [],
-            pagination: { rowsPerPage: 25 },
-            clients: [],
-            headers: [
-                {
-                    text: '客戶統編',
-                    value: 'c_tax_id',
-                    align: 'left',
-                    sortable: false
-                },
-                { text: '客戶名稱', value: 'c_name', sortable: false },
-                { text: '客戶類型', value: 'c_type', sortable: false },
-                { text: '聯絡人', value: 'c_contact', sortable: false },
-                { text: '聯絡電話', value: 'c_phone', sortable: false },
-                { text: '電子信箱', value: 'c_mail', sortable: false },
-            ]
-        };
-    },
-    created() {
-        this.getClients();
-    },
-    props: ['search'],
-    methods: {
-        getClients () {
-            let uri = 'http://172.16.110.7:8888/api/clients'
-            this.axios.get(uri).then(response => {
-                this.clients = response.data;
-            }).catch(error => {
-                console.log(error.message);
-            })
-        }
+  props: ['search', 'dialog'],
+  data() {
+    return {
+      noDataAlert: false,
+      selected: [],
+      pagination: { rowsPerPage: 25 },
+      clients: [],
+      headers: [
+        {
+          text: '客戶統編',
+          value: 'c_tax_id',
+          align: 'left',
+          sortable: false
+        },
+        { text: '客戶名稱', value: 'c_name', sortable: false },
+        { text: '客戶類型', value: 'c_type', sortable: false },
+        { text: '聯絡人', value: 'c_contact', sortable: false },
+        { text: '聯絡電話', value: 'c_phone', sortable: false },
+        { text: '電子信箱', value: 'c_mail', sortable: false },
+        { text: 'Actions', value: 'action', sortable: false }
+      ],
+      editIndex: -1,
+      editItem: {
+        'c_tax_id': '',
+        'c_name': '',
+        'c_type': '',
+        'c_contact': '',
+        'c_phone': '',
+        'c_mail': ''
+      },
+      defaultItem: {
+        'c_tax_id': '',
+        'c_name': '',
+        'c_type': '',
+        'c_contact': '',
+        'c_phone': '',
+        'c_mail': ''
+      }
+    };
+  },
+  created() {
+    this.getClients();
+  },
+  watch: {
+    selected: function(v) {
+      console.log(v);
     }
+  },
+  computed: {
+    formTitle: function() {
+      return this.editIndex === -1 ? 'New Item' : 'Edit Item';
+    }
+  },
+  methods: {
+    getClients () {
+      let uri = 'http://172.16.110.7:8888/api/clients';
+      this.axios.get(uri).then(response => {
+        this.clients = response.data;
+        this.noDataAlert = true;
+      }).catch(error => {
+        console.log(error.message);
+      })
+    },
+    editedItem (item) {
+      this.editIndex = this.clients.indexOf(item);
+      this.editItem = Object.assign({}, item);
+      this.$emit('toggleDialog', true);
+    },
+    deleteItem (item) {
+      const index = this.clients.indexOf(item);
+      let uri = `http://172.16.110.7:8888/api/clients/${item.id}`;
+      confirm('確定刪除這筆資料？') && this.axios.delete(uri, item.id).then(response => {
+        this.clients.splice(index,1);
+      }).catch(error => {
+        console.log(error.message);
+      })
+    },
+    close() {
+      this.$emit('toggleDialog', false);
+      setTimeout(()=>{
+        this.editItem = Object.assign({}, this.defaultItem);
+        this.editIndex = -1;
+      },1000);
+    },
+    save() {
+      let index = this.editIndex;
+      let item = this.editItem;
+      if (index !== -1) {
+        let uri = `http://172.16.110.7:8888/api/clients/${item.id}`;
+        this.axios.put(uri, item).then(response => {
+          console.log('修改成功');
+        }).catch(error => {
+          console.log(error.message);
+        })
+      } else {
+        let uri = 'http://172.16.110.7:8888/api/clients';
+        this.axios.post(uri, item).then(response => {
+          console.log('新增成功');
+        }).catch(error => {
+          console.log(error.message);
+        });
+      }
+
+      this.close();
+    }
+  }
 };
 </script>

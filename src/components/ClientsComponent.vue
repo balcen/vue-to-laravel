@@ -18,12 +18,12 @@
               <v-checkbox v-model="props.selected" primary hide-details></v-checkbox>
             </td>
             <td>{{ props.item.c_tax_id }}</td>
-            <td class="text-xs-right">{{ props.item.c_name }}</td>
-            <td class="text-xs-right">{{ props.item.c_type }}</td>
-            <td class="text-xs-right">{{ props.item.c_contact }}</td>
-            <td class="text-xs-right">{{ props.item.c_phone }}</td>
-            <td class="text-xs-right">{{ props.item.c_mail }}</td>
-            <td class="justify-center layout px-0">
+            <td class="text-xs-center">{{ props.item.c_name }}</td>
+            <td class="text-xs-center">{{ props.item.c_type }}</td>
+            <td class="text-xs-center">{{ props.item.c_contact }}</td>
+            <td class="text-xs-center">{{ props.item.c_phone }}</td>
+            <td class="text-xs-center">{{ props.item.c_mail }}</td>
+            <td id="actions" class="justify-center layout px-0">
               <v-icon
                 small
                 class="mr-2"
@@ -54,51 +54,52 @@
       persistent
     >
       <v-card>
-        <v-card-title class="headline">
-          {{ formTitle }}
-          </v-card-title>
-          <v-card-text>
-            <v-container grid-list-md>
-              <v-layout wrap>
+        <v-card-title>
+          <span class="headline">
+            {{ formTitle }}
+          </span>
+        </v-card-title>
+        <v-card-text>
+          <v-container grid-list-md>
+            <v-layout wrap>
+              <v-flex xs12 sm6 md4>
+                <v-text-field v-model="editItem.c_tax_id" label="客戶統編"></v-text-field>
+              </v-flex>
+              <v-flex xs12 sm6 md4>
+                <v-text-field v-model="editItem.c_name" label="客戶名稱"></v-text-field>
+              </v-flex>
+              <v-flex xs12 sm6 md4>
+                <v-text-field v-model="editItem.c_type" label="客戶類型"></v-text-field>
+              </v-flex>
+              <v-flex xs12 sm6 md4>
+                <v-text-field v-model="editItem.c_contact" label="聯絡人"></v-text-field>
+              </v-flex>
                 <v-flex xs12 sm6 md4>
-                  <v-text-field v-model="editItem.c_tax_id" label="客戶統編"></v-text-field>
+              <v-text-field v-model="editItem.c_phone" label="聯絡電話"></v-text-field>
                 </v-flex>
-                <v-flex xs12 sm6 md4>
-                  <v-text-field v-model="editItem.c_name" label="客戶名稱"></v-text-field>
-                </v-flex>
-                <v-flex xs12 sm6 md4>
-                  <v-text-field v-model="editItem.c_type" label="客戶類型"></v-text-field>
-                </v-flex>
-                <v-flex xs12 sm6 md4>
-                  <v-text-field v-model="editItem.c_contact" label="聯絡人"></v-text-field>
-                </v-flex>
-                  <v-flex xs12 sm6 md4>
-                <v-text-field v-model="editItem.c_phone" label="聯絡電話"></v-text-field>
-                  </v-flex>
-                <v-flex xs12 sm6 md4>
-                  <v-text-field v-model="editItem.c_mail" label="電子信箱"></v-text-field>
-                </v-flex>
-              </v-layout>
-            </v-container>
-          </v-card-text>
+              <v-flex xs12 sm6 md4>
+                <v-text-field v-model="editItem.c_mail" label="電子信箱"></v-text-field>
+              </v-flex>
+            </v-layout>
+          </v-container>
+        </v-card-text>
 
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="blue darken-1" flat @click="close">Cancel</v-btn>
-            <v-btn color="blue darken-1" flat @click="save">Save</v-btn>
-          </v-card-actions>
-        </v-card>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="blue darken-1" flat @click="close">Cancel</v-btn>
+          <v-btn color="blue darken-1" flat @click="save">Save</v-btn>
+        </v-card-actions>
+      </v-card>
     </v-dialog>
   </div>
 </template>
 
 <script>
 export default {
-  props: ['search', 'dialog'],
+  props: ['search', 'dialog', 'selected'],
   data() {
     return {
       noDataAlert: false,
-      selected: [],
       pagination: { rowsPerPage: 25 },
       clients: [],
       headers: [
@@ -108,12 +109,12 @@ export default {
           align: 'left',
           sortable: false
         },
-        { text: '客戶名稱', value: 'c_name', sortable: false },
-        { text: '客戶類型', value: 'c_type', sortable: false },
-        { text: '聯絡人', value: 'c_contact', sortable: false },
-        { text: '聯絡電話', value: 'c_phone', sortable: false },
-        { text: '電子信箱', value: 'c_mail', sortable: false },
-        { text: 'Actions', value: 'action', sortable: false }
+        { text: '客戶名稱', value: 'c_name', sortable: false, align: "center" },
+        { text: '客戶類型', value: 'c_type', sortable: false, align: "center" },
+        { text: '聯絡人', value: 'c_contact', sortable: false, align: "center" },
+        { text: '聯絡電話', value: 'c_phone', sortable: false, align: "center" },
+        { text: '電子信箱', value: 'c_mail', sortable: false, align: "center" },
+        { text: 'Actions', value: 'action', sortable: false, width: "1%", align: "center" }
       ],
       editIndex: -1,
       editItem: {
@@ -138,14 +139,16 @@ export default {
     this.getClients();
   },
   watch: {
-    selected: function(v) {
-      console.log(v);
+    selected: function () {
+      this.$emit('update:selected', this.selected);
+      this.$emit('getDataType', 'clients');
     }
   },
   computed: {
     formTitle: function() {
       return this.editIndex === -1 ? 'New Item' : 'Edit Item';
-    }
+    },
+
   },
   methods: {
     getClients () {
@@ -184,14 +187,14 @@ export default {
       if (index !== -1) {
         let uri = `http://172.16.110.7:8888/api/clients/${item.id}`;
         this.axios.put(uri, item).then(response => {
-          console.log('修改成功');
+          this.$router.go();
         }).catch(error => {
           console.log(error.message);
         })
       } else {
         let uri = 'http://172.16.110.7:8888/api/clients';
         this.axios.post(uri, item).then(response => {
-          console.log('新增成功');
+          this.$router.go();
         }).catch(error => {
           console.log(error.message);
         });

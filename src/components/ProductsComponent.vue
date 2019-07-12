@@ -22,15 +22,15 @@
             </td>
             <td>{{ props.item.p_type }}</td>
             <td class="text-xs-right">{{ props.item.p_image }}</td>
-            <td class="text-xs-right">{{ props.item.p_name }}</td>
+            <td class="text-xs-center">{{ props.item.p_name }}</td>
             <td class="text-xs-right">{{ props.item.p_part_no }}</td>
-            <td class="text-xs-right">{{ props.item.p_spec }}</td>
+            <td class="text-xs-center">{{ props.item.p_spec }}</td>
             <td class="text-xs-right">{{ props.item.p_price }}</td>
-            <td class="text-xs-right">{{ props.item.p_currency }}</td>
+            <td class="text-xs-center">{{ props.item.p_currency }}</td>
             <td class="text-xs-right">{{ props.item.p_size }}</td>
             <td class="text-xs-right">{{ props.item.p_weight }}</td>
             <td class="text-xs-right">{{ props.item.p_note }}</td>
-            <td class="justify-center layout px-0">
+            <td id="actions" class="justify-center layout px-0">
               <v-icon
                 small
                 class="mr-2"
@@ -64,39 +64,41 @@
     >
       <v-card>
         <v-card-title>
-          {{ formTitle }}
+          <span class="headline">
+            {{ formTitle }}
+          </span>
         </v-card-title>
         <v-card-text>
           <v-container grid-list-md>
             <v-layout wrap>
-              <v-flex>
+              <v-flex xs12 sm6 md4>
                 <v-text-field v-model="editItem.p_type" label="產品類型"></v-text-field>
               </v-flex>
-              <v-flex>
+              <v-flex xs12 sm6 md4>
                 <v-text-field v-model="editItem.p_image" label="產品圖片"></v-text-field>
               </v-flex>
-              <v-flex>
+              <v-flex xs12 sm6 md4>
                 <v-text-field v-model="editItem.p_name" label="產品名稱"></v-text-field>
               </v-flex>
-              <v-flex>
+              <v-flex xs12 sm6 md4>
                 <v-text-field v-model="editItem.p_part_no" label="產品料號"></v-text-field>
               </v-flex>
-              <v-flex>
+              <v-flex xs12 sm6 md4>
                 <v-text-field v-model="editItem.p_spec" label="產品規格"></v-text-field>
               </v-flex>
-              <v-flex>
+              <v-flex xs12 sm6 md4>
                 <v-text-field v-model="editItem.p_price" label="產品價格"></v-text-field>
               </v-flex>
-              <v-flex>
+              <v-flex xs12 sm6 md4>
                 <v-text-field v-model="editItem.p_currency" label="幣別"></v-text-field>
               </v-flex>
-              <v-flex>
+              <v-flex xs12 sm6 md4>
                 <v-text-field v-model="editItem.p_size" label="產品尺寸"></v-text-field>
               </v-flex>
-              <v-flex>
+              <v-flex xs12 sm6 md4>
                 <v-text-field v-model="editItem.p_weight" label="產品重量"></v-text-field>
               </v-flex>
-              <v-flex>
+              <v-flex xs12 sm6 md4>
                 <v-text-field v-model="editItem.p_note" label="備註"></v-text-field>
               </v-flex>
             </v-layout>
@@ -130,15 +132,15 @@ export default {
           sortable: false,
         },
         { text: '產品圖片', value: "p_image", sortable: false },
-        { text: '產品名稱', value: "p_name", sortable: false },
+        { text: '產品名稱', value: "p_name", sortable: false, align: "center" },
         { text: '產品料號', value: "p_part_no", sortable: false },
-        { text: '產品規格', value: "p_spec", sortable: false },
-        { text: '產品價格', value: "p_price" },
-        { text: '幣值', value: "p_currency", sortable: false },
+        { text: '產品規格', value: "p_spec", sortable: false, align: "center", width: "30%" },
+        { text: '產品價格', value: "p_price", width: "1%" },
+        { text: '幣值', value: "p_currency", sortable: false, width: "1%" },
         { text: '產品尺寸', value: "p_size", sortable: false },
         { text: '產品重量', value: "p_weight", sortable: false },
         { text: '備註', value: "p_note", sortable: false },
-        { text: 'Actions', value: 'action', sortable: false }
+        { text: 'Actions', value: 'action', sortable: false, width: "1%" }
       ],
       editIndex: -1,
       editItem: {
@@ -173,6 +175,12 @@ export default {
   computed: {
     formTitle: function () {
       return this.editIndex === -1 ? 'New Item' : 'Edit Item';
+    }
+  },
+  match: {
+    selected: function() {
+      this.$emit('update:selected', this.selected);
+      this.$emit('getDataType', 'products');
     }
   },
   methods: {

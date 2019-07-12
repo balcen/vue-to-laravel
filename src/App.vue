@@ -1,13 +1,13 @@
 <template>
     <v-app>
         <v-toolbar app>
-            <v-toolbar-title class="headline text-uppercase">
-                <span>TSCL</span>
+            <v-toolbar-title to="/upload" class="headline text-uppercase">
+                <span class="red--text text--darken-1">TSCL</span>
                 <span class="font-weight-light">TRUST-SEARCH</span>
             </v-toolbar-title>
             <v-toolbar-items class="hidden-sm-and-down">
                 <v-btn to="/upload" flat>UPLOAD</v-btn>
-                <v-btn to="/index" flat>DATA</v-btn>
+                <v-btn to="/index/clients" flat>DATA</v-btn>
             </v-toolbar-items>
             <v-spacer></v-spacer>
             <v-toolbar-items class="hidden-sm-and-down">

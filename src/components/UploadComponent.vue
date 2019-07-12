@@ -1,57 +1,46 @@
 <template>
-    <div>
-        <md-content>
-            <h1 class="text-xs-center mt-3 md-display-3">FILE UPLOAD</h1>
-            <v-layout align-content-center justify-center class="mt-3">
-                <v-flex xs8>
-                    <v-form
-                      lazy-validation
-                    >
-                        <v-container fill-height class="pt-5">
-                            <v-layout row wrap align-center justify-center>
-                                <v-flex xs3>
-                                    <md-field>
-                                        <md-file v-model="upload" name="upload" @md-change="onChanged" placeholder="點擊上傳" />
-                                    </md-field>
-                                </v-flex>
-                                <v-flex xs2>
-                                    <v-select
-                                      v-if="dataType"
-                                      v-model="selectType"
-                                      :items="fileType"
-                                      item-text="state"
-                                      item-value="abbr"
-                                      label="檔案類型"
-                                      single-line
-                                    >
-                                    </v-select>
-                                </v-flex>
-                                <v-flex shrink>
-                                    <v-btn color="info" @click="fileUpload">確認上傳</v-btn>
-                                </v-flex>
-                                <v-flex shrink v-if="dataType">
-                                    總共{{ dataLength }}筆資料
-                                </v-flex>
-                            </v-layout>
-                        </v-container>
-                    </v-form>
+  <div>
+    <md-content>
+      <h1 class="text-xs-center mt-3 md-display-3">FILE UPLOAD</h1>
+      <v-layout align-content-center justify-center class="mt-3">
+        <v-flex xs8>
+          <v-form
+            lazy-validation
+          >
+            <v-container fill-height class="pt-5">
+              <v-layout row wrap align-center justify-center>
+                <v-flex xs3>
+                  <md-field>
+                      <md-file v-model="upload" name="upload" @md-change="onChanged" placeholder="點擊上傳" />
+                  </md-field>
                 </v-flex>
-            </v-layout>
-        </md-content>
-    </div>
+                <template v-if="dataType" name="upload-button">
+                  <v-flex xs2 transition="scale-transition">
+                    <v-select
+                      v-model="selectType"
+                      :items="fileType"
+                      item-text="state"
+                      item-value="abbr"
+                      label="檔案類型"
+                      single-line
+                    >
+                    </v-select>
+                  </v-flex>
+                  <v-flex shrink>
+                    <v-btn color="info" @click="fileUpload">確認上傳</v-btn>
+                  </v-flex>
+                  <v-flex shrink transition="scale-transition">
+                    總共{{ dataLength }}筆資料
+                  </v-flex>
+                </template>
+              </v-layout>
+            </v-container>
+          </v-form>
+        </v-flex>
+      </v-layout>
+    </md-content>
+  </div>
 </template>
-
-<style>
-    .v-enter-active, .v-leave-active {
-    transition: opacity .5s;
-    }
-    .v-enter, .v-leave-to {
-    opacity: 0;
-    }
-    .v-enter-to, .v-leave {
-        opacity: 1;
-    }
-</style>
 
 <script>
 export default {
@@ -108,3 +97,12 @@ export default {
     }
 }
 </script>
+
+<style>
+  .upload-button-enter-active, .upload-button-leave-active {
+    transition: opacity .5s
+  }
+  .upload-button-enter, .upload-button-leave-to /* .fade-leave-active in <2.1.8 */ {
+    opacity: 0
+  }
+</style>

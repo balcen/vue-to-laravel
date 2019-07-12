@@ -21,24 +21,24 @@
               ></v-checkbox>
             </td>
             <td>{{ props.item.i_no }}</td>
-            <td class="text-xs-right">{{ props.item.i_date }}</td>
-            <td class="text-xs-right">{{ props.item.i_mature }}</td>
+            <td class="text-xs-center">{{ props.item.i_date }}</td>
+            <td class="text-xs-center">{{ props.item.i_mature }}</td>
             <td class="text-xs-right">{{ props.item.i_order_no }}</td>
-            <td class="text-xs-right">{{ props.item.i_seller_name }}</td>
-            <td class="text-xs-right">{{ props.item.i_buyer_name }}</td>
-            <td class="text-xs-right">{{ props.item.i_product_name }}</td>
+            <td class="text-xs-center">{{ props.item.i_seller_name }}</td>
+            <td class="text-xs-center">{{ props.item.i_buyer_name }}</td>
+            <td class="text-xs-center">{{ props.item.i_product_name }}</td>
             <td class="text-xs-right">{{ props.item.i_product_part_no }}</td>
-            <td class="text-xs-right">{{ props.item.i_product_spec }}</td>
+            <td class="text-xs-center">{{ props.item.i_product_spec }}</td>
             <td class="text-xs-right">{{ props.item.i_product_price }}</td>
-            <td class="text-xs-right">{{ props.item.i_currency }}</td>
+            <td class="text-xs-center">{{ props.item.i_currency }}</td>
             <td class="text-xs-right">{{ props.item.i_quantity }}</td>
             <td class="text-xs-right">{{ props.item.i_amount }}</td>
             <td class="text-xs-right">{{ props.item.i_note }}</td>
-            <td class="justify-center layout px-0">
+            <td id="actions" class="justify-center layout">
               <v-icon
                 small
                 class="mr-2"
-                @click="editItem(props.item)"
+                @click="editedItem(props.item)"
               >
                 edit
               </v-icon>
@@ -58,6 +58,119 @@
         </v-data-table>
       </v-flex>
     </v-layout>
+
+    <!--  Dialog  -->
+    <v-dialog
+      v-model="dialog"
+      max-width="800px"
+      persistent
+    >
+      <v-card>
+        <v-card-title>
+          <span class="headline">{{ formTitle }}</span>
+        </v-card-title>
+        <v-card-text>
+          <v-container grid-list-md>
+            <v-layout wrap>
+              <v-flex xs12 sm6 md4>
+                <v-text-field v-model="editItem.i_no" label="發票號碼"></v-text-field>
+              </v-flex>
+              <v-flex xs12 sm6 md4>
+                <v-menu
+                  v-model="menu1"
+                  :close-on-content-click="false"
+                  :nudge-right="40"
+                  lazy
+                  transition="scale-transition"
+                  offset-y
+                  full-width
+                  min-width="290px"
+                >
+                  <template v-slot:activator="{ on }">
+                    <v-text-field
+                      v-model="editItem.i_date"
+                      prepend-icon="event"
+                      label="發票日期"
+                      readonly
+                      v-on="on"
+                    ></v-text-field>
+                  </template>
+                  <v-date-picker v-model="editItem.i_date" @input="menu1 = false"></v-date-picker>
+                </v-menu>
+              </v-flex>
+              <v-flex xs12 sm6 md4>
+                <v-menu
+                  v-model="menu2"
+                  :close-on-content-click="false"
+                  :nudge-right="40"
+                  lazy
+                  transition="scale-transition"
+                  offset-y
+                  full-width
+                  min-width="290px"
+                >
+                  <template v-slot:activator="{ on }">
+                    <v-text-field
+                      v-model="editItem.i_mature"
+                      prepend-icon="event"
+                      label="發票到期日"
+                      readonly
+                      v-on="on"
+                    >
+                    </v-text-field>
+                  </template>
+                  <v-date-picker v-model="editItem.i_mature" @input="menu2 = false"></v-date-picker>
+                </v-menu>
+              </v-flex>
+              <v-flex xs12 sm6 md4>
+                <v-text-field v-model="editItem.i_order_no" label="訂單號碼"></v-text-field>
+              </v-flex>
+              <v-flex xs12 sm6 md4>
+                <v-text-field v-model="editItem.i_seller_name" label="賣家名稱"></v-text-field>
+              </v-flex>
+              <v-flex xs12 sm6 md4>
+                <v-text-field v-model="editItem.i_buyer_name" label="買家名稱"></v-text-field>
+              </v-flex>
+              <v-flex xs12 sm6 md4>
+                <v-text-field v-model="editItem.i_product_name" label="產品名稱"></v-text-field>
+              </v-flex>
+              <v-flex xs12 sm6 md4>
+                <v-text-field v-model="editItem.i_product_part_no" label="產品料號"></v-text-field>
+              </v-flex>
+              <v-flex xs12 sm6 md4>
+                <v-text-field v-model="editItem.i_product_spec" label="產品規格"></v-text-field>
+              </v-flex>
+              <v-flex xs12 sm6 md4>
+                <v-text-field
+                  v-model="editItem.i_product_price"
+                  count="12"
+                  label="產品價格"
+                >
+                </v-text-field>
+              </v-flex>
+              <v-flex xs12 sm6 md4>
+                <v-text-field v-model="editItem.i_currency" label="幣別"></v-text-field>
+              </v-flex>
+              <v-flex xs12 sm6 md4>
+                <v-text-field v-model="editItem.i_quantity" label="採購數量"></v-text-field>
+              </v-flex>
+              <v-flex xs12 sm6 md4>
+                <v-text-field v-model="editItem.i_amount" label="採購金額"></v-text-field>
+              </v-flex>
+              <v-flex xs12 sm6 md4>
+                <v-text-field v-model="editItem.i_note" label="付款條件"></v-text-field>
+              </v-flex>
+            </v-layout>
+          </v-container>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="blue darken-1" flat @click="close">Cancel</v-btn>
+          <v-btn color="blue darken-1" flat @click="save">Save</v-btn>
+        </v-card-actions>
+      </v-card>
+
+    </v-dialog>
   </div>
 </template>
 
@@ -66,6 +179,8 @@ export default {
   props: ['search', 'dialog'],
   data () {
     return {
+      menu1: false,
+      menu2: false,
       noDataAlert: false,
       selected: [],
       pagination: { rowsPerPage: 25, sortBy: 'id' },
@@ -77,25 +192,69 @@ export default {
           align: 'left',
           sortable: false
         },
-        { text: '發票日', value: 'i_date' },
-        { text: '發票到期日', value: 'i_mature' },
+        { text: '發票日', value: 'i_date', width: "7%", align: "center" },
+        { text: '發票到期日', value: 'i_mature', width: "7%", align: "center" },
         { text: '訂單號碼', value: 'i_order_no', sortable: false },
-        { text: '賣方名稱', value: 'i_seller_name', sortable: false },
-        { text: '買方名稱', value: 'i_buyer_name', sortable: false },
-        { text: '產品名稱', value: 'i_product_name', sortable: false },
+        { text: '賣方名稱', value: 'i_seller_name', sortable: false, align: "center" },
+        { text: '買方名稱', value: 'i_buyer_name', sortable: false, align: "center" },
+        { text: '產品名稱', value: 'i_product_name', sortable: false, align: "center" },
         { text: '產品料號', value: 'i_product_part_no', sortable: false },
-        { text: '產品規格', value: 'i_product_spec', sortable: false },
+        { text: '產品規格', value: 'i_product_spec', sortable: false, align: "center" },
         { text: '產品價格', value: 'i_product_price' },
-        { text: '幣別', value: 'i_currency', sortable: false },
-        { text: '採購數量', value: 'i_quantity' },
-        { text: '採購金額', value: 'i_amount' },
+        { text: '幣別', value: 'i_currency', sortable: false, width: "1%" },
+        { text: '採購數量', value: 'i_quantity', width: "1%" },
+        { text: '採購金額', value: 'i_amount', width: "1%" },
         { text: '付款條件', value: 'i_note', sortable: false },
-        { text: 'Actions', value: 'action', sortable: false }
+        { text: 'Actions', value: 'action', sortable: false, width: "1%" }
       ],
+      editIndex: -1,
+      editItem: {
+        'i_no': '',
+        'i_date': '',
+        'i_mature': '',
+        'i_order_no': '',
+        'i_seller_name': '',
+        'i_buyer_name': '',
+        'i_product_name': '',
+        'i_product_part_no': '',
+        'i_product_spec': '',
+        'i_product_price': '',
+        'i_currency': '',
+        'i_quantity': '',
+        'i_amount': '',
+        'i_note':''
+      },
+      default: {
+        'i_no': '',
+        'i_date': '',
+        'i_mature': '',
+        'i_order_no': '',
+        'i_seller_name': '',
+        'i_buyer_name': '',
+        'i_product_name': '',
+        'i_product_part_no': '',
+        'i_product_spec': '',
+        'i_product_price': '',
+        'i_currency': '',
+        'i_quantity': '',
+        'i_amount': '',
+        'i_note':''
+      }
     }
   },
   created () {
     this.getInvoices();
+  },
+  computed: {
+    formTitle: function() {
+      return this.editIndex === -1 ? 'New Item' : 'Edit Item';
+    }
+  },
+  watch: {
+    selected: function() {
+      this.$emit('update:selected', this.selected);
+      this.$emit('getDataType', 'invoices');
+    }
   },
   methods: {
     getInvoices () {
@@ -107,8 +266,10 @@ export default {
         console.log(error.message)
       });
     },
-    editItem (item) {
-
+    editedItem (item) {
+      this.editIndex = this.invoices.indexOf(item);
+      this.editItem = Object.assign({}, item);
+      this.$emit('toggleDialog', true);
     },
     deleteItem (item) {
       const index = this.invoices.indexOf(item);
@@ -118,6 +279,33 @@ export default {
       }).catch(error => {
         console.log(error.message);
       });
+    },
+    close () {
+      this.$emit('toggleDialog', false);
+      setTimeout(() => {
+        this.editIndex = -1;
+        this.editItem = Object.assign({}, this.defaultItem);
+      }, 1000)
+    },
+    save() {
+      let index = this.editIndex;
+      let item = this.editItem;
+
+      if (index !== -1) {
+        let uri = `http://172.16.110.7:8888/api/invoices/${item.id}`;
+        this.axios.put(uri, item).then(response => {
+          this.$router.go();
+        }).catch(error => {
+          console.log(error.message);
+        })
+      } else {
+        let uri = 'http://172.16.110.7:8888/api/invoices';
+        this.axios.post(uri, item).then(response => {
+          this.$router.go();
+        }).catch(error => {
+          console.log(error.message);
+        })
+      }
     }
   }
 }

@@ -8,10 +8,10 @@
           :items="products"
           :search="search"
           :pagination.sync="pagination"
+          :loading="loading"
           select-all
           class="elevation-1"
         >
-          <v-progress-linear v-slot:progress color="blue" indeterminate></v-progress-linear>
           <template v-slot:items="props">
             <td>
               <v-checkbox
@@ -116,14 +116,14 @@
 
 <script>
 export default {
-  props: ['search', 'dialog'],
+  props: ['search', 'dialog', 'selected'],
   data () {
     return {
       noDataAlert: false,
       error: '',
       pagination: { rowsPerPage: 25, sortBy: 'id' },
-      selected: [],
       products: [],
+      loading: true,
       headers: [
         {
           text: '產品類型',
@@ -177,7 +177,7 @@ export default {
       return this.editIndex === -1 ? 'New Item' : 'Edit Item';
     }
   },
-  match: {
+  watch: {
     selected: function() {
       this.$emit('update:selected', this.selected);
       this.$emit('getDataType', 'products');
@@ -189,6 +189,7 @@ export default {
       this.axios.get(uri).then(response => {
           this.products = response.data;
           this.noDataAlert = true;
+          this.loading = false;
       }).catch(error => this.error = error.message);
     },
     editedItem (item) {

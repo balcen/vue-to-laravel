@@ -9,10 +9,10 @@
           :item-key="id"
           :search="search"
           :pagination.sync="pagination"
+          :loading="loading"
           select-all
           class="elevation-1"
         >
-          <v-progress-linear v-slot:process color="blue" indeterminate></v-progress-linear>
           <template v-slot:items="props">
             <td>
               <v-checkbox v-model="props.selected" primary hide-details></v-checkbox>
@@ -97,11 +97,12 @@
 <script>
 export default {
   props: ['search', 'dialog', 'selected'],
-  data() {
+  data () {
     return {
       noDataAlert: false,
       pagination: { rowsPerPage: 25 },
       clients: [],
+      loading: true,
       headers: [
         {
           text: '客戶統編',
@@ -156,6 +157,7 @@ export default {
       this.axios.get(uri).then(response => {
         this.clients = response.data;
         this.noDataAlert = true;
+        this.loading = false;
       }).catch(error => {
         console.log(error.message);
       })

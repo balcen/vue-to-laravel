@@ -8,10 +8,10 @@
           :items="orders"
           :search="search"
           :pagination.sync="pagination"
+          :loading="loading"
           select-all
           class="elevation-1"
         >
-          <v-progress-linear v-slot:process color="blue" indeterminate></v-progress-linear>
           <template v-slot:items="props">
             <td>
               <v-checkbox
@@ -154,6 +154,7 @@ export default {
       noDataAlert: false,
       pagination: { rowsPerPage: 25, sortBy: 'id' },
       orders: [],
+      loading: true,
       headers: [
         {
           text: '訂單號碼',
@@ -225,6 +226,7 @@ export default {
       this.axios.get(uri).then(response => {
         this.orders = response.data;
         this.noDataAlert = true;
+        this.loading = false;
       }).catch(error => {
         console.log(error.message);
       });

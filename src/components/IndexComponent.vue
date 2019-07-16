@@ -64,11 +64,11 @@ export default {
     multipleDelete () {
       let uri = `http://172.16.110.7:8888/api/${this.dataType}DeleteAll`;
       let id = this.getColumn(this.selected, 'id');
+      let num = id.length;
       let idStr = id.join();
-      console.log(idStr);
-      this.axios.delete(uri, this.selected).then(response => {
+
+      confirm(`確定刪除${num}筆資料？`) && this.axios.delete(uri, {data: { ids: idStr }}).then(response => {
         this.$router.go();
-        console.log(response.data.result);
       }).catch(error => {
         console.log(error.message);
       })

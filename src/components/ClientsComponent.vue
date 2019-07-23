@@ -153,7 +153,7 @@ export default {
   },
   methods: {
     getClients () {
-      let uri = 'http://172.16.110.7:8888/api/clients';
+      let uri = 'https://calm-ocean-96461.herokuapp.com/api/clients';
       this.axios.get(uri).then(response => {
         this.clients = response.data;
         this.noDataAlert = true;

@@ -84,7 +84,7 @@ export default {
       let formData = new FormData();
       formData.append('file', e.target.files[0]);
       this.formData = formData;
-      let uri = 'http://172.16.110.7:8888/api/upload';
+      let uri = 'https://calm-ocean-96461.herokuapp.com/api/upload';
       this.axios.post(uri, formData).then(response => {
         this.dataType = response.data.type;
         this.dataLength = response.data.length;
@@ -95,7 +95,7 @@ export default {
     },
     fileUpload () {
       if (this.formData) {
-        let uri = `http://172.16.110.7:8888/api/${this.dataType}/upload`;
+        let uri = `https://calm-ocean-96461.herokuapp.com/api/${this.dataType}/upload`;
         this.axios.post(uri, this.formData).then(response => {
           this.$router.push({name: `${this.dataType}`}, function() {
             this.$root.$emit('getAlert', {

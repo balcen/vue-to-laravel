@@ -62,7 +62,7 @@ export default {
       this.dialog = bol;
     },
     multipleDelete () {
-      let uri = `http://172.16.110.7:8888/api/${this.dataType}DeleteAll`;
+      let uri = `https://calm-ocean-96461.herokuapp.com/api/${this.dataType}DeleteAll`;
       let id = this.getColumn(this.selected, 'id');
       let num = id.length;
       let idStr = id.join();

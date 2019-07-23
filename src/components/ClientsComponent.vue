@@ -169,7 +169,7 @@ export default {
     },
     deleteItem (item) {
       const index = this.clients.indexOf(item);
-      let uri = `http://172.16.110.7:8888/api/clients/${item.id}`;
+      let uri = `https://calm-ocean-96461.herokuapp.com/api/clients/${item.id}`;
       confirm('確定刪除這筆資料？') && this.axios.delete(uri, item.id).then(response => {
         this.clients.splice(index,1);
       }).catch(error => {
@@ -187,14 +187,14 @@ export default {
       let index = this.editIndex;
       let item = this.editItem;
       if (index !== -1) {
-        let uri = `http://172.16.110.7:8888/api/clients/${item.id}`;
+        let uri = `https://calm-ocean-96461.herokuapp.com/api/clients/${item.id}`;
         this.axios.put(uri, item).then(response => {
           this.$router.go();
         }).catch(error => {
           console.log(error.message);
         })
       } else {
-        let uri = 'http://172.16.110.7:8888/api/clients';
+        let uri = 'https://calm-ocean-96461.herokuapp.com/api/clients';
         this.axios.post(uri, item).then(response => {
           this.$router.go();
         }).catch(error => {

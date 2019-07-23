@@ -16,6 +16,7 @@ const router = new VueRouter({
 
 import VueAxios from 'vue-axios'
 import axios from 'axios'
+axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
 Vue.use(VueAxios, axios);
 
 // Vue-material

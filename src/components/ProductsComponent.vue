@@ -185,8 +185,8 @@ export default {
   },
   methods: {
     getProducts () {
-      let uri = 'http://172.16.110.7:8888/api/products';
-      this.axios.get(uri).then(response => {
+      let uri = 'https://calm-ocean-96461.herokuapp.com/api/products';
+      this.axios.get(uri, {crossDomain: true}).then(response => {
           this.products = response.data;
           this.noDataAlert = true;
           this.loading = false;
@@ -199,7 +199,7 @@ export default {
     },
     deleteItem (item) {
       const index = this.products.indexOf(item);
-      let uri = `http://172.16.110.7:8888/api/products/${item.id}`;
+      let uri = `https://calm-ocean-96461.herokuapp.com/api/products/${item.id}`;
       confirm('確定刪除這筆資料？') && this.axios.delete(uri, item.id).then(response => {
           this.products.splice(index, 1);
       }).catch(error => {
@@ -217,14 +217,14 @@ export default {
       let index = this.editIndex;
       let item = this.editItem;
       if (index !== -1) {
-        let uri = `http://172.16.110.7:8888/api/products/${item.id}`;
+        let uri = `https://calm-ocean-96461.herokuapp.com/api/products/${item.id}`;
         this.axios.put(uri, item).then(response => {
           this.$router.go();
         }).catch(error => {
           console.log(error.message);
         })
       } else {
-        let uri = 'http://172.16.110.7:8888/api/products';
+        let uri = 'https://calm-ocean-96461.herokuapp.com/api/products';
         this.axios.post(uri, item).then(response => {
           this.$router.go();
         }).catch(error => {

@@ -1,11 +1,10 @@
 <template>
   <div>
     <md-content>
-      <h1 class="text-xs-center mt-4 md-display-3">FILE UPLOAD</h1>
+      <h1 class="text-xs-center mt-5 md-display-3">FILE UPLOAD</h1>
       <v-layout align-content-center justify-center class="mt-3">
         <v-flex xs6>
-
-          <v-container grid-list-sm fill-height class="pt-5">
+          <v-container grid-list-sm fill-height class="pt-4">
             <v-layout row wrap align-center justify-center>
               <v-flex v-if="!dataType" xs6>
                 <v-btn color="primary" @click="uploadBtn" depressed block dark :loading="loading">
@@ -34,13 +33,12 @@
                   </v-flex>
                   <v-flex xs6 offset-xs3>
                     <span>總共{{ dataLength }}筆資料</span>
-                    <v-btn color="info" @click="fileUpload">確認上傳</v-btn>
+                    <v-btn color="info" @click="fileUpload" :loading="loading">確認上傳</v-btn>
                   </v-flex>
                 </v-layout>
               </template>
             </v-layout>
           </v-container>
-
         </v-flex>
       </v-layout>
     </md-content>
@@ -48,6 +46,7 @@
 </template>
 
 <script>
+import { setTimeout } from 'timers';
 export default {
   data () {
     return {
@@ -89,11 +88,13 @@ export default {
         this.dataType = response.data.type;
         this.dataLength = response.data.length;
         this.fileName = e.target.files[0].name;
+        this.loading = false;
       }).catch(error => {
         console.log(error.message);
       })
     },
     fileUpload () {
+      this.loading = true;
       if (this.formData) {
         let uri = `https://calm-ocean-96461.herokuapp.com/api/${this.dataType}/upload`;
         this.axios.post(uri, this.formData).then(response => {
@@ -108,6 +109,10 @@ export default {
           console.log(error.message);
         })
       }
+
+      setTimeout(function(){
+
+      })
     }
   }
 }

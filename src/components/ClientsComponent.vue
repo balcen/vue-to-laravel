@@ -10,6 +10,7 @@
           :search="search"
           :pagination.sync="pagination"
           :loading="loading"
+          :rows-per-page-items="rowsPerPage"
           select-all
           class="elevation-1"
         >
@@ -99,6 +100,7 @@ export default {
   props: ['search', 'dialog', 'selected'],
   data () {
     return {
+      rowsPerPage: [10,25,50,{"text":"$vuetify.dataIterator.rowsPerPageAll","value":-1}],
       noDataAlert: false,
       pagination: { rowsPerPage: 25 },
       clients: [],

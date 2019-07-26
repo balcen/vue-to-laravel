@@ -17,17 +17,9 @@
 
     <v-content>
       <v-container class="pt-0" fluid>
-        <v-alert
-          :value="alert"
-          :type="alertType"
-          transition="scale-transition"
-          dismissible
-        >
-          {{ alertValue }}
-        </v-alert>
+        <flash-message class="customFlash"></flash-message>
         <router-view
           :key="$route.fullPath"
-          @getAlert="getAlert"
         ></router-view>
       </v-container>
     </v-content>
@@ -39,18 +31,10 @@
 export default {
   name: 'App',
   data () {
-    return {
-      alert: false,
-      alertType: '',
-      alertValue: ''
+    return {        
     }
   },
   method: {
-    getAlert: function (alert) {
-      this.alert = true;
-      this.alertType = alert.type;
-      this.alertValue = alert.value;
-    }
   }
 }
 </script>

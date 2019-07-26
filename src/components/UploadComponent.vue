@@ -4,9 +4,10 @@
       <h1 class="text-xs-center mt-5 md-display-3">FILE UPLOAD</h1>
       <v-layout align-content-center justify-center class="mt-3">
         <v-flex xs6>
-          <v-container grid-list-sm fill-height class="pt-4">
+          <v-container grid-list-sm fill-height class="pt-0">
             <v-layout row wrap align-center justify-center>
-              <v-flex v-if="!dataType" xs6>
+
+              <v-flex v-if="!dataType" xs6 class="pt-4">
                 <v-btn color="primary" @click="uploadBtn" depressed block dark :loading="loading">
                   UPLOAD FILE
                   <span class="ml-1">
@@ -18,10 +19,15 @@
 
               <template v-if="dataType" name="upload-button">
                 <v-layout wrap justify-center>
-                  <v-flex xs4>
+                  <v-flex xs12 offset-xs1>
+                    <v-btn icon outlined class="ml-5">
+                      <v-icon class="mx-0 px-0">arrow_back</v-icon>
+                    </v-btn>
+                  </v-flex>
+                  <v-flex xs4 class="mt-3">
                     <v-text-field label="檔案名稱" v-model="fileName" readonly></v-text-field>
                   </v-flex>
-                  <v-flex xs4>
+                  <v-flex xs4 class="mt-3">
                     <v-select
                       v-model="selectType"
                       :items="fileType"
@@ -31,7 +37,7 @@
                     >
                     </v-select>
                   </v-flex>
-                  <v-flex xs6 offset-xs3>
+                  <v-flex xs6 offset-xs3 class="mt-3">
                     <span>總共{{ dataLength }}筆資料</span>
                     <v-btn color="info" @click="fileUpload" :loading="loading">確認上傳</v-btn>
                   </v-flex>
@@ -98,12 +104,7 @@ export default {
       if (this.formData) {
         let uri = `https://calm-ocean-96461.herokuapp.com/api/${this.dataType}/upload`;
         this.axios.post(uri, this.formData).then(response => {
-          this.$router.push({name: `${this.dataType}`}, function() {
-            this.$root.$emit('getAlert', {
-              'type': 'success',
-              'value': '上傳成功！'
-            })
-          })
+          this.$router.push({ name: this.dataType, params: {message: 'yes'} })
         }).catch(error => {
           // eslint-disable-next-line no-console
           console.log(error.message);

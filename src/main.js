@@ -22,8 +22,12 @@ Vue.use(VueAxios, axios);
 // Vue-material
 import VueMaterial from 'vue-material'
 import 'vue-material/dist/vue-material.min.css'
-
 Vue.use(VueMaterial);
+
+// Vue-Flash-Message
+import VueFlashMessage from 'vue-flash-message'
+require('vue-flash-message/dist/vue-flash-message.min.css');
+Vue.use(VueFlashMessage);
 
 import Store from './store/Store'
 

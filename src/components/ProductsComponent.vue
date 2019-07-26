@@ -117,7 +117,7 @@
 
 <script>
 export default {
-  props: ['search', 'dialog', 'selected'],
+  props: ['search', 'dialog', 'selected', 'message'],
   data () {
     return {
       rowsPerPage: [10,25,50,{"text":"$vuetify.dataIterator.rowsPerPageAll","value":-1}],
@@ -173,6 +173,7 @@ export default {
   },
   created () {
     this.getProducts();
+    console.log(this.message);
   },
   computed: {
     formTitle: function () {
@@ -183,6 +184,9 @@ export default {
     selected: function() {
       this.$emit('update:selected', this.selected);
       this.$emit('getDataType', 'products');
+    },
+    message: function() {
+      this.flash('yes', 'success');
     }
   },
   methods: {

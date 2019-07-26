@@ -4,6 +4,7 @@ import OrdersComponent from '../components/OrdersComponent'
 import InvoicesComponent from '../components/InvoicesComponent'
 import IndexComponent from '../components/IndexComponent'
 import UploadComponent from '../components/UploadComponent'
+import { O_TRUNC } from 'constants';
 
 export default [
 	{
@@ -33,7 +34,8 @@ export default [
 			{
 				name: 'products',
 				path: '/index/products',
-				component: ProductsComponent,
+        component: ProductsComponent,
+        props: true,
 				meta: {
 					requiresAuth: true
 				}

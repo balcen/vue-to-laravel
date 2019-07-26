@@ -26,7 +26,7 @@
             <td class="text-xs-center">{{ props.item.p_name }}</td>
             <td class="text-xs-right">{{ props.item.p_part_no }}</td>
             <td class="text-xs-center">{{ props.item.p_spec }}</td>
-            <td class="text-xs-right">{{ props.item.p_price }}</td>
+            <td class="text-xs-right">{{ Math.round(props.item.p_price * 1000) / 1000 }}</td>
             <td class="text-xs-center">{{ props.item.p_currency }}</td>
             <td class="text-xs-right">{{ props.item.p_size }}</td>
             <td class="text-xs-right">{{ props.item.p_weight }}</td>

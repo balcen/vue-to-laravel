@@ -173,7 +173,6 @@ export default {
   },
   created () {
     this.getProducts();
-    console.log(this.message);
   },
   computed: {
     formTitle: function () {
@@ -185,9 +184,6 @@ export default {
       this.$emit('update:selected', this.selected);
       this.$emit('getDataType', 'products');
     },
-    message: function() {
-      this.flash('yes', 'success');
-    }
   },
   methods: {
     getProducts () {
@@ -196,7 +192,9 @@ export default {
           this.products = response.data;
           this.noDataAlert = true;
           this.loading = false;
-      }).catch(error => this.error = error.message);
+      }).catch(error => {
+        this.flash(error.message, 'error');
+      });
     },
     editedItem (item) {
       this.editIndex = this.products.indexOf(item);
@@ -208,8 +206,9 @@ export default {
       let uri = `https://calm-ocean-96461.herokuapp.com/api/products/${item.id}`;
       confirm('確定刪除這筆資料？') && this.axios.delete(uri, item.id).then(response => {
           this.products.splice(index, 1);
+          this.flash('成功刪除一筆資料', 'success', { timeout: 3000 });
       }).catch(error => {
-          console.log(error.message);
+          this.flash(error.message, 'error');
       })
     },
     close () {
@@ -226,18 +225,19 @@ export default {
         let uri = `https://calm-ocean-96461.herokuapp.com/api/products/${item.id}`;
         this.axios.put(uri, item).then(response => {
           this.$router.go();
+          this.flash('成功修改一筆資料', 'success', { timeout: 3000 });
         }).catch(error => {
-          console.log(error.message);
+          this.flash(error.message, 'error');
         })
       } else {
         let uri = 'https://calm-ocean-96461.herokuapp.com/api/products';
         this.axios.post(uri, item).then(response => {
           this.$router.go();
+          this.flash('成功新增一筆資料', 'success', { timeout: 3000 });
         }).catch(error => {
-          console.log(error.message);
+          this.flash(error.message, 'error');
         })
       }
-
       this.close();
     }
   }

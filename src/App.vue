@@ -17,7 +17,7 @@
 
     <v-content>
       <v-container class="pt-0" fluid>
-        <flash-message class="customFlash"></flash-message>
+        <flash-message class="customMessage ma-2"></flash-message>
         <router-view
           :key="$route.fullPath"
         ></router-view>
@@ -26,15 +26,38 @@
   </v-app>
 </template>
 
+<style>
+.customMessage {
+  transition: all 0.5s ease-in-out;
+}
+
+.customMessage .success {
+  background-color: #dff0d8 !important;
+}
+
+.customMessage .error {
+  background-color: #f2dede !important;
+}
+
+.customMessage .warning {
+  background-color: #fcf8e3 !important;
+}
+
+.customMessage .info {
+  background-color: #f2f5fe !important;
+}
+</style>
 
 <script>
 export default {
   name: 'App',
   data () {
-    return {        
+    return {
     }
   },
   method: {
+  },
+  watch: {
   }
 }
 </script>

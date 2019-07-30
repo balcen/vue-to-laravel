@@ -69,8 +69,9 @@ export default {
 
       confirm(`確定刪除${num}筆資料？`) && this.axios.delete(uri, {data: { ids: idStr }}).then(response => {
         this.$router.go();
+        this.flash(`成功刪除${num}筆資料`, 'success');
       }).catch(error => {
-        console.log(error.message);
+        this.flash(error.message, 'error');
       })
     },
     getDataType(type) {

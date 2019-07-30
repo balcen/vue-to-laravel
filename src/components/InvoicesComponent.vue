@@ -266,7 +266,7 @@ export default {
         this.noDataAlert = true;
         this.loading = false;
       }).catch(error => {
-        console.log(error.message)
+        this.flash(error.message, 'error');
       });
     },
     editedItem (item) {
@@ -279,8 +279,9 @@ export default {
       let uri = `https://calm-ocean-96461.herokuapp.com/api/invoices/${item.id}`;
       confirm('確定刪除這筆資料？') && this.axios.delete(uri, item.id).then(response => {
         this.invoices.splice(index, 1);
+        this.flash('成功刪除一筆資料', 'success', { timeout: 3000 });
       }).catch(error => {
-        console.log(error.message);
+        this.flash(error.message, 'error');
       });
     },
     close () {
@@ -298,15 +299,17 @@ export default {
         let uri = `https://calm-ocean-96461.herokuapp.com/api/invoices/${item.id}`;
         this.axios.put(uri, item).then(response => {
           this.$router.go();
+          this.flash('成功修改一筆資料', 'success', { timeout: 3000 });
         }).catch(error => {
-          console.log(error.message);
+          this.flash(error.message, 'error');
         })
       } else {
         let uri = 'https://calm-ocean-96461.herokuapp.com/api/invoices';
         this.axios.post(uri, item).then(response => {
           this.$router.go();
+          this.flash('成功新增一筆資料', 'success', { timeout: 3000 });
         }).catch(error => {
-          console.log(error.message);
+          this.flash(error.message, 'error');
         })
       }
     }

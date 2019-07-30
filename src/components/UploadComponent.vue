@@ -76,8 +76,7 @@ export default {
       this.selectType = str;
     }
   },
-  counted: {
-
+  created() {
   },
   methods: {
     uploadBtn () {
@@ -96,7 +95,7 @@ export default {
         this.fileName = e.target.files[0].name;
         this.loading = false;
       }).catch(error => {
-        console.log(error.message);
+        this.flash(error.message, 'error');
       })
     },
     fileUpload () {
@@ -104,16 +103,12 @@ export default {
       if (this.formData) {
         let uri = `https://calm-ocean-96461.herokuapp.com/api/${this.dataType}/upload`;
         this.axios.post(uri, this.formData).then(response => {
-          this.$router.push({ name: this.dataType, params: {message: 'yes'} })
+          this.$router.push({ name: this.dataType })
+          this.flash('上傳成功', 'success')
         }).catch(error => {
-          // eslint-disable-next-line no-console
-          console.log(error.message);
+          this.flash(error.message, 'error');
         })
       }
-
-      setTimeout(function(){
-
-      })
     }
   }
 }

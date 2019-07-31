@@ -28,11 +28,12 @@
     <v-layout overflow-auto>
       <v-flex xs12>
         <router-view
+          ref="table"
           :key="$route.fullPath"
           :search="search"
           :dialog="dialog"
-          @toggleDialog="toggleDialog"
           :selected.sync="selected"
+          @toggleDialog="toggleDialog"
           @getDataType="getDataType"
         ></router-view>
       </v-flex>
@@ -68,8 +69,8 @@ export default {
       let idStr = id.join();
 
       confirm(`確定刪除${num}筆資料？`) && this.axios.delete(uri, {data: { ids: idStr }}).then(response => {
-        this.$router.go();
-        this.flash(`成功刪除${num}筆資料`, 'success');
+        this.flash(`成功刪除${num}筆資料`, 'success', { timeout: 3000 });
+        this.$refs.table.deleteArray();;
       }).catch(error => {
         this.flash(error.message, 'error');
       })
@@ -77,6 +78,7 @@ export default {
     getDataType(type) {
       this.dataType = type;
     },
+    // 取得array裡面的column
     getColumn (array, column) {
       return array.map((value, index) => {return value[column]});
     }
@@ -91,5 +93,14 @@ export default {
 
   #actions {
     display: table-cell;
+  }
+
+  .v-btn.editBtn:hover{
+    background-color: #FDD835;
+    color: #FFFDE7;
+  }
+  .v-btn.deleteBtn:hover {
+    background-color: #F44336;
+    color: #FFEBEE;
   }
 </style>

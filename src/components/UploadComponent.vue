@@ -8,7 +8,7 @@
             <v-layout row wrap align-center justify-center>
 
               <v-flex v-if="!dataType" xs6 class="pt-4">
-                <v-btn color="primary" @click="uploadBtn" depressed block dark :loading="loading">
+                <v-btn large color="primary" @click="uploadBtn" depressed block dark :loading="loading">
                   UPLOAD FILE
                   <span class="ml-1">
                     <v-icon>cloud_upload</v-icon>

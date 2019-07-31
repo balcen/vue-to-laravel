@@ -32,19 +32,22 @@
             <td class="text-xs-right">{{ props.item.p_weight }}</td>
             <td class="text-xs-right">{{ props.item.p_note }}</td>
             <td id="actions" class="justify-center layout px-0">
-              <v-icon
-                small
-                class="mr-2"
-                @click="editedItem(props.item)"
-              >
-                edit
-              </v-icon>
-              <v-icon
-                small
-                @click="deleteItem(props.item)"
-              >
-                delete
-              </v-icon>
+              <v-btn icon small class="ma-0 editBtn">
+                <v-icon
+                  small
+                  @click="editedItem(props.item)"
+                >
+                  edit
+                </v-icon>
+              </v-btn>
+              <v-btn icon small class="ma-0 deleteBtn">
+                <v-icon
+                  small
+                  @click="deleteItem(props.item)"
+                >
+                  delete
+                </v-icon>
+                </v-btn>
             </td>
           </template>
 
@@ -224,7 +227,7 @@ export default {
       if (index !== -1) {
         let uri = `https://calm-ocean-96461.herokuapp.com/api/products/${item.id}`;
         this.axios.put(uri, item).then(response => {
-          this.$router.go();
+          Object.assign(this.products[index], item);
           this.flash('成功修改一筆資料', 'success', { timeout: 3000 });
         }).catch(error => {
           this.flash(error.message, 'error');
@@ -232,13 +235,16 @@ export default {
       } else {
         let uri = 'https://calm-ocean-96461.herokuapp.com/api/products';
         this.axios.post(uri, item).then(response => {
-          this.$router.go();
+          this.products.push(item);
           this.flash('成功新增一筆資料', 'success', { timeout: 3000 });
         }).catch(error => {
           this.flash(error.message, 'error');
         })
       }
       this.close();
+    },
+    deleteArray() {
+      this.products = this.products.filter((el) => !this.selected.includes(el));
     }
   }
 }

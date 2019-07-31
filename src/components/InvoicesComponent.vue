@@ -36,19 +36,22 @@
             <td class="text-xs-right">{{ props.item.i_amount }}</td>
             <td class="text-xs-right">{{ props.item.i_note }}</td>
             <td id="actions" class="justify-center layout">
-              <v-icon
-                small
-                class="mr-2"
-                @click="editedItem(props.item)"
-              >
-                edit
-              </v-icon>
-              <v-icon
-                small
-                @click="deleteItem(props.item)"
-              >
-                delete
-              </v-icon>
+              <v-btn icon small class="ma-0 editBtn">
+                <v-icon
+                  small
+                  @click="editedItem(props.item)"
+                >
+                  edit
+                </v-icon>
+              </v-btn>
+              <v-btn icon small class="ma-0 deleteBtn">
+                <v-icon
+                  small
+                  @click="deleteItem(props.item)"
+                >
+                  delete
+                </v-icon>
+              </v-btn>
             </td>
           </template>
           <template v-slot:no-data>
@@ -175,6 +178,12 @@
   </div>
 </template>
 
+<style>
+#actions {
+  padding: 0 3px !important;
+}
+</style>
+
 <script>
 export default {
   props: ['search', 'dialog', 'selected'],
@@ -298,7 +307,7 @@ export default {
       if (index !== -1) {
         let uri = `https://calm-ocean-96461.herokuapp.com/api/invoices/${item.id}`;
         this.axios.put(uri, item).then(response => {
-          this.$router.go();
+          Object.assign(this.invoices[index], item);
           this.flash('成功修改一筆資料', 'success', { timeout: 3000 });
         }).catch(error => {
           this.flash(error.message, 'error');
@@ -306,12 +315,15 @@ export default {
       } else {
         let uri = 'https://calm-ocean-96461.herokuapp.com/api/invoices';
         this.axios.post(uri, item).then(response => {
-          this.$router.go();
+          this.invoices.push(item);
           this.flash('成功新增一筆資料', 'success', { timeout: 3000 });
         }).catch(error => {
           this.flash(error.message, 'error');
         })
       }
+    },
+    deleteArray () {
+      this.invoices = this.invoices.filter((el) => !this.selected.includes(el));
     }
   }
 }

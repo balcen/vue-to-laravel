@@ -190,7 +190,7 @@ export default {
         'o_product_part_no': '',
         'o_product_spec': '',
         'o_product_price': '',
-        'o_currency': '',
+        'o_currency': 'USD',
         'o_quantity': '',
         'o_amount': '',
         'o_note': ''
@@ -204,7 +204,7 @@ export default {
         'o_product_part_no': '',
         'o_product_spec': '',
         'o_product_price': '',
-        'o_currency': '',
+        'o_currency': 'USD',
         'o_quantity': '',
         'o_amount': '',
         'o_note': ''

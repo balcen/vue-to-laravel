@@ -230,7 +230,7 @@ export default {
         'i_product_part_no': '',
         'i_product_spec': '',
         'i_product_price': '',
-        'i_currency': '',
+        'i_currency': 'USD',
         'i_quantity': '',
         'i_amount': '',
         'i_note':''
@@ -246,7 +246,7 @@ export default {
         'i_product_part_no': '',
         'i_product_spec': '',
         'i_product_price': '',
-        'i_currency': '',
+        'i_currency': 'USD',
         'i_quantity': '',
         'i_amount': '',
         'i_note':''

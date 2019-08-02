@@ -1,26 +1,28 @@
 <template>
   <div>
     <md-content>
-      <h1 class="text-xs-center mt-5 md-display-3">FILE UPLOAD</h1>
-      <v-layout align-content-center justify-center class="mt-3">
+      <v-layout align-content-center wrap justify-center class="mt-3">
+        <v-flex xs12>
+          <h1 class="text-xs-center mt-3 md-display-3 font-weight-medium">FILE UPLOAD</h1>
+        </v-flex>
         <v-flex xs6>
           <v-container grid-list-sm fill-height class="pt-0">
             <v-layout row wrap align-center justify-center>
-
               <v-flex v-if="!dataType" xs6 class="pt-4">
                 <v-btn large color="primary" @click="uploadBtn" depressed block dark :loading="loading">
-                  UPLOAD FILE
-                  <span class="ml-1">
-                    <v-icon>cloud_upload</v-icon>
+                  <span class="mr-2">
+                    <v-icon large>description</v-icon>
                   </span>
+                  UPLOAD FILE
                 </v-btn>
+
                 <input type="file" id="upload" ref="upload" @change="changeFile" accept=".xlsx">
               </v-flex>
 
-              <template v-if="dataType" name="upload-button">
+              <template v-if="dataType" name="upload-button" transition="fade-transition">
                 <v-layout wrap justify-center>
                   <v-flex xs12 offset-xs1>
-                    <v-btn icon outlined class="ml-5">
+                    <v-btn icon outlined class="ml-5" @click="dataType=''">
                       <v-icon class="mx-0 px-0">arrow_back</v-icon>
                     </v-btn>
                   </v-flex>
@@ -76,7 +78,7 @@ export default {
       this.selectType = str;
     }
   },
-  created() {
+  computed: {
   },
   methods: {
     uploadBtn () {
@@ -91,11 +93,19 @@ export default {
       let uri = 'https://calm-ocean-96461.herokuapp.com/api/upload';
       this.axios.post(uri, formData).then(response => {
         this.dataType = response.data.type;
-        this.dataLength = response.data.length;
-        this.fileName = e.target.files[0].name;
-        this.loading = false;
+        // 如果有找到檔案類型
+        if(this.dataType) {
+          this.dataLength = response.data.length;
+          this.fileName = e.target.files[0].name;
+        // 如果沒有找到檔案類型
+        }else {
+          this.flash('檔案類型有誤，請確認檔案', 'warning', { timeout: 3000 });
+          this.$refs.upload.value = '';
+        }
+          this.loading = false;
       }).catch(error => {
         this.flash(error.message, 'error');
+        this.loading = false;
       })
     },
     fileUpload () {

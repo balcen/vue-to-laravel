@@ -54,10 +54,6 @@ export default {
   data () {
     return {
     }
-  },
-  method: {
-  },
-  watch: {
   }
 }
 </script>

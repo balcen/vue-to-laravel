@@ -52,6 +52,7 @@
         </v-data-table>
       </v-flex>
     </v-layout>
+
     <v-dialog
       v-model="dialog"
       max-width="800px"
@@ -63,36 +64,38 @@
             {{ formTitle }}
           </span>
         </v-card-title>
-        <v-card-text>
-          <v-container grid-list-md>
-            <v-layout wrap>
-              <v-flex xs12 sm6 md4>
-                <v-text-field v-model="editItem.c_tax_id" label="客戶統編"></v-text-field>
-              </v-flex>
-              <v-flex xs12 sm6 md4>
-                <v-text-field v-model="editItem.c_name" label="客戶名稱"></v-text-field>
-              </v-flex>
-              <v-flex xs12 sm6 md4>
-                <v-text-field v-model="editItem.c_type" label="客戶類型"></v-text-field>
-              </v-flex>
-              <v-flex xs12 sm6 md4>
-                <v-text-field v-model="editItem.c_contact" label="聯絡人"></v-text-field>
-              </v-flex>
+        <v-form ref="form" v-model="valid" lazy-validation>
+          <v-card-text>
+            <v-container grid-list-md>
+              <v-layout wrap>
                 <v-flex xs12 sm6 md4>
-              <v-text-field v-model="editItem.c_phone" label="聯絡電話"></v-text-field>
+                  <v-text-field ref="c_tax_id" :rules="[rules.required]" v-model="editItem.c_tax_id" label="客戶統編" required></v-text-field>
                 </v-flex>
-              <v-flex xs12 sm6 md4>
-                <v-text-field v-model="editItem.c_mail" label="電子信箱"></v-text-field>
-              </v-flex>
-            </v-layout>
-          </v-container>
-        </v-card-text>
+                <v-flex xs12 sm6 md4>
+                  <v-text-field ref="c_name" :rules="[rules.required]" v-model="editItem.c_name" label="客戶名稱" required></v-text-field>
+                </v-flex>
+                <v-flex xs12 sm6 md4>
+                  <v-text-field ref="c_type" :rules="[rules.required]" v-model="editItem.c_type" label="客戶類型" required></v-text-field>
+                </v-flex>
+                <v-flex xs12 sm6 md4>
+                  <v-text-field ref="c_contact" :rules="[rules.required]" v-model="editItem.c_contact" label="聯絡人" required></v-text-field>
+                </v-flex>
+                <v-flex xs12 sm6 md4>
+                  <v-text-field ref="c_phone" :rules="[rules.required]" v-model="editItem.c_phone" label="聯絡電話" required></v-text-field>
+                </v-flex>
+                <v-flex xs12 sm6 md4>
+                  <v-text-field ref="c_mail" :rules="[rules.required, rules.email]" v-model="editItem.c_mail" label="電子信箱" required></v-text-field>
+                </v-flex>
+              </v-layout>
+            </v-container>
+          </v-card-text>
 
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" flat @click="close">Cancel</v-btn>
-          <v-btn color="blue darken-1" flat @click="save">Save</v-btn>
-        </v-card-actions>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="blue darken-1" flat @click="close">Cancel</v-btn>
+            <v-btn color="blue darken-1" flat @click="save" :disabled="!valid">Save</v-btn>
+          </v-card-actions>
+        </v-form>
       </v-card>
     </v-dialog>
   </div>
@@ -103,6 +106,7 @@ export default {
   props: ['search', 'dialog', 'selected'],
   data () {
     return {
+      valid: true,
       rowsPerPage: [10,25,50,{"text":"$vuetify.dataIterator.rowsPerPageAll","value":-1}],
       noDataAlert: false,
       pagination: { rowsPerPage: 25 },
@@ -138,6 +142,13 @@ export default {
         'c_contact': '',
         'c_phone': '',
         'c_mail': ''
+      },
+      rules: {
+        required: value => !!value || 'Required',
+        email: value => {
+          const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+          return pattern.test(value) || "Invalid e-mail";
+        }
       }
     };
   },
@@ -148,13 +159,15 @@ export default {
     selected: function () {
       this.$emit('update:selected', this.selected);
       this.$emit('getDataType', 'clients');
+    },
+    dialog() {
+      this.reset();
     }
   },
   computed: {
     formTitle: function() {
       return this.editIndex === -1 ? 'New Item' : 'Edit Item';
-    },
-
+    }
   },
   methods: {
     getClients () {
@@ -183,13 +196,18 @@ export default {
       })
     },
     close() {
+      this.reset();
       this.$emit('toggleDialog', false);
       setTimeout(()=>{
         this.editItem = Object.assign({}, this.defaultItem);
         this.editIndex = -1;
-      },1000);
+      },100);
     },
     save() {
+      this.validate();
+      if(this.$refs.form.validate) {
+        return;
+      }
       let index = this.editIndex;
       let item = this.editItem;
       if (index !== -1) {
@@ -213,6 +231,14 @@ export default {
     },
     deleteArray () {
       this.clients = this.clients.filter((el) => !this.selected.includes(el));
+    },
+    reset() {
+      this.$refs.form.reset();
+    },
+    validate() {
+      if(this.$refs.form.validate()) {
+        this.snackbar = true;
+      }
     }
   }
 };

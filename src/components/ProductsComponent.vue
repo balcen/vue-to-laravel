@@ -72,57 +72,69 @@
             {{ formTitle }}
           </span>
         </v-card-title>
-        <v-card-text>
-          <v-container grid-list-md>
-            <v-layout wrap>
-              <v-flex xs12 sm6 md4>
-                <v-text-field v-model="editItem.p_type" label="產品類型"></v-text-field>
-              </v-flex>
-              <v-flex xs12 sm6 md4>
-                <v-text-field v-model="editItem.p_image" label="產品圖片"></v-text-field>
-              </v-flex>
-              <v-flex xs12 sm6 md4>
-                <v-text-field v-model="editItem.p_name" label="產品名稱"></v-text-field>
-              </v-flex>
-              <v-flex xs12 sm6 md4>
-                <v-text-field v-model="editItem.p_part_no" label="產品料號"></v-text-field>
-              </v-flex>
-              <v-flex xs12 sm6 md4>
-                <v-text-field v-model="editItem.p_spec" label="產品規格"></v-text-field>
-              </v-flex>
-              <v-flex xs12 sm6 md4>
-                <v-text-field v-model="editItem.p_price" label="產品價格"></v-text-field>
-              </v-flex>
-              <v-flex xs12 sm6 md4>
-                <v-text-field v-model="editItem.p_currency" label="幣別"></v-text-field>
-              </v-flex>
-              <v-flex xs12 sm6 md4>
-                <v-text-field v-model="editItem.p_size" label="產品尺寸"></v-text-field>
-              </v-flex>
-              <v-flex xs12 sm6 md4>
-                <v-text-field v-model="editItem.p_weight" label="產品重量"></v-text-field>
-              </v-flex>
-              <v-flex xs12 sm6 md4>
-                <v-text-field v-model="editItem.p_note" label="備註"></v-text-field>
-              </v-flex>
-            </v-layout>
-          </v-container>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" flat @click="close">Cancel</v-btn>
-          <v-btn color="blue darken-1" flat @click="save">Save</v-btn>
-        </v-card-actions>
+        <v-form ref="form" v-model="valid" lazy-validation>
+          <v-card-text>
+            <v-container grid-list-md>
+              <v-layout wrap>
+                <v-flex xs12 sm6 md4>
+                  <v-text-field :rules="[rules.required]" v-model="editItem.p_type" label="產品類型"></v-text-field>
+                </v-flex>
+                <v-flex xs12 sm6 md4>
+                  <v-text-field v-model="editItem.p_image" label="產品圖片" readonly @click="upload"></v-text-field>
+                  <input type="file" ref="image" id="image" accept="image/*" />
+                </v-flex>
+                <v-flex xs12 sm6 md4>
+                  <v-text-field :rules="[rules.required]" v-model="editItem.p_name" label="產品名稱"></v-text-field>
+                </v-flex>
+                <v-flex xs12 sm6 md4>
+                  <v-text-field :rules="[rules.required]" v-model="editItem.p_part_no" label="產品料號"></v-text-field>
+                </v-flex>
+                <v-flex xs12 sm6 md4>
+                  <v-text-field :rules="[rules.required]" v-model="editItem.p_spec" label="產品規格"></v-text-field>
+                </v-flex>
+                <v-flex xs12 sm6 md4>
+                  <v-text-field :rules="[rules.required]" v-model="editItem.p_price" label="產品價格"></v-text-field>
+                </v-flex>
+                <v-flex xs12 sm6 md4>
+                  <v-text-field :rules="[rules.required]" v-model="editItem.p_currency" label="幣別"></v-text-field>
+                </v-flex>
+                <v-flex xs12 sm6 md4>
+                  <v-text-field v-model="editItem.p_size" label="產品尺寸"></v-text-field>
+                </v-flex>
+                <v-flex xs12 sm6 md4>
+                  <v-text-field v-model="editItem.p_weight" label="產品重量"></v-text-field>
+                </v-flex>
+                <v-flex xs12 sm6 md4>
+                  <v-text-field v-model="editItem.p_note" label="備註"></v-text-field>
+                </v-flex>
+              </v-layout>
+            </v-container>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="blue darken-1" flat @click="close">Cancel</v-btn>
+            <v-btn color="blue darken-1" flat @click="save" :disabled="!valid">Save</v-btn>
+          </v-card-actions>
+        </v-form>
       </v-card>
     </v-dialog>
   </div>
 </template>
+
+<style>
+#image {
+  height: 0;
+  width: 0;
+  display: none;
+}
+</style>
 
 <script>
 export default {
   props: ['search', 'dialog', 'selected', 'message'],
   data () {
     return {
+      valid: true,
       rowsPerPage: [10,25,50,{"text":"$vuetify.dataIterator.rowsPerPageAll","value":-1}],
       noDataAlert: false,
       error: '',
@@ -155,10 +167,11 @@ export default {
         'p_part_no': '',
         'p_spec': '',
         'p_price': '',
-        'p_currency': '',
+        'p_currency': 'USD',
         'p_size': '',
         'p_weight': '',
-        'p_note': ''
+        'p_note': '',
+        'image': ''
       },
       defaultItem: {
         'p_type': '',
@@ -167,10 +180,14 @@ export default {
         'p_part_no': '',
         'p_spec': '',
         'p_price': '',
-        'p_currency': '',
+        'p_currency': 'USD',
         'p_size': '',
         'p_weight': '',
-        'p_note': ''
+        'p_note': '',
+        'image': ''
+      },
+      rules: {
+        required: v => !!v || 'Required'
       }
     }
   },
@@ -187,6 +204,9 @@ export default {
       this.$emit('update:selected', this.selected);
       this.$emit('getDataType', 'products');
     },
+    dialog() {
+      this.$refs.form.reset();
+    }
   },
   methods: {
     getProducts () {
@@ -222,6 +242,10 @@ export default {
       }, 1000)
     },
     save () {
+      if(this.$refs.form.validate){
+        this.validate();
+        return;
+      }
       let index = this.editIndex;
       let item = this.editItem;
       if (index !== -1) {
@@ -241,10 +265,26 @@ export default {
           this.flash(error.message, 'error');
         })
       }
+      
       this.close();
     },
     deleteArray() {
       this.products = this.products.filter((el) => !this.selected.includes(el));
+    },
+    // Image Upload Method
+    upload() {
+      this.$refs.image.click();
+    },
+    change(e) {
+      this.editItem.image = new FormData;
+      this.editItem.append('image', e.target.files[0]);
+      this.editItem.p_image = e.target.files[0].name;
+    },
+    // Validation
+    validate() {
+      if(this.$refs.form.validate()) {
+        this.snackbar = true;
+      }
     }
   }
 }

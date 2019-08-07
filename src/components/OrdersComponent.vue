@@ -73,77 +73,81 @@
             {{ formTitle }}
           </span>
         </v-card-title>
-        <v-card-text>
-          <v-container grid-list-md>
-            <v-layout wrap>
-              <v-flex xs12 sm6 md4>
-                <v-text-field v-model="editItem.o_no" label="訂單號碼"></v-text-field>
-              </v-flex>
-              <v-flex xs12 sm6 md4>
-                <v-menu
-                  v-model="menu"
-                  :close-on-content-click="false"
-                  :nudge-right="40"
-                  lazy
-                  transition="scale-transition"
-                  offset-y
-                  full-width
-                  min-width="290px"
-                >
-                  <template v-slot:activator="{ on }">
-                    <v-text-field
-                      v-model="editItem.o_date"
-                      prepend-icon="event"
-                      label="訂單日期"
-                      readonly
-                      v-on="on"
-                    ></v-text-field>
-                  </template>
-                  <v-date-picker v-model="editItem.o_date" @input="menu = false"></v-date-picker>
-                </v-menu>
-              </v-flex>
-              <v-flex xs12 sm6 md4>
-                <v-text-field v-model="editItem.o_seller_name" label="賣家名稱"></v-text-field>
-              </v-flex>
-              <v-flex xs12 sm6 md4>
-                <v-text-field v-model="editItem.o_buyer_name" label="買家名稱"></v-text-field>
-              </v-flex>
-              <v-flex xs12 sm6 md4>
-                <v-text-field v-model="editItem.o_product_name" label="產品名稱"></v-text-field>
-              </v-flex>
-              <v-flex xs12 sm6 md4>
-                <v-text-field v-model="editItem.o_product_part_no" label="產品料號"></v-text-field>
-              </v-flex>
-              <v-flex xs12 sm6 md4>
-                <v-text-field v-model="editItem.o_product_spec" label="產品規格"></v-text-field>
-              </v-flex>
-              <v-flex xs12 sm6 md4>
-                <v-text-field
-                  v-model="editItem.o_product_price"
-                  label="產品價格"
-                  counter="12"
-                ></v-text-field>
-              </v-flex>
-              <v-flex xs12 sm6 md4>
-                <v-text-field v-model="editItem.o_currency" label="幣別"></v-text-field>
-              </v-flex>
-              <v-flex xs12 sm6 md4>
-                <v-text-field v-model="editItem.o_quantity" label="採購數量"></v-text-field>
-              </v-flex>
-              <v-flex xs12 sm6 md4>
-                <v-text-field v-model="editItem.o_amount" label="採購金額"></v-text-field>
-              </v-flex>
-              <v-flex xs12 sm6 md4>
-                <v-text-field v-model="editItem.o_note" label="付款條件"></v-text-field>
-              </v-flex>
-            </v-layout>
-          </v-container>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" flat @click="close">Cancel</v-btn>
-          <v-btn color="blue darken-1" flat @click="save">Save</v-btn>
-        </v-card-actions>
+        <v-form ref="form" v-model="valid" lazy-validation>
+          <v-card-text>
+            <v-container grid-list-md>
+              <v-layout wrap>
+                <v-flex xs12 sm6 md4>
+                  <v-text-field :rules="[rules.required]" v-model="editItem.o_no" label="訂單號碼"></v-text-field>
+                </v-flex>
+                <v-flex xs12 sm6 md4>
+                  <v-menu
+                    v-model="menu"
+                    :close-on-content-click="false"
+                    :nudge-right="40"
+                    lazy
+                    transition="scale-transition"
+                    offset-y
+                    full-width
+                    min-width="290px"
+                  >
+                    <template v-slot:activator="{ on }">
+                      <v-text-field
+                        v-model="editItem.o_date"
+                        prepend-icon="event"
+                        label="訂單日期"
+                        :rules="[rules.required]"
+                        readonly
+                        v-on="on"
+                      ></v-text-field>
+                    </template>
+                    <v-date-picker v-model="editItem.o_date" @input="menu = false"></v-date-picker>
+                  </v-menu>
+                </v-flex>
+                <v-flex xs12 sm6 md4>
+                  <v-text-field :rules="[rules.required]" v-model="editItem.o_seller_name" label="賣家名稱"></v-text-field>
+                </v-flex>
+                <v-flex xs12 sm6 md4>
+                  <v-text-field :rules="[rules.required]" v-model="editItem.o_buyer_name" label="買家名稱"></v-text-field>
+                </v-flex>
+                <v-flex xs12 sm6 md4>
+                  <v-text-field :rules="[rules.required]" v-model="editItem.o_product_name" label="產品名稱"></v-text-field>
+                </v-flex>
+                <v-flex xs12 sm6 md4>
+                  <v-text-field :rules="[rules.required]" v-model="editItem.o_product_part_no" label="產品料號"></v-text-field>
+                </v-flex>
+                <v-flex xs12 sm6 md4>
+                  <v-text-field v-model="editItem.o_product_spec" label="產品規格"></v-text-field>
+                </v-flex>
+                <v-flex xs12 sm6 md4>
+                  <v-text-field
+                    v-model="editItem.o_product_price"
+                    label="產品價格"
+                    :rules="[rules.required]"
+                    counter="12"
+                  ></v-text-field>
+                </v-flex>
+                <v-flex xs12 sm6 md4>
+                  <v-text-field :rules="[rules.required]" v-model="editItem.o_currency" label="幣別"></v-text-field>
+                </v-flex>
+                <v-flex xs12 sm6 md4>
+                  <v-text-field :rules="[rules.required]" v-model="editItem.o_quantity" label="採購數量"></v-text-field>
+                </v-flex>
+                <v-flex xs12 sm6 md4>
+                  <v-text-field v-model="editItem.o_amount" label="採購金額"></v-text-field>
+                </v-flex>
+                <v-flex xs12 sm6 md4>
+                  <v-text-field v-model="editItem.o_note" label="付款條件"></v-text-field>
+                </v-flex>
+              </v-layout>
+            </v-container>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="blue darken-1" flat @click="close">Cancel</v-btn>
+            <v-btn color="blue darken-1" flat @click="save" :disabled="!valid">Save</v-btn>
+          </v-card-actions>
+        </v-form>
       </v-card>
     </v-dialog>
   </div>
@@ -154,6 +158,7 @@ export default {
   props: ['search', 'dialog', 'selected'],
   data () {
     return {
+      valid: true,
       rowsPerPage: [10,25,50,{"text":"$vuetify.dataIterator.rowsPerPageAll","value":-1}],
       menu: false,
       noDataAlert: false,
@@ -208,6 +213,9 @@ export default {
         'o_quantity': '',
         'o_amount': '',
         'o_note': ''
+      },
+      rules: {
+        required: v => !!v || 'Required'
       }
     }
   },
@@ -215,6 +223,9 @@ export default {
     selected: function() {
       this.$emit('update:selected', this.selected);
       this.$emit('getDataType', 'orders');
+    },
+    dialog() {
+      this.$refs.form.reset();
     }
   },
   computed: {
@@ -259,6 +270,10 @@ export default {
       },1000)
     },
     save () {
+      if(this.$refs.form.validate) {
+        this.validate();
+        return;
+      }
       let index = this.editIndex;
       let item = this.editItem;
       if (index !== -1) {
@@ -282,6 +297,12 @@ export default {
     },
     deleteArray () {
       this.orders = this.orders.filter((el) => !this.selected.includes(el));
+    },
+    // Validation
+    validate() {
+      if(this.$refs.form.validate()) {
+        this.snackbar = true;
+      }
     }
   }
 }

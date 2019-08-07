@@ -6,7 +6,6 @@
           v-model="selected"
           :headers="headers"
           :items="clients"
-          :item-key="id"
           :search="search"
           :pagination.sync="pagination"
           :loading="loading"
@@ -69,22 +68,22 @@
             <v-container grid-list-md>
               <v-layout wrap>
                 <v-flex xs12 sm6 md4>
-                  <v-text-field ref="c_tax_id" :rules="[rules.required]" v-model="editItem.c_tax_id" label="客戶統編" required></v-text-field>
+                  <v-text-field :rules="[rules.required]" v-model="editItem.c_tax_id" label="客戶統編" required></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm6 md4>
-                  <v-text-field ref="c_name" :rules="[rules.required]" v-model="editItem.c_name" label="客戶名稱" required></v-text-field>
+                  <v-text-field :rules="[rules.required]" v-model="editItem.c_name" label="客戶名稱" required></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm6 md4>
-                  <v-text-field ref="c_type" :rules="[rules.required]" v-model="editItem.c_type" label="客戶類型" required></v-text-field>
+                  <v-text-field :rules="[rules.required]" v-model="editItem.c_type" label="客戶類型" required></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm6 md4>
-                  <v-text-field ref="c_contact" :rules="[rules.required]" v-model="editItem.c_contact" label="聯絡人" required></v-text-field>
+                  <v-text-field :rules="[rules.required]" v-model="editItem.c_contact" label="聯絡人" required></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm6 md4>
-                  <v-text-field ref="c_phone" :rules="[rules.required]" v-model="editItem.c_phone" label="聯絡電話" required></v-text-field>
+                  <v-text-field :rules="[rules.required]" v-model="editItem.c_phone" label="聯絡電話" required></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm6 md4>
-                  <v-text-field ref="c_mail" :rules="[rules.required, rules.email]" v-model="editItem.c_mail" label="電子信箱" required></v-text-field>
+                  <v-text-field :rules="[rules.required, rules.email]" v-model="editItem.c_mail" label="電子信箱" required></v-text-field>
                 </v-flex>
               </v-layout>
             </v-container>

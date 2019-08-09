@@ -164,7 +164,7 @@
                   <v-text-field :rules="[rules.required]" v-model="editItem.i_quantity" label="採購數量"></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm6 md4>
-                  <v-text-field v-model="editItem.i_amount" label="採購金額" :value="sum"></v-text-field>
+                  <v-text-field v-model="amount" label="採購金額" :value="sum"></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm6 md4>
                   <v-text-field v-model="editItem.i_note" label="付款條件"></v-text-field>
@@ -270,8 +270,15 @@ export default {
     formTitle: function() {
       return this.editIndex === -1 ? 'New Item' : 'Edit Item';
     },
-    sum() {
-      return this.editItem.i_quantity * this.editItem.i_product_price;
+    amount: {
+      get: function() {
+        let sum = this.editItem.i_product_price * this.editItem.i_quantity;
+        this.editItem.i_amount = sum;
+        return sum;
+      },
+      set: function(newVal) {
+        this.editItem.i_amount = newVal;
+      }
     }
   },
   watch: {

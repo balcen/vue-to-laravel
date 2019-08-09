@@ -78,7 +78,7 @@
             <v-container grid-list-md>
               <v-layout wrap>
                 <v-flex xs12 sm6 md4>
-                  <v-text-field :rules="[rules.required]" v-model="editItem.o_no" label="訂單號碼"></v-text-field>
+                  <v-text-field :rules="[rules.required]" v-model="editItem.o_no" label="訂單號碼" maxlength="30"></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm6 md4>
                   <v-menu
@@ -114,27 +114,22 @@
                   <v-text-field :rules="[rules.required]" v-model="editItem.o_product_name" label="產品名稱"></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm6 md4>
-                  <v-text-field :rules="[rules.required]" v-model="editItem.o_product_part_no" label="產品料號"></v-text-field>
+                  <v-text-field :rules="[rules.required]" v-model="editItem.o_product_part_no" label="產品料號" maxlength="30"></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm6 md4>
                   <v-text-field v-model="editItem.o_product_spec" label="產品規格"></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm6 md4>
-                  <v-text-field
-                    v-model="editItem.o_product_price"
-                    label="產品價格"
-                    :rules="[rules.required]"
-                    counter="12"
-                  ></v-text-field>
+                  <v-text-field type="number" v-model="editItem.o_product_price" label="產品價格" :rules="[rules.required]" maxlength="12"></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm6 md4>
-                  <v-text-field :rules="[rules.required]" v-model="editItem.o_currency" label="幣別"></v-text-field>
+                  <v-text-field :rules="[rules.required]" v-model="editItem.o_currency" label="幣別" maxlength="10"></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm6 md4>
                   <v-text-field :rules="[rules.required]" v-model="editItem.o_quantity" label="採購數量"></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm6 md4>
-                  <v-text-field v-model="editItem.o_amount" label="採購金額"></v-text-field>
+                  <v-text-field v-model="editItem.o_amount" label="採購金額" :value="value"></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm6 md4>
                   <v-text-field v-model="editItem.o_note" label="付款條件"></v-text-field>
@@ -158,6 +153,7 @@ export default {
   props: ['search', 'dialog', 'selected'],
   data () {
     return {
+      value: 123,
       valid: true,
       rowsPerPage: [10,25,50,{"text":"$vuetify.dataIterator.rowsPerPageAll","value":-1}],
       menu: false,
@@ -229,8 +225,13 @@ export default {
     }
   },
   computed: {
-    formTitle: function() {
+    formTitle() {
       return this.editIndex === -1 ? 'New Item' : 'Edit Item';
+    },
+    sum: function(){
+      console.log(this.editItem.o_product_price);
+      console.log(this.editItem.o_quantity);
+      return;
     }
   },
   created() {
@@ -270,10 +271,7 @@ export default {
       },1000)
     },
     save () {
-      if(this.$refs.form.validate) {
-        this.validate();
-        return;
-      }
+      if(!this.$refs.form.validate) return;
       let index = this.editIndex;
       let item = this.editItem;
       if (index !== -1) {
@@ -297,12 +295,6 @@ export default {
     },
     deleteArray () {
       this.orders = this.orders.filter((el) => !this.selected.includes(el));
-    },
-    // Validation
-    validate() {
-      if(this.$refs.form.validate()) {
-        this.snackbar = true;
-      }
     }
   }
 }

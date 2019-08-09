@@ -16,7 +16,7 @@ const router = new VueRouter({
 
 import VueAxios from 'vue-axios'
 import axios from 'axios'
-axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
+axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
 Vue.use(VueAxios, axios);
 
 // Vue-material

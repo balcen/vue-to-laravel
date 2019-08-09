@@ -203,10 +203,7 @@ export default {
       },100);
     },
     save() {
-      this.validate();
-      if(this.$refs.form.validate) {
-        return;
-      }
+      if(this.$refs.form.validate) return;
       let index = this.editIndex;
       let item = this.editItem;
       if (index !== -1) {
@@ -233,11 +230,6 @@ export default {
     },
     reset() {
       this.$refs.form.reset();
-    },
-    validate() {
-      if(this.$refs.form.validate()) {
-        this.snackbar = true;
-      }
     }
   }
 };

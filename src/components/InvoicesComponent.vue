@@ -78,7 +78,7 @@
             <v-container grid-list-md>
               <v-layout wrap>
                 <v-flex xs12 sm6 md4>
-                  <v-text-field :rules="[rules.required]" v-model="editItem.i_no" label="發票號碼"></v-text-field>
+                  <v-text-field :rules="[rules.required]" v-model="editItem.i_no" label="發票號碼" maxlength="30"></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm6 md4>
                   <v-menu
@@ -130,7 +130,7 @@
                   </v-menu>
                 </v-flex>
                 <v-flex xs12 sm6 md4>
-                  <v-text-field :rules="[rules.required]" v-model="editItem.i_order_no" label="訂單號碼"></v-text-field>
+                  <v-text-field :rules="[rules.required]" v-model="editItem.i_order_no" label="訂單號碼" maxlength="30"></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm6 md4>
                   <v-text-field :rules="[rules.required]" v-model="editItem.i_seller_name" label="賣家名稱"></v-text-field>
@@ -142,28 +142,29 @@
                   <v-text-field :rules="[rules.required]" v-model="editItem.i_product_name" label="產品名稱"></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm6 md4>
-                  <v-text-field :rules="[rules.required]" v-model="editItem.i_product_part_no" label="產品料號"></v-text-field>
+                  <v-text-field :rules="[rules.required]" v-model="editItem.i_product_part_no" label="產品料號" maxlength="30"></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm6 md4>
                   <v-text-field v-model="editItem.i_product_spec" label="產品規格"></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm6 md4>
                   <v-text-field
-                    rules="[rules.required]"
+                    type="number"
+                    :rules="[rules.required]"
                     v-model="editItem.i_product_price"
-                    count="12"
+                    maxlength="12"
                     label="產品價格"
                   >
                   </v-text-field>
                 </v-flex>
                 <v-flex xs12 sm6 md4>
-                  <v-text-field :rules="[rules.required]" v-model="editItem.i_currency" label="幣別"></v-text-field>
+                  <v-text-field :rules="[rules.required]" v-model="editItem.i_currency" label="幣別" maxlength="10"></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm6 md4>
                   <v-text-field :rules="[rules.required]" v-model="editItem.i_quantity" label="採購數量"></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm6 md4>
-                  <v-text-field v-model="editItem.i_amount" label="採購金額"></v-text-field>
+                  <v-text-field v-model="editItem.i_amount" label="採購金額" :value="sum"></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm6 md4>
                   <v-text-field v-model="editItem.i_note" label="付款條件"></v-text-field>
@@ -268,6 +269,9 @@ export default {
   computed: {
     formTitle: function() {
       return this.editIndex === -1 ? 'New Item' : 'Edit Item';
+    },
+    sum() {
+      return this.editItem.i_quantity * this.editItem.i_product_price;
     }
   },
   watch: {
@@ -313,10 +317,7 @@ export default {
       }, 1000)
     },
     save() {
-      if(this.$refs.form.validate) {
-        this.validate();
-        return;
-      }
+      if(this.$refs.form.validate) return;
       let index = this.editIndex;
       let item = this.editItem;
 
@@ -340,12 +341,6 @@ export default {
     },
     deleteArray () {
       this.invoices = this.invoices.filter((el) => !this.selected.includes(el));
-    },
-    // Validation
-    validate() {
-      if(this.$refs.form.validate()) {
-        this.snackbar = true;
-      }
     }
   }
 }

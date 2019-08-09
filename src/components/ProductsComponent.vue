@@ -77,32 +77,32 @@
             <v-container grid-list-md>
               <v-layout wrap>
                 <v-flex xs12 sm6 md4>
-                  <v-text-field :rules="[rules.required]" v-model="editItem.p_type" label="產品類型"></v-text-field>
+                  <v-text-field :rules="[rules.required]" v-model="editItem.p_type" label="產品類型" maxlength="30"></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm6 md4>
                   <v-text-field v-model="editItem.p_image" label="產品圖片" readonly @click="upload"></v-text-field>
-                  <input type="file" ref="image" id="image" accept="image/*" />
+                  <input @change="change" type="file" ref="image" id="image" accept="image/*">
                 </v-flex>
                 <v-flex xs12 sm6 md4>
                   <v-text-field :rules="[rules.required]" v-model="editItem.p_name" label="產品名稱"></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm6 md4>
-                  <v-text-field :rules="[rules.required]" v-model="editItem.p_part_no" label="產品料號"></v-text-field>
+                  <v-text-field :rules="[rules.required]" v-model="editItem.p_part_no" label="產品料號" maxlength="100"></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm6 md4>
                   <v-text-field :rules="[rules.required]" v-model="editItem.p_spec" label="產品規格"></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm6 md4>
-                  <v-text-field :rules="[rules.required]" v-model="editItem.p_price" label="產品價格"></v-text-field>
+                  <v-text-field type="number" :rules="[rules.required]" v-model="editItem.p_price" label="產品價格" maxlength="12"></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm6 md4>
-                  <v-text-field :rules="[rules.required]" v-model="editItem.p_currency" label="幣別"></v-text-field>
+                  <v-text-field :rules="[rules.required]" v-model="editItem.p_currency" label="幣別" maxlength="10"></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm6 md4>
-                  <v-text-field v-model="editItem.p_size" label="產品尺寸"></v-text-field>
+                  <v-text-field v-model="editItem.p_size" label="產品尺寸" maxlegnth="50"></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm6 md4>
-                  <v-text-field v-model="editItem.p_weight" label="產品重量"></v-text-field>
+                  <v-text-field v-model="editItem.p_weight" label="產品重量" maxlength="15"></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm6 md4>
                   <v-text-field v-model="editItem.p_note" label="備註"></v-text-field>
@@ -159,6 +159,7 @@ export default {
         { text: '備註', value: "p_note", sortable: false },
         { text: 'Actions', value: 'action', sortable: false, width: "1%" }
       ],
+      image: null,
       editIndex: -1,
       editItem: {
         'p_type': '',
@@ -170,8 +171,7 @@ export default {
         'p_currency': 'USD',
         'p_size': '',
         'p_weight': '',
-        'p_note': '',
-        'image': ''
+        'p_note': ''
       },
       defaultItem: {
         'p_type': '',
@@ -183,8 +183,7 @@ export default {
         'p_currency': 'USD',
         'p_size': '',
         'p_weight': '',
-        'p_note': '',
-        'image': ''
+        'p_note': ''
       },
       rules: {
         required: v => !!v || 'Required'
@@ -206,6 +205,7 @@ export default {
     },
     dialog() {
       this.$refs.form.reset();
+      this.fileReset();
     }
   },
   methods: {
@@ -227,6 +227,7 @@ export default {
     deleteItem (item) {
       const index = this.products.indexOf(item);
       let uri = `https://calm-ocean-96461.herokuapp.com/api/products/${item.id}`;
+      // let uri = `http://localhost:8888/api/products/${item.id}`
       confirm('確定刪除這筆資料？') && this.axios.delete(uri, item.id).then(response => {
           this.products.splice(index, 1);
           this.flash('成功刪除一筆資料', 'success', { timeout: 3000 });
@@ -242,15 +243,15 @@ export default {
       }, 1000)
     },
     save () {
-      if(this.$refs.form.validate){
-        this.validate();
-        return;
-      }
+      if(!this.$refs.form.validate()) return;
+      let formData = new FormData;
+      formData.append('item', JSON.stringify(this.editItem));
+      formData.append('image', this.image);
       let index = this.editIndex;
-      let item = this.editItem;
+      // let item = {item: this.editItem, image: this.image};
       if (index !== -1) {
         let uri = `https://calm-ocean-96461.herokuapp.com/api/products/${item.id}`;
-        this.axios.put(uri, item).then(response => {
+        this.axios.put(uri, formData).then(response => {
           Object.assign(this.products[index], item);
           this.flash('成功修改一筆資料', 'success', { timeout: 3000 });
         }).catch(error => {
@@ -258,7 +259,8 @@ export default {
         })
       } else {
         let uri = 'https://calm-ocean-96461.herokuapp.com/api/products';
-        this.axios.post(uri, item).then(response => {
+        // let uri = 'http://localhost:8888/api/products';
+        this.axios.post(uri, formData).then(response => {
           this.products.push(item);
           this.flash('成功新增一筆資料', 'success', { timeout: 3000 });
         }).catch(error => {
@@ -276,15 +278,14 @@ export default {
       this.$refs.image.click();
     },
     change(e) {
-      this.editItem.image = new FormData;
-      this.editItem.append('image', e.target.files[0]);
+      this.image = e.target.files[0];
       this.editItem.p_image = e.target.files[0].name;
     },
-    // Validation
-    validate() {
-      if(this.$refs.form.validate()) {
-        this.snackbar = true;
-      }
+    fileReset() {
+      console.log('fileReset work!!')
+      const input = this.$refs.image;
+      input.type = 'text';
+      input.type = 'file';
     }
   }
 }

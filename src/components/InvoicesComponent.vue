@@ -287,7 +287,9 @@ export default {
       this.$emit('getDataType', 'invoices');
     },
     dialog() {
-      this.$refs.form.reset();
+      if(!dialog) {
+        this.$refs.form.reset();
+      }
     }
   },
   methods: {

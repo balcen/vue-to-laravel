@@ -1,6 +1,51 @@
 <template>
   <div>
     <v-layout>
+      <v-dialog
+        v-model="dialog"
+        max-width="800px"
+        persistent
+      >
+      <v-card>
+        <v-card-title>
+          <span class="headline">
+            {{ formTitle }}
+          </span>
+        </v-card-title>
+        <v-form ref="form" v-model="valid" lazy-validation>
+          <v-card-text>
+            <v-container grid-list-md>
+              <v-layout wrap>
+                <v-flex xs12 sm6 md4>
+                  <v-text-field :rules="[rules.required]" v-model="editItem.c_tax_id" label="客戶統編" required></v-text-field>
+                </v-flex>
+                <v-flex xs12 sm6 md4>
+                  <v-text-field :rules="[rules.required]" v-model="editItem.c_name" label="客戶名稱" required></v-text-field>
+                </v-flex>
+                <v-flex xs12 sm6 md4>
+                  <v-text-field :rules="[rules.required]" v-model="editItem.c_type" label="客戶類型" required></v-text-field>
+                </v-flex>
+                <v-flex xs12 sm6 md4>
+                  <v-text-field :rules="[rules.required]" v-model="editItem.c_contact" label="聯絡人" required></v-text-field>
+                </v-flex>
+                <v-flex xs12 sm6 md4>
+                  <v-text-field :rules="[rules.required]" v-model="editItem.c_phone" label="聯絡電話" required></v-text-field>
+                </v-flex>
+                <v-flex xs12 sm6 md4>
+                  <v-text-field :rules="[rules.required, rules.email]" v-model="editItem.c_mail" label="電子信箱" required></v-text-field>
+                </v-flex>
+              </v-layout>
+            </v-container>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="blue darken-1" flat @click="close">Cancel</v-btn>
+            <v-btn color="blue darken-1" flat @click="save" :disabled="!valid">Save</v-btn>
+          </v-card-actions>
+        </v-form>
+      </v-card>
+    </v-dialog>
+
       <v-flex xs12>
         <v-data-table
           v-model="selected"
@@ -51,52 +96,6 @@
         </v-data-table>
       </v-flex>
     </v-layout>
-
-    <v-dialog
-      v-model="dialog"
-      max-width="800px"
-      persistent
-    >
-      <v-card>
-        <v-card-title>
-          <span class="headline">
-            {{ formTitle }}
-          </span>
-        </v-card-title>
-        <v-form ref="form" v-model="valid" lazy-validation>
-          <v-card-text>
-            <v-container grid-list-md>
-              <v-layout wrap>
-                <v-flex xs12 sm6 md4>
-                  <v-text-field :rules="[rules.required]" v-model="editItem.c_tax_id" label="客戶統編" required></v-text-field>
-                </v-flex>
-                <v-flex xs12 sm6 md4>
-                  <v-text-field :rules="[rules.required]" v-model="editItem.c_name" label="客戶名稱" required></v-text-field>
-                </v-flex>
-                <v-flex xs12 sm6 md4>
-                  <v-text-field :rules="[rules.required]" v-model="editItem.c_type" label="客戶類型" required></v-text-field>
-                </v-flex>
-                <v-flex xs12 sm6 md4>
-                  <v-text-field :rules="[rules.required]" v-model="editItem.c_contact" label="聯絡人" required></v-text-field>
-                </v-flex>
-                <v-flex xs12 sm6 md4>
-                  <v-text-field :rules="[rules.required]" v-model="editItem.c_phone" label="聯絡電話" required></v-text-field>
-                </v-flex>
-                <v-flex xs12 sm6 md4>
-                  <v-text-field :rules="[rules.required, rules.email]" v-model="editItem.c_mail" label="電子信箱" required></v-text-field>
-                </v-flex>
-              </v-layout>
-            </v-container>
-          </v-card-text>
-
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="blue darken-1" flat @click="close">Cancel</v-btn>
-            <v-btn color="blue darken-1" flat @click="save" :disabled="!valid">Save</v-btn>
-          </v-card-actions>
-        </v-form>
-      </v-card>
-    </v-dialog>
   </div>
 </template>
 
@@ -160,7 +159,9 @@ export default {
       this.$emit('getDataType', 'clients');
     },
     dialog() {
-      this.reset();
+      if(!dialog) {
+        this.reset();
+      }
     }
   },
   computed: {
@@ -181,7 +182,8 @@ export default {
     },
     editedItem (item) {
       this.editIndex = this.clients.indexOf(item);
-      this.editItem = Object.assign({}, item);
+      this.editItem = Object.assign({}, this.clients[this.editIndex]);
+      console.log(this.editItem);
       this.$emit('toggleDialog', true);
     },
     deleteItem (item) {

@@ -221,7 +221,9 @@ export default {
       this.$emit('getDataType', 'orders');
     },
     dialog() {
-      this.$refs.form.reset();
+      if(dialog) {
+        this.$refs.form.reset();
+      }
     }
   },
   computed: {

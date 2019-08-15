@@ -95,12 +95,12 @@ export default {
     display: table-cell;
   }
 
-  .v-btn.editBtn:hover{
+  /* .v-btn.editBtn:hover{
     background-color: #FDD835;
     color: #FFFDE7;
   }
   .v-btn.deleteBtn:hover {
     background-color: #F44336;
     color: #FFEBEE;
-  }
+  } */
 </style>

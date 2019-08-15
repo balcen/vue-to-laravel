@@ -204,8 +204,10 @@ export default {
       this.$emit('getDataType', 'products');
     },
     dialog() {
-      this.$refs.form.reset();
-      this.fileReset();
+      if(!dialog) {
+        this.$refs.form.reset();
+        this.fileReset();
+      }
     }
   },
   methods: {

@@ -14,9 +14,11 @@ const router = new VueRouter({
 	routes: ourRoutes,
 });
 
+// Vue Axios
 import VueAxios from 'vue-axios'
 import axios from 'axios'
 axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
+axios.defaults.baseURL = 'https://calm-ocean-96461.herokuapp.com/api/'
 Vue.use(VueAxios, axios);
 
 // Vue-material
@@ -31,10 +33,20 @@ Vue.use(VueFlashMessage);
 
 import Store from './store/Store'
 
+Vue.router = router;
+// Vue-Auth
+Vue.use(require('@websanova/vue-auth'), {
+  auth: require('@websanova/vue-auth/drivers/auth/bearer.js'),
+  http: require('@websanova/vue-auth/drivers/http/axios.1.x.js'),
+  router: require('@websanova/vue-auth/drivers/router/vue-router.2.x.js'),
+});
+
 // new Vue(Vue.util.extend({ router,Store },App)).$mount('#app');
+
+App.router = Vue.router;
 
 new Vue({
 	Store,
-	router,
+	// router,
 	render: h => h(App)
 }).$mount('#app');

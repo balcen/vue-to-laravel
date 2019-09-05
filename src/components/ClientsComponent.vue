@@ -171,8 +171,7 @@ export default {
   },
   methods: {
     getClients () {
-      let uri = 'https://calm-ocean-96461.herokuapp.com/api/clients';
-      this.axios.get(uri).then(response => {
+      this.axios.get('clients').then(response => {
         this.clients = response.data;
         this.noDataAlert = true;
         this.loading = false;
@@ -188,8 +187,7 @@ export default {
     },
     deleteItem (item) {
       const index = this.clients.indexOf(item);
-      let uri = `https://calm-ocean-96461.herokuapp.com/api/clients/${item.id}`;
-      confirm('確定刪除這筆資料？') && this.axios.delete(uri, item.id).then(response => {
+      confirm('確定刪除這筆資料？') && this.axios.delete(`clients/${item.id}`, item.id).then(response => {
         this.clients.splice(index,1);
         this.flash('成功刪除一筆資料', 'success', { timeout: 3000 });
       }).catch(error => {
@@ -209,16 +207,14 @@ export default {
       let index = this.editIndex;
       let item = this.editItem;
       if (index !== -1) {
-        let uri = `https://calm-ocean-96461.herokuapp.com/api/clients/${item.id}`;
-        this.axios.put(uri, item).then(response => {
+        this.axios.put(`clients/${item.id}`, item).then(response => {
           Object.assign(this.clients[index], item);
           this.flash('成功修改一筆資料', 'success', { timeout: 3000 });
         }).catch(error => {
           this.flash(error.message, 'error');
         })
       } else {
-        let uri = 'https://calm-ocean-96461.herokuapp.com/api/clients';
-        this.axios.post(uri, item).then(response => {
+        this.axios.post('clients', item).then(response => {
           this.clients.push(item);
           this.flash('成功新增一筆資料', 'success', { timeout: 3000 });
         }).catch(error => {

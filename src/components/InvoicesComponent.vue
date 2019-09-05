@@ -164,7 +164,7 @@
                   <v-text-field :rules="[rules.required]" v-model="editItem.i_quantity" label="採購數量"></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm6 md4>
-                  <v-text-field v-model="amount" label="採購金額" :value="sum"></v-text-field>
+                  <v-text-field v-model="amount" label="採購金額"></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm6 md4>
                   <v-text-field v-model="editItem.i_note" label="付款條件"></v-text-field>
@@ -287,15 +287,14 @@ export default {
       this.$emit('getDataType', 'invoices');
     },
     dialog() {
-      if(!dialog) {
+      if(!this.dialog) {
         this.$refs.form.reset();
       }
     }
   },
   methods: {
     getInvoices () {
-      let uri = 'https://calm-ocean-96461.herokuapp.com/api/invoices'
-      this.axios.get(uri).then(response => {
+      this.axios.get('invoices').then(response => {
         this.invoices = response.data;
         this.noDataAlert = true;
         this.loading = false;
@@ -310,8 +309,7 @@ export default {
     },
     deleteItem (item) {
       const index = this.invoices.indexOf(item);
-      let uri = `https://calm-ocean-96461.herokuapp.com/api/invoices/${item.id}`;
-      confirm('確定刪除這筆資料？') && this.axios.delete(uri, item.id).then(response => {
+      confirm('確定刪除這筆資料？') && this.axios.delete(`invoices/${item.id}`, item.id).then(response => {
         this.invoices.splice(index, 1);
         this.flash('成功刪除一筆資料', 'success', { timeout: 3000 });
       }).catch(error => {
@@ -331,16 +329,14 @@ export default {
       let item = this.editItem;
 
       if (index !== -1) {
-        let uri = `https://calm-ocean-96461.herokuapp.com/api/invoices/${item.id}`;
-        this.axios.put(uri, item).then(response => {
+        this.axios.put(`invoices/${item.id}`, item).then(response => {
           Object.assign(this.invoices[index], item);
           this.flash('成功修改一筆資料', 'success', { timeout: 3000 });
         }).catch(error => {
           this.flash(error.message, 'error');
         })
       } else {
-        let uri = 'https://calm-ocean-96461.herokuapp.com/api/invoices';
-        this.axios.post(uri, item).then(response => {
+        this.axios.post('invoices', item).then(response => {
           this.invoices.push(item);
           this.flash('成功新增一筆資料', 'success', { timeout: 3000 });
         }).catch(error => {

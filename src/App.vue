@@ -6,8 +6,8 @@
         <span class="font-weight-light">TRUST-SEARCH</span>
       </v-toolbar-title>
       <v-toolbar-items class="hidden-sm-and-down">
-        <v-btn to="/upload" flat>UPLOAD</v-btn>
-        <v-btn to="/index/clients" flat>DATA</v-btn>
+        <v-btn to="/upload" flat :active-class="'red--text text--darken-1'">UPLOAD</v-btn>
+        <v-btn to="/index/" flat :active-class="'red--text text--darken-1'">DATA</v-btn>
       </v-toolbar-items>
       <v-spacer></v-spacer>
       <v-toolbar-items class="hidden-sm-and-down">
@@ -46,6 +46,11 @@
 .customMessage .info {
   background-color: #f2f5fe !important;
 }
+
+/* 取消 btn 的 active 背景色
+.v-btn--active:before, .v-btn:hover:before, .v-btn:focus:before {
+    background-color: transparent !important;
+} */
 </style>
 
 <script>

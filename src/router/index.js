@@ -4,23 +4,36 @@ import OrdersComponent from '../components/OrdersComponent'
 import InvoicesComponent from '../components/InvoicesComponent'
 import IndexComponent from '../components/IndexComponent'
 import UploadComponent from '../components/UploadComponent'
+import RegisterComponent from '../components/RegisterComponent'
+import LoginComponent from '../components/LoginComponent'
 import { O_TRUNC } from 'constants';
 
 export default [
+  {
+    name: 'register',
+    path: '/register',
+    component: RegisterComponent
+  },
+  {
+    name: 'login',
+    path: '/login',
+    component: LoginComponent
+  },
 	{
 		name: 'upload',
 		path: '/upload',
 		component: UploadComponent,
 		meta: {
-			requiresAuth: true
+			auth: false
 		}
 	},
 	{
 		name: 'index',
 		path: '/index',
-		component: IndexComponent,
+    component: IndexComponent,
+    redirect: '/index/clients',
 		meta: {
-			requiresAuth: true
+			auth: false
 		},
 		children: [
 			{
@@ -28,7 +41,7 @@ export default [
 				path: '/index/clients',
 				component: ClientsComponent,
 				meta: {
-					requiresAuth: true
+					auth: false
 				}
 			},
 			{
@@ -37,7 +50,7 @@ export default [
         component: ProductsComponent,
         props: true,
 				meta: {
-					requiresAuth: true
+					auth: false
 				}
 			},
 			{
@@ -45,7 +58,7 @@ export default [
 				path: '/index/orders',
 				component: OrdersComponent,
 				meta: {
-					requiresAuth: true
+					auth: false
 				}
 			},
 			{
@@ -53,7 +66,7 @@ export default [
 				path: '/index/invoices',
 				component: InvoicesComponent,
 				meta: {
-					requiresAuth: true
+					auth: false
 				}
 			}
 		]

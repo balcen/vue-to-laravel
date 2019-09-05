@@ -212,8 +212,7 @@ export default {
   },
   methods: {
     getProducts () {
-      let uri = 'https://calm-ocean-96461.herokuapp.com/api/products';
-      this.axios.get(uri, {crossDomain: true}).then(response => {
+      this.axios.get('products', {crossDomain: true}).then(response => {
           this.products = response.data;
           this.noDataAlert = true;
           this.loading = false;
@@ -228,9 +227,8 @@ export default {
     },
     deleteItem (item) {
       const index = this.products.indexOf(item);
-      let uri = `https://calm-ocean-96461.herokuapp.com/api/products/${item.id}`;
       // let uri = `http://localhost:8888/api/products/${item.id}`
-      confirm('確定刪除這筆資料？') && this.axios.delete(uri, item.id).then(response => {
+      confirm('確定刪除這筆資料？') && this.axios.delete(`products/${item.id}`, item.id).then(response => {
           this.products.splice(index, 1);
           this.flash('成功刪除一筆資料', 'success', { timeout: 3000 });
       }).catch(error => {
@@ -246,23 +244,22 @@ export default {
     },
     save () {
       if(!this.$refs.form.validate()) return;
-      let formData = new FormData;
-      formData.append('item', JSON.stringify(this.editItem));
-      formData.append('image', this.image);
+      // let formData = new FormData;
+      // formData.append('item', JSON.stringify(this.editItem));
+      // formData.append('image', this.image);
       let index = this.editIndex;
       // let item = {item: this.editItem, image: this.image};
+      let item = this.editItem;
       if (index !== -1) {
-        let uri = `https://calm-ocean-96461.herokuapp.com/api/products/${item.id}`;
-        this.axios.put(uri, formData).then(response => {
+        this.axios.put(`products/${item.id}`, item).then(response => {
           Object.assign(this.products[index], item);
           this.flash('成功修改一筆資料', 'success', { timeout: 3000 });
         }).catch(error => {
           this.flash(error.message, 'error');
         })
       } else {
-        let uri = 'https://calm-ocean-96461.herokuapp.com/api/products';
         // let uri = 'http://localhost:8888/api/products';
-        this.axios.post(uri, formData).then(response => {
+        this.axios.post(`products`, item).then(response => {
           this.products.push(item);
           this.flash('成功新增一筆資料', 'success', { timeout: 3000 });
         }).catch(error => {

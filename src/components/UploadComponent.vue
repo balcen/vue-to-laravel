@@ -1,19 +1,16 @@
 <template>
-  <div>
+  <div class="back">
     <md-content>
-      <v-layout align-content-center wrap justify-center class="mt-3">
+      <v-layout align-content-center wrap justify-center class="mt-5">
         <v-flex xs12>
           <h1 class="text-xs-center mt-3 md-display-3 font-weight-medium">FILE UPLOAD</h1>
         </v-flex>
         <v-flex xs6>
-          <v-container grid-list-sm fill-height class="pt-0">
+          <v-container grid-list-sm fill-height class="pt-4">
             <v-layout row wrap align-center justify-center>
               <v-flex v-if="!dataType" xs6 class="pt-4">
                 <v-btn large color="primary" @click="uploadBtn" depressed block dark :loading="loading">
-                  <span class="mr-2">
-                    <v-icon large>description</v-icon>
-                  </span>
-                  UPLOAD FILE
+                  Click to Upload File
                 </v-btn>
 
                 <input type="file" id="upload" ref="upload" @change="changeFile" accept=".xlsx">
@@ -136,5 +133,9 @@ export default {
     width: 0;
     height: 0;
     visibility: hidden;
+  }
+
+  .back {
+    background-image: url(https://images.unsplash.com/photo-1565951547445-51919906df33?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1512&q=80);
   }
 </style>

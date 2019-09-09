@@ -1,15 +1,15 @@
 <template>
-  <div class="back">
-    <md-content>
-      <v-layout align-content-center wrap justify-center class="mt-5">
-        <v-flex xs12>
-          <h1 class="text-xs-center mt-3 md-display-3 font-weight-medium">FILE UPLOAD</h1>
-        </v-flex>
+  <div class="pa-5 back">
+    <!-- <md-content> -->
+      <v-layout fill-height align-center wrap justify-center>
+        <!-- <v-flex xs12>
+          <h1 class="text-xs-center mt-3 md-display-3 font-weight-medium source-sans-pro">FILE UPLOAD</h1>
+        </v-flex> -->
         <v-flex xs6>
-          <v-container grid-list-sm fill-height class="pt-4">
+          <v-container grid-list-sm fill-height>
             <v-layout row wrap align-center justify-center>
               <v-flex v-if="!dataType" xs6 class="pt-4">
-                <v-btn large color="primary" @click="uploadBtn" depressed block dark :loading="loading">
+                <v-btn large color="primary" @click="uploadBtn" block dark :loading="loading">
                   Click to Upload File
                 </v-btn>
 
@@ -46,7 +46,7 @@
           </v-container>
         </v-flex>
       </v-layout>
-    </md-content>
+    <!-- </md-content> -->
   </div>
 </template>
 
@@ -88,7 +88,7 @@ export default {
       formData.append('file', e.target.files[0]);
       this.formData = formData;
       let uri = 'https://calm-ocean-96461.herokuapp.com/api/upload';
-      this.axios.post(uri, formData).then(response => {
+      this.axios.post('upload', formData).then(response => {
         this.dataType = response.data.type;
         // 如果有找到檔案類型
         if(this.dataType) {
@@ -103,13 +103,14 @@ export default {
       }).catch(error => {
         this.flash(error.message, 'error');
         this.loading = false;
+        this.$refs.upload.value = '';
       })
     },
     fileUpload () {
       this.loading = true;
       if (this.formData) {
         let uri = `https://calm-ocean-96461.herokuapp.com/api/${this.dataType}/upload`;
-        this.axios.post(uri, this.formData).then(response => {
+        this.axios.post(`${this.dataType}/upload`, this.formData).then(response => {
           this.$router.push({ name: this.dataType })
           this.flash('上傳成功', 'success')
         }).catch(error => {
@@ -136,6 +137,10 @@ export default {
   }
 
   .back {
-    background-image: url(https://images.unsplash.com/photo-1565951547445-51919906df33?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1512&q=80);
+    background-image: url(https://images.unsplash.com/photo-1464278533981-50106e6176b1?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1567&q=80);
+    background-position: center;
+    background-size: cover;
+    height: 100%;
   }
+
 </style>

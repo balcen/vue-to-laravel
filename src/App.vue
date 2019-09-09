@@ -16,12 +16,10 @@
     </v-toolbar>
 
     <v-content>
-      <v-container class="pt-0" fluid>
-        <flash-message class="customMessage ma-2"></flash-message>
-        <router-view
-          :key="$route.fullPath"
-        ></router-view>
-      </v-container>
+      <flash-message class="customMessage ma-2"></flash-message>
+      <router-view
+        :key="$route.fullPath"
+      ></router-view>
     </v-content>
   </v-app>
 </template>
@@ -29,6 +27,10 @@
 <style>
 .customMessage {
   transition: all 0.5s ease-in-out;
+  width: 60%;
+  position: fixed;
+  left: 50%;
+  transform:translateX(-50%);
 }
 
 .customMessage .success {

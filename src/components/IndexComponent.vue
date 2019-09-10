@@ -68,7 +68,7 @@ export default {
       let num = id.length;
       let idStr = id.join();
 
-      confirm(`確定刪除${num}筆資料？`) && this.axios.delete(uri, {data: { ids: idStr }}).then(response => {
+      confirm(`確定刪除${num}筆資料？`) && this.axios.delete(`${this.dataType}DeleteAll`, {data: { ids: idStr }}).then(response => {
         this.flash(`成功刪除${num}筆資料`, 'success', { timeout: 3000 });
         this.$refs.table.deleteArray();;
       }).catch(error => {

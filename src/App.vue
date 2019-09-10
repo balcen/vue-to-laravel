@@ -31,6 +31,7 @@
   position: fixed;
   left: 50%;
   transform:translateX(-50%);
+  z-index: 9999;
 }
 
 .customMessage .success {

@@ -18,7 +18,7 @@ const router = new VueRouter({
 import VueAxios from 'vue-axios'
 import axios from 'axios'
 axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
-axios.defaults.baseURL = 'https://lpcen.com/api/'
+axios.defaults.baseURL = 'http://34.80.45.85/api/'
 Vue.use(VueAxios, axios);
 
 // Vue-material

@@ -18,7 +18,7 @@ const router = new VueRouter({
 import VueAxios from 'vue-axios'
 import axios from 'axios'
 axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
-axios.defaults.baseURL = 'http://34.80.45.85/api/'
+axios.defaults.baseURL = process.env.LOCAL_URL
 Vue.use(VueAxios, axios);
 
 // Vue-material

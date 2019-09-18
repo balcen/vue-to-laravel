@@ -11,7 +11,7 @@
       </v-toolbar-items>
       <v-spacer></v-spacer>
       <v-toolbar-items class="hidden-sm-and-down">
-        <v-btn icon><v-icon>person</v-icon></v-btn>
+        <v-btn to="/login" icon><v-icon>person</v-icon></v-btn>
       </v-toolbar-items>
     </v-toolbar>
 

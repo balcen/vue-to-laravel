@@ -221,7 +221,7 @@ export default {
       this.$emit('getDataType', 'orders');
     },
     dialog() {
-      if(dialog) {
+      if(!this.dialog) {
         this.$refs.form.reset();
       }
     }
@@ -233,7 +233,6 @@ export default {
     amount: {
       get: function(){
         let sum = this.editItem.o_product_price * this.editItem.o_quantity;
-        this.editItem.o_amount = sum;
         return sum;
       },
       // 如果手動修改amount就執行set賦值給o_amount
@@ -262,7 +261,7 @@ export default {
     },
     deleteItem (item) {
       const index = this.orders.indexOf(item);
-      confirm('確定刪除這筆資料？') && this.axios.delete(`orders/${item.id}`, item.id).then(response => {
+      confirm('確定刪除這筆資料？') && this.axios.delete(`orders/${item.id}`, item.id).then(() => {
         this.orders.splice(index, 1);
         this.flash('成功刪除一筆資料', 'success', { timeout: 3000 })
       }).catch(error => {
@@ -281,14 +280,14 @@ export default {
       let index = this.editIndex;
       let item = this.editItem;
       if (index !== -1) {
-        this.axios.put(`orders/${item.id}`, item).then(response => {
+        this.axios.put(`orders/${item.id}`, item).then(() => {
           Object.assign(this.orders[index], item);
           this.flash('成功修改一筆資料', 'success', { timeout: 3000 });
         }).catch(error => {
           this.flash(error.message, 'error');
         })
       } else {
-        this.axios.post('orders', item).then(response => {
+        this.axios.post('orders', item).then(() => {
           this.orders.push(item);
           this.flash('成功新增一筆資料', 'success', { timeout: 3000 })
         }).catch(error => {

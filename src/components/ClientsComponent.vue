@@ -159,7 +159,7 @@ export default {
       this.$emit('getDataType', 'clients');
     },
     dialog() {
-      if(!dialog) {
+      if(!this.dialog) {
         this.reset();
       }
     }
@@ -182,12 +182,11 @@ export default {
     editedItem (item) {
       this.editIndex = this.clients.indexOf(item);
       this.editItem = Object.assign({}, this.clients[this.editIndex]);
-      console.log(this.editItem);
       this.$emit('toggleDialog', true);
     },
     deleteItem (item) {
       const index = this.clients.indexOf(item);
-      confirm('確定刪除這筆資料？') && this.axios.delete(`clients/${item.id}`, item.id).then(response => {
+      confirm('確定刪除這筆資料？') && this.axios.delete(`clients/${item.id}`, item.id).then(() => {
         this.clients.splice(index,1);
         this.flash('成功刪除一筆資料', 'success', { timeout: 3000 });
       }).catch(error => {
@@ -207,14 +206,14 @@ export default {
       let index = this.editIndex;
       let item = this.editItem;
       if (index !== -1) {
-        this.axios.put(`clients/${item.id}`, item).then(response => {
+        this.axios.put(`clients/${item.id}`, item).then(() => {
           Object.assign(this.clients[index], item);
           this.flash('成功修改一筆資料', 'success', { timeout: 3000 });
         }).catch(error => {
           this.flash(error.message, 'error');
         })
       } else {
-        this.axios.post('clients', item).then(response => {
+        this.axios.post('clients', item).then(() => {
           this.clients.push(item);
           this.flash('成功新增一筆資料', 'success', { timeout: 3000 });
         }).catch(error => {

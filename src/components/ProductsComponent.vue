@@ -204,7 +204,7 @@ export default {
       this.$emit('getDataType', 'products');
     },
     dialog() {
-      if(!dialog) {
+      if(!this.dialog) {
         this.$refs.form.reset();
         this.fileReset();
       }
@@ -228,7 +228,7 @@ export default {
     deleteItem (item) {
       const index = this.products.indexOf(item);
       // let uri = `http://localhost:8888/api/products/${item.id}`
-      confirm('確定刪除這筆資料？') && this.axios.delete(`products/${item.id}`, item.id).then(response => {
+      confirm('確定刪除這筆資料？') && this.axios.delete(`products/${item.id}`, item.id).then(() => {
           this.products.splice(index, 1);
           this.flash('成功刪除一筆資料', 'success', { timeout: 3000 });
       }).catch(error => {
@@ -251,7 +251,7 @@ export default {
       // let item = {item: this.editItem, image: this.image};
       let item = this.editItem;
       if (index !== -1) {
-        this.axios.put(`products/${item.id}`, item).then(response => {
+        this.axios.put(`products/${item.id}`, item).then(() => {
           Object.assign(this.products[index], item);
           this.flash('成功修改一筆資料', 'success', { timeout: 3000 });
         }).catch(error => {
@@ -259,7 +259,7 @@ export default {
         })
       } else {
         // let uri = 'http://localhost:8888/api/products';
-        this.axios.post(`products`, item).then(response => {
+        this.axios.post(`products`, item).then(() => {
           this.products.push(item);
           this.flash('成功新增一筆資料', 'success', { timeout: 3000 });
         }).catch(error => {
@@ -281,7 +281,6 @@ export default {
       this.editItem.p_image = e.target.files[0].name;
     },
     fileReset() {
-      console.log('fileReset work!!')
       const input = this.$refs.image;
       input.type = 'text';
       input.type = 'file';

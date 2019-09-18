@@ -54,7 +54,15 @@
           <v-card-actions>
             <v-layout column align-center justify-center>
               <v-flex>
-                <v-btn flat outline color="indigo" @click="register" :loading="loading">註冊</v-btn>
+                <v-btn 
+                  flat 
+                  outline 
+                  color="indigo" 
+                  @click="register" 
+                  :loading="loading"
+                >
+                  註冊
+                </v-btn>
               </v-flex>
               <v-flex class="mt-1">
                 <router-link :to="{name: 'login'}">已有帳號</router-link>
@@ -113,7 +121,8 @@ export default {
           this.message = res.response.data.errors;
         },
         redirect: null
-      })
+      });
+      this.loading = false;
     }
   }
 }

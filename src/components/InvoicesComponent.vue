@@ -273,7 +273,6 @@ export default {
     amount: {
       get: function() {
         let sum = this.editItem.i_product_price * this.editItem.i_quantity;
-        this.editItem.i_amount = sum;
         return sum;
       },
       set: function(newVal) {
@@ -309,7 +308,7 @@ export default {
     },
     deleteItem (item) {
       const index = this.invoices.indexOf(item);
-      confirm('確定刪除這筆資料？') && this.axios.delete(`invoices/${item.id}`, item.id).then(response => {
+      confirm('確定刪除這筆資料？') && this.axios.delete(`invoices/${item.id}`, item.id).then(() => {
         this.invoices.splice(index, 1);
         this.flash('成功刪除一筆資料', 'success', { timeout: 3000 });
       }).catch(error => {
@@ -329,14 +328,14 @@ export default {
       let item = this.editItem;
 
       if (index !== -1) {
-        this.axios.put(`invoices/${item.id}`, item).then(response => {
+        this.axios.put(`invoices/${item.id}`, item).then(() => {
           Object.assign(this.invoices[index], item);
           this.flash('成功修改一筆資料', 'success', { timeout: 3000 });
         }).catch(error => {
           this.flash(error.message, 'error');
         })
       } else {
-        this.axios.post('invoices', item).then(response => {
+        this.axios.post('invoices', item).then(() => {
           this.invoices.push(item);
           this.flash('成功新增一筆資料', 'success', { timeout: 3000 });
         }).catch(error => {

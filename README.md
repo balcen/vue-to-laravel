@@ -1,5 +1,5 @@
 # Excel to MySQL
-[Demo](upload.lpcen.com)<br>
+[Demo](http://upload.lpcen.com)<br>
 上傳Excel資料到後端，必須使用限定的Excel格式
 
 ### 上傳

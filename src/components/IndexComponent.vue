@@ -68,9 +68,9 @@ export default {
       let num = id.length;
       let idStr = id.join();
 
-      confirm(`確定刪除${num}筆資料？`) && this.axios.delete(`${this.dataType}DeleteAll`, {data: { ids: idStr }}).then(response => {
+      confirm(`確定刪除${num}筆資料？`) && this.axios.delete(`${this.dataType}DeleteAll`, {data: { ids: idStr }}).then(() => {
         this.flash(`成功刪除${num}筆資料`, 'success', { timeout: 3000 });
-        this.$refs.table.deleteArray();;
+        this.$refs.table.deleteArray();
       }).catch(error => {
         this.flash(error.message, 'error');
       })
@@ -80,7 +80,8 @@ export default {
     },
     // 取得array裡面的column
     getColumn (array, column) {
-      return array.map((value, index) => {return value[column]});
+      // 取出Array裡面每一個元素的id，做成array
+      return array.map((el) => {return el[column]});
     }
   }
 }

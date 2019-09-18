@@ -110,7 +110,7 @@ export default {
       this.loading = true;
       if (this.formData) {
         let uri = `https://calm-ocean-96461.herokuapp.com/api/${this.dataType}/upload`;
-        this.axios.post(`${this.dataType}/upload`, this.formData).then(response => {
+        this.axios.post(`${this.dataType}/upload`, this.formData).then(() => {
           this.$router.push({ name: this.dataType })
           this.flash('上傳成功', 'success')
         }).catch(error => {

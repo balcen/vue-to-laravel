@@ -15,9 +15,9 @@
                   <v-text-field 
                     v-model="name" 
                     :rules="[rules.required]"
-                    :error="error"
+                    :error="error && message.name"
                     :messages="error && message.name ? message.name : ''" 
-                    label="用戶"
+                    label="用戶名稱"
                   ></v-text-field>
                 </v-flex>
                 <v-flex xs8>
@@ -43,7 +43,7 @@
                   <v-text-field 
                     v-model="email" 
                     :rules="[rules.required, rules.email]" 
-                    :error="error"
+                    :error="error && message.email"
                     :messages="error && message.email ? message.email : ''"
                     label="電子信箱"
                   ></v-text-field>
@@ -117,8 +117,11 @@ export default {
         error: function(res) {
           this.loading = false;
           this.flash('註冊失敗', 'error');
+          console.log(res);
           this.error = true;
-          this.message = res.response.data.errors;
+          if(res) {
+            // this.message =
+          }
         },
         redirect: null
       });

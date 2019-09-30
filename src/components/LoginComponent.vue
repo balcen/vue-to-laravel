@@ -14,14 +14,14 @@
                 <v-flex xs8>
                   <v-text-field
                     label="用戶"
-                    v-model="user.email"
+                    v-model="user.name"
                   ></v-text-field>
                 </v-flex>
                 <v-flex xs8 class="mt-2">
                   <v-text-field
                     type="password"
                     label="密碼"
-                    v-model="user.passwrod"
+                    v-model="user.password"
                   ></v-text-field>
                 </v-flex>
               </v-layout>
@@ -30,7 +30,15 @@
           <v-card-actions>
             <v-layout justify-center align-center wrap column>
               <v-flex>
-                <v-btn flat outline color="primary" @click="login">登入</v-btn>  
+                <v-btn 
+                  flat 
+                  outline 
+                  color="primary" 
+                  @click="login"
+                  :loading="loading"
+                >
+                  登入
+                </v-btn>  
               </v-flex>
               <v-flex class="mt-1" shrink>
                 <router-link :to="{name: 'register'}">註冊帳號</router-link>
@@ -52,24 +60,34 @@ export default {
   data() {
     return {
       user: {
-        email: '',
+        name: '',
         password: ''
-      }
+      },
+      message: '',
+      loading: false,
     }
   },
-  method: {
+  methods: {
     login() {
+      this.loading = true;
+
       this.$auth.login({
         params: {
-          email: this.user.email,
-          pasword: this.user.password
+          name: this.user.name,
+          password: this.user.password
         },
-        success: function() {},
-        error: function() {},
+        success: function() {
+          console.log(this.$auth.check());
+          this.loading = false;
+        },
+        error: function() {
+          this.message = '用戶名稱密碼不正確';
+          this.loading = false;
+        },
         rememberMe: true,
         redirect: '/index',
-        fetUser: true
-      })
+        fetchUser: true
+      });
     }
   }
 }

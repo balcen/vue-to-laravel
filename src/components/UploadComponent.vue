@@ -51,7 +51,7 @@
 </template>
 
 <script>
-import { setTimeout } from 'timers';
+// import { setTimeout } from 'timers';
 export default {
   data () {
     return {
@@ -87,7 +87,7 @@ export default {
       let formData = new FormData();
       formData.append('file', e.target.files[0]);
       this.formData = formData;
-      let uri = 'https://calm-ocean-96461.herokuapp.com/api/upload';
+      // let uri = 'https://calm-ocean-96461.herokuapp.com/api/upload';
       this.axios.post('upload', formData).then(response => {
         this.dataType = response.data.type;
         // 如果有找到檔案類型
@@ -109,7 +109,7 @@ export default {
     fileUpload () {
       this.loading = true;
       if (this.formData) {
-        let uri = `https://calm-ocean-96461.herokuapp.com/api/${this.dataType}/upload`;
+        // let uri = `https://calm-ocean-96461.herokuapp.com/api/${this.dataType}/upload`;
         this.axios.post(`${this.dataType}/upload`, this.formData).then(() => {
           this.$router.push({ name: this.dataType })
           this.flash('上傳成功', 'success')

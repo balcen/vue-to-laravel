@@ -21,8 +21,22 @@
         ></v-text-field>
       </v-flex>
       <v-flex shrink>
-        <v-btn @click.stop="toggleDialog(true)" flat icon><v-icon>add</v-icon></v-btn>
-        <v-btn flat icon color="red darken-1" @click="multipleDelete" :disabled="selectedValue"><v-icon>delete</v-icon></v-btn>
+        <v-btn 
+          flat 
+          icon
+          @click.stop="toggleDialog(true)" 
+        >
+          <v-icon>add</v-icon>
+        </v-btn>
+        <v-btn 
+          flat 
+          icon 
+          color="red darken-1" 
+          @click="multipleDelete" 
+          :disabled="selectedValue"
+        >
+          <v-icon>delete</v-icon>
+        </v-btn>
       </v-flex>
     </v-layout>
     <v-layout overflow-auto>

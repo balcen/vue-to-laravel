@@ -11,8 +11,9 @@
       </v-toolbar-items>
       <v-spacer></v-spacer>
       <v-toolbar-items class="hidden-sm-and-down">
-        <v-btn v-if="!$auth.check()" to="/login" icon><v-icon>person</v-icon></v-btn>
-        <v-btn v-if="$auth.check()" @click="logout" icon><v-icon>logout</v-icon></v-btn>
+        <v-btn v-if="!isLoggedIn" to="/login" icon><v-icon>person</v-icon></v-btn>
+        <v-btn v-if="isLoggedIn" to="/dashboard" icon><v-icon>account_circle</v-icon></v-btn>
+        <v-btn v-if="isLoggedIn" @click="logout" icon><v-icon>logout</v-icon></v-btn>
       </v-toolbar-items>
     </v-toolbar>
 
@@ -62,18 +63,28 @@ export default {
   name: 'App',
   data () {
     return {
+      bager: true
+    }
+  },
+  computed: {
+    isLoggedIn : function(){
+      return this.$store.getters.isLoggedIn
     }
   },
   methods: {
     logout: function() {
-      this.$auth.logout({
-        // 用來通知 api，如果 false 的話就只會刪除本地 token
-        makeRequest: true,
-        params: {},
-        success: function() {},
-        error: function() {},
-        redirect: '/login'
-      });
+      // this.$auth.logout({
+      //   // 用來通知 api，如果 false 的話就只會刪除本地 token
+      //   makeRequest: true,
+      //   params: {},
+      //   success: function() {},
+      //   error: function() {},
+      //   redirect: '/login'
+      // });
+      this.$store.dispatch('logout')
+      .then(() => {
+        this.$router.push('/login')
+      })
     },
   }
 }

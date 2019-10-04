@@ -57,6 +57,7 @@
 
 <script>
 export default {
+  // props: [status, flashMessage],
   data() {
     return {
       user: {
@@ -67,27 +68,44 @@ export default {
       loading: false,
     }
   },
+  mounted() {
+    // console.log('Status ' + status + ' , Flash ' + falshMessage)
+    console.log(this.$router.query)
+    console.log(this.$router.params)
+    // if(status && flashMessage) {
+    //   this.flash(flashMessage, status)
+    // }
+  },
   methods: {
     login() {
-      this.loading = true;
+      // this.loading = true;
 
-      this.$auth.login({
-        params: {
-          name: this.user.name,
-          password: this.user.password
-        },
-        success: function() {
-          console.log(this.$auth.check());
-          this.loading = false;
-        },
-        error: function() {
-          this.message = '用戶名稱密碼不正確';
-          this.loading = false;
-        },
-        rememberMe: true,
-        redirect: '/index',
-        fetchUser: true
-      });
+      // this.$auth.login({
+      //   params: {
+      //     name: this.user.name,
+      //     password: this.user.password
+      //   },
+      //   success: function(res) {
+      //     console.log(res);
+      //     this.loading = false;
+      //   },
+      //   error: function() {
+      //     this.message = '用戶名稱密碼不正確';
+      //     this.loading = false;
+      //   },
+      //   rememberMe: true,
+      //   redirect: '/index',
+      //   fetchUser: true
+      // });
+      const name = this.user.name
+      const password = this.user.password
+
+      this.loading = true
+
+      // actions 必須透過 dispatch 來調用
+      this.$store.dispatch('login', {name, password})
+      .then(() => this.$router.push('/index'))
+      .catch(err => console.log(err))
     }
   }
 }

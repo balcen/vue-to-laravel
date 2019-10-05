@@ -24,7 +24,7 @@ const router = new VueRouter({
     },
     {
       name: 'login',
-      path: '/login',
+      path: '/login/:id',
       props(route) {
         return route.query || {}
       },
@@ -101,7 +101,7 @@ router.beforeEach((to, from, next) => {
       next()
       return 
     }
-    next({path: '/login', parasm: {id: 123}, query: {status: 'error', flashMessage: '請先登入'}})
+    next({name: 'login', params: {id: 123}, query: {status: 'error', flashMessage: '請先登入'}})
   }else {
     next()
   }

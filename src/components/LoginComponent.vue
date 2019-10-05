@@ -13,7 +13,7 @@
               <v-layout wrap justify-center>
                 <v-flex xs8>
                   <v-text-field
-                    label="用戶"
+                    label="用戶名稱"
                     v-model="user.name"
                   ></v-text-field>
                 </v-flex>
@@ -70,8 +70,9 @@ export default {
   },
   mounted() {
     // console.log('Status ' + status + ' , Flash ' + falshMessage)
-    console.log(this.$router.query)
-    console.log(this.$router.params)
+    // console.log(this.$router.query)
+    // console.log(this.$router.params)
+    this.init() 
     // if(status && flashMessage) {
     //   this.flash(flashMessage, status)
     // }
@@ -106,6 +107,10 @@ export default {
       this.$store.dispatch('login', {name, password})
       .then(() => this.$router.push('/index'))
       .catch(err => console.log(err))
+    },
+    init() {
+      console.log(this.$router.params)
+      console.log(this.$router.query)
     }
   }
 }

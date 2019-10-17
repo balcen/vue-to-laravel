@@ -89,6 +89,7 @@ export default {
       this.formData = formData;
       // let uri = 'https://calm-ocean-96461.herokuapp.com/api/upload';
       this.axios.post('upload', formData).then(response => {
+        console.log(response);
         this.dataType = response.data.type;
         // 如果有找到檔案類型
         if(this.dataType) {
@@ -96,7 +97,7 @@ export default {
           this.fileName = e.target.files[0].name;
         // 如果沒有找到檔案類型
         }else {
-          this.flash('檔案類型有誤，請確認檔案', 'warning', { timeout: 3000 });
+          this.flash('檔案類型有誤，請確認檔案', 'warning');
           this.$refs.upload.value = '';
         }
           this.loading = false;

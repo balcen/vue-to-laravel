@@ -28,9 +28,9 @@
             <td class="text-xs-center">{{ props.item.o_product_name }}</td>
             <td class="text-xs-right">{{ props.item.o_product_part_no }}</td>
             <td class="text-xs-center">{{ props.item.o_product_spec }}</td>
-            <td class="text-xs-right">{{ props.item.o_product_price }}</td>
+            <td class="text-xs-right">{{ Math.round(props.item.o_product_price * 1000) / 1000 }}</td>
             <td class="text-xs-center">{{ props.item.o_currency }}</td>
-            <td class="text-xs-right">{{ props.item.o_quantity }}</td>
+            <td class="text-xs-right">{{ Math.round(props.item.o_quantity * 1000) / 1000 }}</td>
             <td class="text-xs-right">{{ props.item.o_amount }}</td>
             <td class="text-xs-right">{{ props.item.o_note }}</td>
             <td id="actions" class="justify-center layout px-0">

@@ -30,10 +30,10 @@
             <td class="text-xs-center">{{ props.item.i_product_name }}</td>
             <td class="text-xs-right">{{ props.item.i_product_part_no }}</td>
             <td class="text-xs-center">{{ props.item.i_product_spec }}</td>
-            <td class="text-xs-right">{{ props.item.i_product_price }}</td>
+            <td class="text-xs-right">{{ Math.round(props.item.i_product_price * 1000) / 1000 }}</td>
             <td class="text-xs-center">{{ props.item.i_currency }}</td>
             <td class="text-xs-right">{{ props.item.i_quantity }}</td>
-            <td class="text-xs-right">{{ props.item.i_amount }}</td>
+            <td class="text-xs-right">{{ Math.round(props.item.i_amount * 1000) / 1000 }}</td>
             <td class="text-xs-right">{{ props.item.i_note }}</td>
             <td id="actions" class="justify-center layout">
               <v-btn icon small class="ma-0 editBtn">

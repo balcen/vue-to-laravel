@@ -66,6 +66,22 @@ export default {
       bager: true
     }
   },
+  created: function() {
+    this.axios.interceptors.response.use((res) => {
+      var token = res.headers.authorization
+      if (token) {
+        this.$store.dispatch('refresh', token)
+      }
+      return res
+    }, function(err) {
+      return new Promise(function() {
+        if (err.status === 401 && err.config && err.config.__isRetryReqeust) {
+          this.$store.dispatch('logout')
+        }
+        throw err
+      })
+    })
+  },
   computed: {
     isLoggedIn : function(){
       return this.$store.getters.isLoggedIn

@@ -26,6 +26,9 @@ const store = new Vuex.Store({
       state.status = '',
       state.token = '',
       state.user = {}
+    },
+    auth_refresh(state, token) {
+      state.token = token
     }
   },
   actions: {
@@ -73,6 +76,13 @@ const store = new Vuex.Store({
         commit('auth_logout')
         delete axios.defaults.headers.common['Authorization']
         resolve()
+      })
+    },
+    refresh({commit}, token) {
+      return new Promise(() => {
+        localStorage.token = token
+        axios.defaults.headers.common['Authorization'] = token
+        commit('auth_refresh', token)
       })
     }
   },

@@ -28,7 +28,7 @@
                   </v-flex>
                   <v-flex xs4 class="mt-3">
                     <v-select
-                      v-model="selectType"
+                      v-model="dataType"
                       :items="fileType"
                       item-text="state"
                       item-value="abbr"
@@ -59,7 +59,6 @@ export default {
       upload: null,
       dataLength: 0,
       loading: false,
-      selectType: null,
       formData: null,
       fileName: '',
       fileType: [
@@ -68,11 +67,6 @@ export default {
         { state: 'Orders', abbr: 'orders' },
         { state: 'Invoices', abbr: 'invoices' }
       ]
-    }
-  },
-  watch: {
-    dataType: function (str) {
-      this.selectType = str;
     }
   },
   computed: {
@@ -89,7 +83,6 @@ export default {
       this.formData = formData;
       // let uri = 'https://calm-ocean-96461.herokuapp.com/api/upload';
       this.axios.post('upload', formData).then(response => {
-        console.log(response);
         this.dataType = response.data.type;
         // 如果有找到檔案類型
         if(this.dataType) {
@@ -97,7 +90,8 @@ export default {
           this.fileName = e.target.files[0].name;
         // 如果沒有找到檔案類型
         }else {
-          this.flash('檔案類型有誤，請確認檔案', 'warning');
+          let col = response.data.col;
+          this.flash(`檔案類型有誤，請確認檔案 colume: ${col}`, 'warning');
           this.$refs.upload.value = '';
         }
           this.loading = false;
@@ -111,11 +105,12 @@ export default {
       this.loading = true;
       if (this.formData) {
         // let uri = `https://calm-ocean-96461.herokuapp.com/api/${this.dataType}/upload`;
-        this.axios.post(`${this.dataType}/upload`, this.formData).then(() => {
+        this.axios.post(`${this.dataType}/upload`, this.formData).then((res) => {
           this.$router.push({ name: this.dataType })
           this.flash('上傳成功', 'success')
         }).catch(error => {
-          this.flash(error.message, 'error');
+          this.flash(error.message, 'error')
+          this.loading = false;
         })
       }
     }

@@ -150,24 +150,19 @@ export default {
       }
     };
   },
-  created() {
-    this.getClients();
+  computed: {
+    formTitle: function() {
+      return this.editIndex === -1 ? 'New Item' : 'Edit Item';
+    }
   },
   watch: {
     selected: function () {
       this.$emit('update:selected', this.selected);
       this.$emit('getDataType', 'clients');
-    },
-    dialog() {
-      if(!this.dialog) {
-        this.reset();
-      }
     }
   },
-  computed: {
-    formTitle: function() {
-      return this.editIndex === -1 ? 'New Item' : 'Edit Item';
-    }
+  created() {
+    this.getClients();
   },
   methods: {
     getClients () {
@@ -194,17 +189,17 @@ export default {
       })
     },
     close() {
-      this.reset();
       this.$emit('toggleDialog', false);
-      setTimeout(()=>{
+      setTimeout(function() {
+        this.$refs.form.reset()
         this.editItem = Object.assign({}, this.defaultItem);
         this.editIndex = -1;
-      },100);
+      },3000);
     },
     save() {
-      if(this.$refs.form.validate) return;
       let index = this.editIndex;
       let item = this.editItem;
+      if(!this.$refs.form.validate()) return;
       if (index !== -1) {
         this.axios.put(`clients/${item.id}`, item).then(() => {
           Object.assign(this.clients[index], item);
@@ -212,7 +207,7 @@ export default {
         }).catch(error => {
           this.flash(error.message, 'error');
         })
-      } else {
+      } else if (index === -1) {
         this.axios.post('clients', item).then(() => {
           this.clients.push(item);
           this.flash('成功新增一筆資料', 'success', { timeout: 3000 });

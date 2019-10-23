@@ -190,25 +190,19 @@ export default {
       }
     }
   },
-  created () {
-    this.getProducts();
-  },
   computed: {
     formTitle: function () {
       return this.editIndex === -1 ? 'New Item' : 'Edit Item';
-    }
+    },
   },
   watch: {
     selected: function() {
       this.$emit('update:selected', this.selected);
       this.$emit('getDataType', 'products');
-    },
-    dialog() {
-      if(!this.dialog) {
-        this.$refs.form.reset();
-        this.fileReset();
-      }
     }
+  },
+  created () {
+    this.getProducts();
   },
   methods: {
     getProducts () {
@@ -237,19 +231,20 @@ export default {
     },
     close () {
       this.$emit('toggleDialog', false);
-      setTimeout(() => {
+      setTimeout(function() {
+        this.$refs.form.reset()
         this.editItem = Object.assign({}, this.defaultItem);
         this.editIndex = -1;
-      }, 1000)
+      }, 3000)
     },
     save () {
-      if(!this.$refs.form.validate()) return;
       // let formData = new FormData;
       // formData.append('item', JSON.stringify(this.editItem));
       // formData.append('image', this.image);
       let index = this.editIndex;
       // let item = {item: this.editItem, image: this.image};
       let item = this.editItem;
+      if(!this.$refs.form.validate()) return;
       if (index !== -1) {
         this.axios.put(`products/${item.id}`, item).then(() => {
           Object.assign(this.products[index], item);
@@ -257,7 +252,7 @@ export default {
         }).catch(error => {
           this.flash(error.message, 'error');
         })
-      } else {
+      } else if(index === -1) {
         // let uri = 'http://localhost:8888/api/products';
         this.axios.post(`products`, item).then(() => {
           this.products.push(item);

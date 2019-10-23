@@ -215,24 +215,13 @@ export default {
       }
     }
   },
-  watch: {
-    selected: function() {
-      this.$emit('update:selected', this.selected);
-      this.$emit('getDataType', 'orders');
-    },
-    dialog() {
-      if(!this.dialog) {
-        this.$refs.form.reset();
-      }
-    }
-  },
   computed: {
     formTitle() {
-      return this.editIndex === -1 ? 'New Item' : 'Edit Item';
+      return this.editIndex === -1 ? '新增資料' : '修改資料';
     },
     amount: {
       get: function(){
-        let sum = this.editItem.o_product_price * this.editItem.o_quantity;
+        let sum = Math.round(this.editItem.o_product_price * this.editItem.o_quantity * 1000) / 1000;
         return sum;
       },
       // 如果手動修改amount就執行set賦值給o_amount
@@ -240,6 +229,12 @@ export default {
         this.editItem.o_amount = newVal;
       }
     }
+  },
+  watch: {
+    selected: function() {
+      this.$emit('update:selected', this.selected);
+      this.$emit('getDataType', 'orders');
+    },
   },
   created() {
     this.getOrders()
@@ -270,15 +265,17 @@ export default {
     },
     close () {
       this.$emit('toggleDialog', false);
-      setTimeout(() => {
+      const root = this
+      setTimeout(function () {
+        root.$refs.form.reset();
         this.editItem = Object.assign({}, this.defaultItem);
         this.editIndex = -1;
-      },1000)
+      },3000)
     },
     save () {
-      if(!this.$refs.form.validate) return;
       let index = this.editIndex;
       let item = this.editItem;
+      if(!this.$refs.form.validate()) return;
       if (index !== -1) {
         this.axios.put(`orders/${item.id}`, item).then(() => {
           Object.assign(this.orders[index], item);
@@ -286,7 +283,7 @@ export default {
         }).catch(error => {
           this.flash(error.message, 'error');
         })
-      } else {
+      } else if(index === -1) {
         this.axios.post('orders', item).then(() => {
           this.orders.push(item);
           this.flash('成功新增一筆資料', 'success', { timeout: 3000 })

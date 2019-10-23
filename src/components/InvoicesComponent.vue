@@ -263,9 +263,6 @@ export default {
       }
     }
   },
-  created () {
-    this.getInvoices();
-  },
   computed: {
     formTitle: function() {
       return this.editIndex === -1 ? 'New Item' : 'Edit Item';
@@ -284,12 +281,10 @@ export default {
     selected: function() {
       this.$emit('update:selected', this.selected);
       this.$emit('getDataType', 'invoices');
-    },
-    dialog() {
-      if(!this.dialog) {
-        this.$refs.form.reset();
-      }
     }
+  },
+  created () {
+    this.getInvoices();
   },
   methods: {
     getInvoices () {
@@ -317,15 +312,16 @@ export default {
     },
     close () {
       this.$emit('toggleDialog', false);
-      setTimeout(() => {
+      setTimeout(function() {
+        this.$refs.form.reset()
         this.editIndex = -1;
         this.editItem = Object.assign({}, this.defaultItem);
       }, 1000)
     },
     save() {
-      if(this.$refs.form.validate) return;
       let index = this.editIndex;
       let item = this.editItem;
+      if(!this.$refs.form.validate()) return;
 
       if (index !== -1) {
         this.axios.put(`invoices/${item.id}`, item).then(() => {
@@ -334,7 +330,7 @@ export default {
         }).catch(error => {
           this.flash(error.message, 'error');
         })
-      } else {
+      } else if(index === -1) {
         this.axios.post('invoices', item).then(() => {
           this.invoices.push(item);
           this.flash('成功新增一筆資料', 'success', { timeout: 3000 });

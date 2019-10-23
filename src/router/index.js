@@ -60,6 +60,7 @@ const router = new VueRouter({
           name: 'clients',
           path: '/index/clients',
           component: ClientsComponent,
+          props: true,
           meta: {
             auth: undefined
           }
@@ -77,6 +78,7 @@ const router = new VueRouter({
           name: 'orders',
           path: '/index/orders',
           component: OrdersComponent,
+          props: true,
           meta: {
             auth: undefined
           }
@@ -85,6 +87,7 @@ const router = new VueRouter({
           name: 'invoices',
           path: '/index/invoices',
           component: InvoicesComponent,
+          props: true,
           meta: {
             auth: undefined
           }

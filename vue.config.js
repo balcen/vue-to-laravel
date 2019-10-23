@@ -1,5 +1,8 @@
 // module.exports = {
 //   devServer: {
-//     sockHost
+//     port: 80,
+//     watchOptions: {
+//       poll: true
+//     }
 //   }
 // }

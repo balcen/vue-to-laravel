@@ -1,5 +1,4 @@
 import 'vue-material/dist/vue-material.min.css'
-import './plugins/vuetify'
 import Vue from 'vue'
 import axios from 'axios'
 import App from './App.vue'

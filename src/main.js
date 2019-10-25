@@ -10,6 +10,9 @@ import VueMaterial from 'vue-material'
 import VueFlashMessage from 'vue-flash-message'
 import auth from './auth'
 import router from './router'
+import vuetify from './plugins/vuetify';
+import 'roboto-fontface/css/roboto/roboto-fontface.css'
+import '@mdi/font/css/materialdesignicons.css'
 
 // Set Vue global
 window.Vue = Vue;
@@ -45,7 +48,8 @@ Vue.use(VueFlashMessage);
 
 // new Vue(Vue.util.extend({ router,Store },App)).$mount('#app');
 new Vue({
-	store,
-	router,
-	render: h => h(App)
+  store,
+  router,
+  vuetify,
+  render: h => h(App)
 }).$mount('#app');

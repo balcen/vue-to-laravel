@@ -1,19 +1,19 @@
 <template>
   <v-app>
-    <v-toolbar app>
+    <v-toolbar short class="shrink">
       <v-toolbar-title to="/upload" class="headline text-uppercase">
         <span class="red--text text--darken-1">TSCL</span>
         <span class="font-weight-light">TRUST-SEARCH</span>
       </v-toolbar-title>
-      <v-toolbar-items class="hidden-sm-and-down">
-        <v-btn to="/upload" flat :active-class="'red--text text--darken-1'">UPLOAD</v-btn>
-        <v-btn to="/index/" flat :active-class="'red--text text--darken-1'">DATA</v-btn>
+      <v-toolbar-items>
+        <v-btn text to="/upload" flat :active-class="'red--text text--darken-1'">UPLOAD</v-btn>
+        <v-btn text to="/index/" flat :active-class="'red--text text--darken-1'">DATA</v-btn>
       </v-toolbar-items>
       <v-spacer></v-spacer>
-      <v-toolbar-items class="hidden-sm-and-down">
-        <v-btn v-if="!isLoggedIn" to="/login" icon><v-icon>person</v-icon></v-btn>
-        <v-btn v-if="isLoggedIn" to="/dashboard" icon><v-icon>account_circle</v-icon></v-btn>
-        <v-btn v-if="isLoggedIn" @click="logout" icon><v-icon>logout</v-icon></v-btn>
+      <v-toolbar-items>
+        <v-btn icon flat text v-if="!isLoggedIn" to="/login" :active-class="'red--text text--darken-1'"><v-icon>person</v-icon></v-btn>
+        <v-btn icon flat text v-if="isLoggedIn" to="/dashboard" :active-class="'red--text text--darken-1'"><v-icon>account_circle</v-icon></v-btn>
+        <v-btn icon flat text v-if="isLoggedIn" @click="logout" :active-class="'red--text text--darken-1'"><v-icon>logout</v-icon></v-btn>
       </v-toolbar-items>
     </v-toolbar>
 
@@ -27,6 +27,11 @@
 </template>
 
 <style>
+/* v-btn 加上 link 的底線 */
+a:not(.md-button):hover {
+    text-decoration: none !important;
+}
+
 .customMessage {
   transition: all 0.5s ease-in-out;
   width: 60%;

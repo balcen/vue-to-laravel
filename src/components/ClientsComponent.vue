@@ -1,61 +1,61 @@
 <template>
   <div>
-    <v-layout>
+    <v-row>
       <v-dialog
         v-model="dialog"
         max-width="800px"
         persistent
       >
-      <v-card>
-        <v-card-title>
-          <span class="headline">
-            {{ formTitle }}
-          </span>
-        </v-card-title>
-        <v-form ref="form" v-model="valid" lazy-validation>
-          <v-card-text>
-            <v-container grid-list-md>
-              <v-layout wrap>
-                <v-flex xs12 sm6 md4>
-                  <v-text-field :rules="[rules.required]" v-model="editItem.c_tax_id" label="客戶統編" required></v-text-field>
-                </v-flex>
-                <v-flex xs12 sm6 md4>
-                  <v-text-field :rules="[rules.required]" v-model="editItem.c_name" label="客戶名稱" required></v-text-field>
-                </v-flex>
-                <v-flex xs12 sm6 md4>
-                  <v-text-field :rules="[rules.required]" v-model="editItem.c_type" label="客戶類型" required></v-text-field>
-                </v-flex>
-                <v-flex xs12 sm6 md4>
-                  <v-text-field :rules="[rules.required]" v-model="editItem.c_contact" label="聯絡人" required></v-text-field>
-                </v-flex>
-                <v-flex xs12 sm6 md4>
-                  <v-text-field :rules="[rules.required]" v-model="editItem.c_phone" label="聯絡電話" required></v-text-field>
-                </v-flex>
-                <v-flex xs12 sm6 md4>
-                  <v-text-field :rules="[rules.required, rules.email]" v-model="editItem.c_mail" label="電子信箱" required></v-text-field>
-                </v-flex>
-              </v-layout>
-            </v-container>
-          </v-card-text>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="blue darken-1" flat @click="close">Cancel</v-btn>
-            <v-btn color="blue darken-1" flat @click="save" :disabled="!valid">Save</v-btn>
-          </v-card-actions>
-        </v-form>
-      </v-card>
-    </v-dialog>
+        <v-card>
+          <v-card-title>
+            <span class="headline">
+              {{ formTitle }}
+            </span>
+          </v-card-title>
+          <v-form ref="form" v-model="valid" lazy-validation>
+            <v-card-text>
+              <v-container grid-list-md>
+                <v-row wrap>
+                  <v-col xs12 sm6 md4>
+                    <v-text-field :rules="[rules.required]" v-model="editItem.c_tax_id" label="客戶統編" required></v-text-field>
+                  </v-col>
+                  <v-col xs12 sm6 md4>
+                    <v-text-field :rules="[rules.required]" v-model="editItem.c_name" label="客戶名稱" required></v-text-field>
+                  </v-col>
+                  <v-col xs12 sm6 md4>
+                    <v-text-field :rules="[rules.required]" v-model="editItem.c_type" label="客戶類型" required></v-text-field>
+                  </v-col>
+                  <v-col xs12 sm6 md4>
+                    <v-text-field :rules="[rules.required]" v-model="editItem.c_contact" label="聯絡人" required></v-text-field>
+                  </v-col>
+                  <v-col xs12 sm6 md4>
+                    <v-text-field :rules="[rules.required]" v-model="editItem.c_phone" label="聯絡電話" required></v-text-field>
+                  </v-col>
+                  <v-col xs12 sm6 md4>
+                    <v-text-field :rules="[rules.required, rules.email]" v-model="editItem.c_mail" label="電子信箱" required></v-text-field>
+                  </v-col>
+                </v-row>
+              </v-container>
+            </v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="blue darken-1" flat @click="close">Cancel</v-btn>
+              <v-btn color="blue darken-1" flat @click="save" :disabled="!valid">Save</v-btn>
+            </v-card-actions>
+          </v-form>
+        </v-card>
+      </v-dialog>
 
-      <v-flex xs12>
+      <v-col xs12>
         <v-data-table
           v-model="selected"
           :headers="headers"
           :items="clients"
+          :options.sync="options"
+          :server-items-length="totalItems"
           :search="search"
-          :pagination.sync="pagination"
           :loading="loading"
-          :rows-per-page-items="rowsPerPage"
-          select-all
+          show-select
           class="elevation-1"
         >
           <template v-slot:items="props">
@@ -94,8 +94,8 @@
             </v-alert>
           </template>
         </v-data-table>
-      </v-flex>
-    </v-layout>
+      </v-col>
+    </v-row>
   </div>
 </template>
 
@@ -105,9 +105,10 @@ export default {
   data () {
     return {
       valid: true,
-      rowsPerPage: [10,25,50,{"text":"$vuetify.dataIterator.rowsPerPageAll","value":-1}],
+      totalItems: 0,
+      itemsPerPage: 25,
       noDataAlert: false,
-      pagination: { rowsPerPage: 25 },
+      options: {},
       clients: [],
       loading: true,
       headers: [
@@ -159,21 +160,51 @@ export default {
     selected: function () {
       this.$emit('update:selected', this.selected);
       this.$emit('getDataType', 'clients');
+    },
+    options: {
+      handler () {
+        this.loading = true
+        this.getDataFromApi() 
+          .then(data => {
+            this.clients = data.data
+            this.totalItems = data.total
+            this.loading = false
+          })
+      }
     }
   },
   created() {
-    this.getClients();
+  },
+  mounted() {
+    this.loading = true
+    this.getDataFromApi() 
+      .then(data => {
+        this.clients = data.data
+        this.totalItems = data.total
+        this.loading = false
+      })
   },
   methods: {
-    getClients () {
-      this.axios.get('clients').then(response => {
-        this.clients = response.data;
-        this.noDataAlert = true;
-        this.loading = false;
-      }).catch(error => {
-        this.flash(error.message, 'error');
+    getDataFromApi() {
+      return new Promise((resolve, reject) => {
+        const { sortBy, sortDesc, page, itemsPerPage } = this.options
+        const url = `clients?page=${page}&itemsPerPage=${itemsPerPage}`
+        this.axios.get(url)
+          .then(res => {
+            return resolve(res.data)
+        })
       })
     },
+    // getClients () {
+    //   this.axios.get('clients').then(response => {
+    //     this.clients = response.data
+    //     this.noDataAlert = true
+    //     this.loading = false
+    //     this.totalItems = this.clients.length
+    //   }).catch(error => {
+    //     this.flash(error.message, 'error')
+    //   })
+    // },
     editedItem (item) {
       this.editIndex = this.clients.indexOf(item);
       this.editItem = Object.assign({}, this.clients[this.editIndex]);

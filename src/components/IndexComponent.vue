@@ -1,46 +1,51 @@
 <template>
   <div>
-    <v-layout row no-wrap>
-      <v-flex xs6>
-        <v-tabs fixed-tabs>
-          <v-tab to="/index/clients" flat color="teal">CLIENT</v-tab>
-          <v-tab to="/index/products" flat color="teal">PRODUCT</v-tab>
-          <v-tab to="/index/orders" flat color="teal">ORDER</v-tab>
-          <v-tab to="/index/invoices" flat color="teal">INVOICE</v-tab>
+    <v-row dense no-gutters row no-wrap>
+      <v-col cols="6">
+        <v-tabs fixed-tabs color="red darken-1">
+          <v-tab to="/index/clients" text>CLIENT</v-tab>
+          <v-tab to="/index/products" text>PRODUCT</v-tab>
+          <v-tab to="/index/orders" text>ORDER</v-tab>
+          <v-tab to="/index/invoices" text>INVOICE</v-tab>
         </v-tabs>
-      </v-flex>
+      </v-col>
       <v-spacer></v-spacer>
-      <v-flex xs3 class="pr-2">
-        <v-text-field
-          v-model="search"
-          label="Search"
-          append-icon="search"
-          single-line
-          hide-details
-          class="pt-1"
-        ></v-text-field>
-      </v-flex>
-      <v-flex shrink>
-        <v-btn 
-          flat 
-          icon
-          @click.stop="toggleDialog(true)" 
-        >
-          <v-icon>add</v-icon>
-        </v-btn>
-        <v-btn 
-          flat 
-          icon 
-          color="red darken-1" 
-          @click="multipleDelete" 
-          :disabled="selectedValue"
-        >
-          <v-icon>delete</v-icon>
-        </v-btn>
-      </v-flex>
-    </v-layout>
-    <v-layout overflow-auto>
-      <v-flex xs12>
+      <v-col cols="4">
+        <v-row no-gutters align-content="center" justify="space-around">
+          <v-col cols="10" class="pr-2">
+            <v-text-field
+              v-model="search"
+              label="Search"
+              append-icon="search"
+              color="red draken-1"
+              single-line
+              hide-details
+              class="pt-1"
+            ></v-text-field>
+          </v-col>
+          <v-col align-self="center" cols="auto">
+            <v-btn 
+              text 
+              icon
+              @click.stop="toggleDialog(true)" 
+            >
+              <v-icon>add</v-icon>
+            </v-btn>
+            <v-btn 
+              text 
+              icon 
+              color="red darken-1" 
+              @click="multipleDelete" 
+              :disabled="selectedValue"
+            >
+              <v-icon>delete</v-icon>
+            </v-btn>
+          </v-col>
+        </v-row>
+      </v-col>
+    </v-row>
+    <v-row no-gutters overflow-auto>
+      <v-col cols="12">
         <router-view
           ref="table"
           :key="$route.fullPath"
@@ -50,8 +55,8 @@
           @toggleDialog="toggleDialog"
           @getDataType="getDataType"
         ></router-view>
-      </v-flex>
-    </v-layout>
+      </v-col>
+    </v-row>
   </div>
 </template>
 

@@ -1,18 +1,18 @@
 <template>
   <v-app>
-    <v-toolbar dense class="shrink">
+    <v-toolbar flat dense class="shrink">
       <v-toolbar-title to="/upload" class="headline text-uppercase">
         <span class="red--text text--darken-1">TSCL</span>
         <span class="font-weight-light">TRUST-SEARCH</span>
       </v-toolbar-title>
       <v-toolbar-items>
-        <v-btn text to="/upload" flat :active-class="'red--text text--darken-1'">UPLOAD</v-btn>
-        <v-btn text to="/index/" flat :active-class="'red--text text--darken-1'">DATA</v-btn>
+        <v-btn text to="/upload" :active-class="'red--text text--darken-1'">UPLOAD</v-btn>
+        <v-btn text to="/index/" :active-class="'red--text text--darken-1'">DATA</v-btn>
       </v-toolbar-items>
       <v-spacer></v-spacer>
-      <v-btn icon flat text v-if="!isLoggedIn" to="/login" :active-class="'red--text text--darken-1'"><v-icon>person</v-icon></v-btn>
-      <v-btn icon flat text v-if="isLoggedIn" to="/dashboard" :active-class="'red--text text--darken-1'"><v-icon>account_circle</v-icon></v-btn>
-      <v-btn icon flat text v-if="isLoggedIn" @click="logout" :active-class="'red--text text--darken-1'"><v-icon>logout</v-icon></v-btn>
+      <v-btn icon text v-if="!isLoggedIn" to="/login" :active-class="'red--text text--darken-1'"><v-icon>mdi-account</v-icon></v-btn>
+      <v-btn icon text v-if="isLoggedIn" to="/dashboard" :active-class="'red--text text--darken-1'"><v-icon>account_circle</v-icon></v-btn>
+      <v-btn icon text v-if="isLoggedIn" @click="logout" :active-class="'red--text text--darken-1'"><v-icon>logout</v-icon></v-btn>
     </v-toolbar>
 
     <v-content>

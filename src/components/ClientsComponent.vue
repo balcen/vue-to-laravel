@@ -1,6 +1,17 @@
 <template>
-  <div>
-    <v-row>
+  <v-data-table
+    v-model="selected"
+    :headers="headers"
+    :items="clients"
+    :options.sync="options"
+    :server-items-length="totalItems"
+    :footer-props="footerProps"
+    :search="search"
+    :loading="loading"
+    show-select
+    class="elevation-1"
+  > 
+    <template v-slot:top>
       <v-dialog
         v-model="dialog"
         max-width="800px"
@@ -16,22 +27,22 @@
             <v-card-text>
               <v-container grid-list-md>
                 <v-row wrap>
-                  <v-col xs12 sm6 md4>
+                  <v-col cols="12" sm="6" md="4">
                     <v-text-field :rules="[rules.required]" v-model="editItem.c_tax_id" label="客戶統編" required></v-text-field>
                   </v-col>
-                  <v-col xs12 sm6 md4>
+                  <v-col cols="12" sm="6" md="4">
                     <v-text-field :rules="[rules.required]" v-model="editItem.c_name" label="客戶名稱" required></v-text-field>
                   </v-col>
-                  <v-col xs12 sm6 md4>
+                  <v-col cols="12" sm="6" md="4">
                     <v-text-field :rules="[rules.required]" v-model="editItem.c_type" label="客戶類型" required></v-text-field>
                   </v-col>
-                  <v-col xs12 sm6 md4>
+                  <v-col cols="12" sm="6" md="4">
                     <v-text-field :rules="[rules.required]" v-model="editItem.c_contact" label="聯絡人" required></v-text-field>
                   </v-col>
-                  <v-col xs12 sm6 md4>
+                  <v-col cols="12" sm="6" md="4">
                     <v-text-field :rules="[rules.required]" v-model="editItem.c_phone" label="聯絡電話" required></v-text-field>
                   </v-col>
-                  <v-col xs12 sm6 md4>
+                  <v-col cols="12" sm="6" md="4">
                     <v-text-field :rules="[rules.required, rules.email]" v-model="editItem.c_mail" label="電子信箱" required></v-text-field>
                   </v-col>
                 </v-row>
@@ -39,65 +50,34 @@
             </v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" flat @click="close">Cancel</v-btn>
-              <v-btn color="blue darken-1" flat @click="save" :disabled="!valid">Save</v-btn>
+              <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
+              <v-btn color="blue darken-1" text @click="save" :disabled="!valid">Save</v-btn>
             </v-card-actions>
           </v-form>
         </v-card>
       </v-dialog>
-
-      <v-col xs12>
-        <v-data-table
-          v-model="selected"
-          :headers="headers"
-          :items="clients"
-          :options.sync="options"
-          :server-items-length="totalItems"
-          :footer-props="footerProps"
-          :search="search"
-          :loading="loading"
-          show-select
-          class="elevation-1"
-        >
-          <template v-slot:items="props">
-            <td>
-              <v-checkbox v-model="props.selected" primary hide-details></v-checkbox>
-            </td>
-            <td>{{ props.item.c_tax_id }}</td>
-            <td class="text-xs-center">{{ props.item.c_name }}</td>
-            <td class="text-xs-center">{{ props.item.c_type }}</td>
-            <td class="text-xs-center">{{ props.item.c_contact }}</td>
-            <td class="text-xs-center">{{ props.item.c_phone }}</td>
-            <td class="text-xs-center">{{ props.item.c_mail }}</td>
-            <td id="actions" class="justify-center layout px-0">
-              <v-btn icon small class="ma-0 editBtn">
-                <v-icon
-                  small
-                  @click="editedItem(props.item)"
-                >
-                  edit
-                </v-icon>
-              </v-btn>
-              <v-btn icon small class="ma-0 deleteBtn">
-                <v-icon
-                  small
-                  @click="deleteItem(props.item)"
-                >
-                  delete
-                </v-icon>
-              </v-btn>
-            </td>
-
-          </template>
-          <template v-slot:no-data>
-            <v-alert :value="noDataAlert" color="error" icon="warning">
-              抱歉，這裡沒有任何資料 :(
-            </v-alert>
-          </template>
-        </v-data-table>
-      </v-col>
-    </v-row>
-  </div>
+    </template>
+    <template v-slot:item.action="{ item }">
+      <v-icon 
+        small
+        class="mr-2"
+        @click="editedItem(item)"
+      >
+        edit
+      </v-icon>
+      <v-icon
+        small
+        @click="deleteItem(item)"
+      >
+        delete
+      </v-icon>
+    </template>
+    <template v-slot:no-data>
+      <v-alert :value="noDataAlert" color="error" icon="warning">
+        抱歉，這裡沒有任何資料 :(
+      </v-alert>
+    </template>
+  </v-data-table>
 </template>
 
 <script>
@@ -198,16 +178,6 @@ export default {
         })
       })
     },
-    // getClients () {
-    //   this.axios.get('clients').then(response => {
-    //     this.clients = response.data
-    //     this.noDataAlert = true
-    //     this.loading = false
-    //     this.totalItems = this.clients.length
-    //   }).catch(error => {
-    //     this.flash(error.message, 'error')
-    //   })
-    // },
     editedItem (item) {
       this.editIndex = this.clients.indexOf(item);
       this.editItem = Object.assign({}, this.clients[this.editIndex]);
@@ -224,11 +194,11 @@ export default {
     },
     close() {
       this.$emit('toggleDialog', false);
-      setTimeout(function() {
+      setTimeout(() => {
         this.$refs.form.reset()
         this.editItem = Object.assign({}, this.defaultItem);
         this.editIndex = -1;
-      },3000);
+      },1000);
     },
     save() {
       let index = this.editIndex;

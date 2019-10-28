@@ -107,28 +107,4 @@ export default {
 </script>
 
 <style>
-  table.v-table tbody td:first-child, table.v-table tbody td:not(:first-child), table.v-table tbody th:first-child, table.v-table tbody th:not(:first-child), table.v-table thead td:first-child, table.v-table thead td:not(:first-child), table.v-table thead th:first-child, table.v-table thead th:not(:first-child) {
-    padding: 0 10px
-  }
-
-  #actions {
-    display: table-cell;
-  }
-
-  .v-btn.editBtn:hover{
-    background-color: #FDD835;
-    color: #FFFDE7;
-  }
-  .v-btn.deleteBtn:hover {
-    background-color: #F44336;
-    color: #FFEBEE;
-  }
-  .v-icon {
-    -webkit-transition: all 0s;
-    transition: all 0s;
-  }
-  .v-btn__content {
-    -webkit-transition: all 0s;
-    transition: all 0s;
-  }
 </style>

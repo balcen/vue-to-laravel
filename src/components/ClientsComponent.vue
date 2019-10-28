@@ -53,6 +53,7 @@
           :items="clients"
           :options.sync="options"
           :server-items-length="totalItems"
+          :footer-props="footerProps"
           :search="search"
           :loading="loading"
           show-select
@@ -106,9 +107,11 @@ export default {
     return {
       valid: true,
       totalItems: 0,
-      itemsPerPage: 25,
       noDataAlert: false,
       options: {},
+      footerProps: {
+        'items-per-page-options': [10, 25, 50, 100, 200, 500]
+      },
       clients: [],
       loading: true,
       headers: [

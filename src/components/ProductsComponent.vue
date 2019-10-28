@@ -6,11 +6,12 @@
           v-model="selected"
           :headers="headers"
           :items="products"
-          :search="search"
-          :pagination.sync="pagination"
+          :options.sync="options"
+          :server-items-length="totalItems"
+          :footer-props="footerProps"
           :loading="loading"
-          :rows-per-page-items="rowsPerPage"
-          select-all
+          :search="search"
+          show-select
           class="elevation-1"
         >
           <template v-slot:items="props">
@@ -49,6 +50,21 @@
                 </v-icon>
                 </v-btn>
             </td>
+          </template>
+          <template v-slot:item.action="{ item }">
+            <v-icon
+              small
+              class="mr-2"
+              @click="editedItem(item)"
+            >
+              edit
+            </v-icon>
+            <v-icon
+              small
+              @click="deleteItem(item)"
+            >
+              delete
+            </v-icon>
           </template>
 
           <template v-slot:no-data>
@@ -135,10 +151,13 @@ export default {
   data () {
     return {
       valid: true,
-      rowsPerPage: [10,25,50,{"text":"$vuetify.dataIterator.rowsPerPageAll","value":-1}],
       noDataAlert: false,
       error: '',
-      pagination: { rowsPerPage: 25, sortBy: 'id' },
+      options: {},
+      totalItems: 0,
+      footerProps: {
+        'items-per-page-options': [10, 25, 50, 100, 200, 500]
+      },
       products: [],
       loading: true,
       headers: [
@@ -199,12 +218,42 @@ export default {
     selected: function() {
       this.$emit('update:selected', this.selected);
       this.$emit('getDataType', 'products');
+    },
+    options: {
+      handler() {
+        this.loading = true
+        this.getDataFromApi()
+          .then(data => {
+            this.products = data.data
+            this.totalItems = data.total
+            this.loading = false
+          })
+      },
+      deep: true
     }
   },
   created () {
-    this.getProducts();
+  },
+  mounted() {
+    this.loading = true
+    this.getDataFromApi()
+      .then(data => {
+        this.products = data.data
+        this.totalItems = data.total
+        this.loading = false
+      })
   },
   methods: {
+    getDataFromApi() {
+      return new Promise((resolve) => {
+        const { page, itemsPerPage } = this.options
+        const url = `products?page=${page}&itemsPerPage=${itemsPerPage}`
+        this.axios.get(url)
+          .then(res => {
+           return resolve(res.data)
+          })
+      })
+    },
     getProducts () {
       this.axios.get('products', {crossDomain: true}).then(response => {
           this.products = response.data;

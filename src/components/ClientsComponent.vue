@@ -153,7 +153,8 @@ export default {
             this.totalItems = data.total
             this.loading = false
           })
-      }
+      },
+      deep: true
     }
   },
   created() {
@@ -169,8 +170,8 @@ export default {
   },
   methods: {
     getDataFromApi() {
-      return new Promise((resolve, reject) => {
-        const { sortBy, sortDesc, page, itemsPerPage } = this.options
+      return new Promise((resolve) => {
+        const { page, itemsPerPage } = this.options
         const url = `clients?page=${page}&itemsPerPage=${itemsPerPage}`
         this.axios.get(url)
           .then(res => {

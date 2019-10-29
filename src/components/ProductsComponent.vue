@@ -1,82 +1,19 @@
 <template>
-  <div>
-    <v-layout overflow-auto>
-      <v-flex xs12>
-        <v-data-table
-          v-model="selected"
-          :headers="headers"
-          :items="products"
-          :options.sync="options"
-          :server-items-length="totalItems"
-          :footer-props="footerProps"
-          :loading="loading"
-          :search="search"
-          show-select
-          class="elevation-1"
-        >
-          <template v-slot:items="props">
-            <td>
-              <v-checkbox
-                v-model="props.selected"
-                primary
-                hide-details
-              ></v-checkbox>
-            </td>
-            <td>{{ props.item.p_type }}</td>
-            <td class="text-xs-right">{{ props.item.p_image }}</td>
-            <td class="text-xs-center">{{ props.item.p_name }}</td>
-            <td class="text-xs-right">{{ props.item.p_part_no }}</td>
-            <td class="text-xs-center">{{ props.item.p_spec }}</td>
-            <td class="text-xs-right">{{ Math.round(props.item.p_price * 1000) / 1000 }}</td>
-            <td class="text-xs-center">{{ props.item.p_currency }}</td>
-            <td class="text-xs-right">{{ props.item.p_size }}</td>
-            <td class="text-xs-right">{{ props.item.p_weight }}</td>
-            <td class="text-xs-right">{{ props.item.p_note }}</td>
-            <td id="actions" class="justify-center layout px-0">
-              <v-btn icon small class="ma-0 editBtn">
-                <v-icon
-                  small
-                  @click="editedItem(props.item)"
-                >
-                  edit
-                </v-icon>
-              </v-btn>
-              <v-btn icon small class="ma-0 deleteBtn">
-                <v-icon
-                  small
-                  @click="deleteItem(props.item)"
-                >
-                  delete
-                </v-icon>
-                </v-btn>
-            </td>
-          </template>
-          <template v-slot:item.action="{ item }">
-            <v-icon
-              small
-              class="mr-2"
-              @click="editedItem(item)"
-            >
-              edit
-            </v-icon>
-            <v-icon
-              small
-              @click="deleteItem(item)"
-            >
-              delete
-            </v-icon>
-          </template>
+  <v-data-table
+    v-model="selected"
+    :headers="headers"
+    :items="products"
+    :options.sync="options"
+    :server-items-length="totalItems"
+    :footer-props="footerProps"
+    :loading="loading"
+    :search="search"
+    show-select
+    class="elevation-1"
+  >
 
-          <template v-slot:no-data>
-            <v-alert :value="noDataAlert" color="error" icon="warning">
-              抱歉，這裡沒有任何資料 :(
-            </v-alert>
-          </template>
-        </v-data-table>
-      </v-flex>
-    </v-layout>
-
-    <!--  Dialog  -->
+  <!--  Dialog  -->
+  <template v-slot:top>
     <v-dialog
       v-model="dialog"
       max-width="800"
@@ -91,50 +28,74 @@
         <v-form ref="form" v-model="valid" lazy-validation>
           <v-card-text>
             <v-container grid-list-md>
-              <v-layout wrap>
-                <v-flex xs12 sm6 md4>
+              <v-row wrap>
+                <v-col cols="12" sm="6" md="4">
                   <v-text-field :rules="[rules.required]" v-model="editItem.p_type" label="產品類型" maxlength="30"></v-text-field>
-                </v-flex>
-                <v-flex xs12 sm6 md4>
+                </v-col>
+                <v-col cols="12" sm="6" md="4">
                   <v-text-field v-model="editItem.p_image" label="產品圖片" readonly @click="upload"></v-text-field>
                   <input @change="change" type="file" ref="image" id="image" accept="image/*">
-                </v-flex>
-                <v-flex xs12 sm6 md4>
+                </v-col>
+                <v-col cols="12" sm="6" md="4">
                   <v-text-field :rules="[rules.required]" v-model="editItem.p_name" label="產品名稱"></v-text-field>
-                </v-flex>
-                <v-flex xs12 sm6 md4>
+                </v-col>
+                <v-col cols="12" sm="6" md="4">
                   <v-text-field :rules="[rules.required]" v-model="editItem.p_part_no" label="產品料號" maxlength="100"></v-text-field>
-                </v-flex>
-                <v-flex xs12 sm6 md4>
+                </v-col>
+                <v-col cols="12" sm="6" md="4">
                   <v-text-field :rules="[rules.required]" v-model="editItem.p_spec" label="產品規格"></v-text-field>
-                </v-flex>
-                <v-flex xs12 sm6 md4>
+                </v-col>
+                <v-col cols="12" sm="6" md="4">
                   <v-text-field type="number" :rules="[rules.required]" v-model="editItem.p_price" label="產品價格" maxlength="12"></v-text-field>
-                </v-flex>
-                <v-flex xs12 sm6 md4>
+                </v-col>
+                <v-col cols="12" sm="6" md="4">
                   <v-text-field :rules="[rules.required]" v-model="editItem.p_currency" label="幣別" maxlength="10"></v-text-field>
-                </v-flex>
-                <v-flex xs12 sm6 md4>
+                </v-col>
+                <v-col cols="12" sm="6" md="4">
                   <v-text-field v-model="editItem.p_size" label="產品尺寸" maxlegnth="50"></v-text-field>
-                </v-flex>
-                <v-flex xs12 sm6 md4>
+                </v-col>
+                <v-col cols="12" sm="6" md="4">
                   <v-text-field v-model="editItem.p_weight" label="產品重量" maxlength="15"></v-text-field>
-                </v-flex>
-                <v-flex xs12 sm6 md4>
+                </v-col>
+                <v-col cols="12" sm="6" md="4">
                   <v-text-field v-model="editItem.p_note" label="備註"></v-text-field>
-                </v-flex>
-              </v-layout>
+                </v-col>
+              </v-row>
             </v-container>
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="blue darken-1" flat @click="close">Cancel</v-btn>
-            <v-btn color="blue darken-1" flat @click="save" :disabled="!valid">Save</v-btn>
+            <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
+            <v-btn color="blue darken-1" text @click="save" :disabled="!valid">Save</v-btn>
           </v-card-actions>
         </v-form>
       </v-card>
     </v-dialog>
-  </div>
+  </template>
+
+  <template v-slot:item.action="{ item }">
+    <v-icon
+      small
+      class="mr-2"
+      @click="editedItem(item)"
+    >
+      edit
+    </v-icon>
+    <v-icon
+      small
+      @click="deleteItem(item)"
+    >
+      delete
+    </v-icon>
+  </template>
+
+  <template v-slot:no-data>
+    <v-alert :value="noDataAlert" color="error" icon="warning">
+      抱歉，這裡沒有任何資料 :(
+    </v-alert>
+  </template>
+  
+  </v-data-table>
 </template>
 
 <style>
@@ -280,11 +241,11 @@ export default {
     },
     close () {
       this.$emit('toggleDialog', false);
-      setTimeout(function() {
+      setTimeout(() => {
         this.$refs.form.reset()
         this.editItem = Object.assign({}, this.defaultItem);
         this.editIndex = -1;
-      }, 3000)
+      }, 1000)
     },
     save () {
       // let formData = new FormData;

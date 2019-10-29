@@ -16,7 +16,7 @@
     </v-toolbar>
 
     <v-content>
-      <flash-message class="customMessage ma-2"></flash-message>
+      <flash-message transitionName="slide-y-transition" id="flashMessage" class="customMessage ma-2"></flash-message>
       <router-view
         :key="$route.fullPath"
       ></router-view>
@@ -39,29 +39,15 @@ a:not(.md-button):hover {
   z-index: 9999;
 }
 
-.customMessage .success {
+#flashMessage .flash__message.success {
   background-color: #dff0d8 !important;
+  border-color: #d6e9c6 !important;
 }
 
-.customMessage .error {
-  background-color: #f2dede !important;
-}
-
-.customMessage .warning {
-  background-color: #fcf8e3 !important;
-}
-
-.customMessage .info {
-  background-color: #f2f5fe !important;
-}
-
-/* 取消 btn 的 active 背景色
-.v-btn--active:before, .v-btn:hover:before, .v-btn:focus:before {
-    background-color: transparent !important;
-} */
 </style>
 
 <script>
+require('vue-flash-message/dist/vue-flash-message.min.css')
 export default {
   name: 'App',
   data () {

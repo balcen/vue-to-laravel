@@ -36,10 +36,8 @@
                       v-model="menu"
                       :close-on-content-click="false"
                       :nudge-right="40"
-                      lazy
                       transition="scale-transition"
                       offset-y
-                      full-width
                       min-width="290px"
                     >
                       <template v-slot:activator="{ on }">
@@ -71,16 +69,28 @@
                     <v-text-field v-model="editItem.o_product_spec" label="產品規格"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field type="number" v-model="editItem.o_product_price" label="產品價格" :rules="[rules.required]" maxlength="12"></v-text-field>
+                    <v-text-field 
+                      type="number" 
+                      v-model="editItem.o_product_price" 
+                      label="產品價格" 
+                      :rules="[rules.required]" 
+                      maxlength="12"
+                      @change="amount"  
+                    ></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
                     <v-text-field :rules="[rules.required]" v-model="editItem.o_currency" label="幣別" maxlength="10"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field :rules="[rules.required]" v-model="editItem.o_quantity" label="採購數量"></v-text-field>
+                    <v-text-field 
+                      :rules="[rules.required]" 
+                      v-model="editItem.o_quantity" 
+                      label="採購數量"
+                      @change="amount"
+                    ></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="amount" label="採購金額"></v-text-field>
+                    <v-text-field v-model="editItem.o_amount" label="採購金額"></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
                     <v-text-field v-model="editItem.o_note" label="付款條件"></v-text-field>
@@ -194,23 +204,23 @@ export default {
   },
   computed: {
     formTitle() {
-      return this.editIndex === -1 ? '新增資料' : '修改資料';
+      return this.editIndex === -1 ? '新增資料' : '修改資料'
     },
-    amount: {
-      get: function(){
-        let sum = Math.round(this.editItem.o_product_price * this.editItem.o_quantity * 1000) / 1000;
-        return sum;
-      },
-      // 如果手動修改amount就執行set賦值給o_amount
-      set: function(newVal) {
-        this.editItem.o_amount = newVal;
-      }
-    }
+    // amount: {
+    //   get: function(){
+    //     let sum = Math.round(this.editItem.o_product_price * this.editItem.o_quantity * 1000) / 1000
+    //     return sum
+    //   },
+    //   // 如果手動修改amount就執行set賦值給o_amount
+    //   set: function(newVal) {
+    //     this.editItem.o_amount = newVal
+    //   }
+    // }
   },
   watch: {
     selected: function() {
-      this.$emit('update:selected', this.selected);
-      this.$emit('getDataType', 'orders');
+      this.$emit('update:selected', this.selected)
+      this.$emit('getDataType', 'orders')
     },
     options: {
       handler() {
@@ -248,50 +258,55 @@ export default {
       })
     },
     editedItem (item) {
-      this.editIndex = this.orders.indexOf(item);
-      this.editItem = Object.assign({}, item);
-      this.$emit('toggleDialog', true);
+      this.editIndex = this.orders.indexOf(item)
+      this.editItem = Object.assign({}, item)
+      this.$emit('toggleDialog', true)
     },
     deleteItem (item) {
-      const index = this.orders.indexOf(item);
+      const index = this.orders.indexOf(item)
       confirm('確定刪除這筆資料？') && this.axios.delete(`orders/${item.id}`, item.id).then(() => {
-        this.orders.splice(index, 1);
-        this.flash('成功刪除一筆資料', 'success', { timeout: 3000 })
+        this.orders.splice(index, 1)
+        this.flash('成功刪除一筆資料', 'success')
       }).catch(error => {
-        this.flash(error.message, 'error');
+        this.flash(error.message, 'error')
       })
     },
     close () {
-      this.$emit('toggleDialog', false);
+      this.$emit('toggleDialog', false)
       setTimeout(() => {
-        this.$refs.form.reset();
-        this.editItem = Object.assign({}, this.defaultItem);
-        this.editIndex = -1;
-      },1000)
+        this.editItem = Object.assign({}, this.defaultItem)
+        this.editIndex = -1
+        this.$refs.form.reset()
+        this.loading = false
+      },300)
     },
     save () {
-      let index = this.editIndex;
-      let item = this.editItem;
-      if(!this.$refs.form.validate()) return;
+      this.loading = true
+      let index = this.editIndex
+      let item = this.editItem
+      if(!this.$refs.form.validate()) return
       if (index !== -1) {
         this.axios.put(`orders/${item.id}`, item).then(() => {
-          Object.assign(this.orders[index], item);
-          this.flash('成功修改一筆資料', 'success', { timeout: 3000 });
+          Object.assign(this.orders[index], item)
+          this.flash('成功修改一筆資料', 'success')
         }).catch(error => {
-          this.flash(error.message, 'error');
+          this.flash(error.message, 'error')
         })
       } else if(index === -1) {
         this.axios.post('orders', item).then(() => {
-          this.orders.push(item);
-          this.flash('成功新增一筆資料', 'success', { timeout: 3000 })
+          this.orders.push(item)
+          this.flash('成功新增一筆資料', 'success')
         }).catch(error => {
-          this.flash(error.message, 'error');
+          this.flash(error.message, 'error')
         })
       }
-      this.close();
+      this.close()
     },
     deleteArray () {
-      this.orders = this.orders.filter((el) => !this.selected.includes(el));
+      this.orders = this.orders.filter((el) => !this.selected.includes(el))
+    },
+    amount() {
+      this.editItem.o_amount = Math.round(this.editItem.o_product_price * this.editItem.o_quantity * 1000) / 1000
     }
   }
 }

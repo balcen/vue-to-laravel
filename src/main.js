@@ -3,12 +3,10 @@ import Vue from 'vue'
 import axios from 'axios'
 import App from './App.vue'
 import store from './store/Store'
-import VueAuth from '@websanova/vue-auth'
 import VueAxios from 'vue-axios'
 import VueRouter from 'vue-router'
 import VueMaterial from 'vue-material'
 import VueFlashMessage from 'vue-flash-message'
-import auth from './auth'
 import router from './router'
 import vuetify from './plugins/vuetify';
 import 'roboto-fontface/css/roboto/roboto-fontface.css'
@@ -42,9 +40,11 @@ Vue.router = router;
 Vue.use(VueMaterial);
 
 // Vue-Flash-Message
-require('vue-flash-message/dist/vue-flash-message.min.css');
-Vue.use(VueFlashMessage);
-
+Vue.use(VueFlashMessage, {
+  messageOptions: {
+    timeout: 300000,
+  }
+});
 
 // new Vue(Vue.util.extend({ router,Store },App)).$mount('#app');
 new Vue({

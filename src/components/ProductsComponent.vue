@@ -215,15 +215,6 @@ export default {
           })
       })
     },
-    getProducts () {
-      this.axios.get('products', {crossDomain: true}).then(response => {
-          this.products = response.data;
-          this.noDataAlert = true;
-          this.loading = false;
-      }).catch(error => {
-        this.flash(error.message, 'error');
-      });
-    },
     editedItem (item) {
       this.editIndex = this.products.indexOf(item);
       this.editItem = Object.assign({}, item);
@@ -234,7 +225,7 @@ export default {
       // let uri = `http://localhost:8888/api/products/${item.id}`
       confirm('確定刪除這筆資料？') && this.axios.delete(`products/${item.id}`, item.id).then(() => {
           this.products.splice(index, 1);
-          this.flash('成功刪除一筆資料', 'success', { timeout: 3000 });
+          this.flash('成功刪除一筆資料', 'success');
       }).catch(error => {
           this.flash(error.message, 'error');
       })
@@ -242,10 +233,10 @@ export default {
     close () {
       this.$emit('toggleDialog', false);
       setTimeout(() => {
-        this.$refs.form.reset()
         this.editItem = Object.assign({}, this.defaultItem);
         this.editIndex = -1;
-      }, 1000)
+        this.$refs.form.reset()
+      }, 300)
     },
     save () {
       // let formData = new FormData;
@@ -258,7 +249,7 @@ export default {
       if (index !== -1) {
         this.axios.put(`products/${item.id}`, item).then(() => {
           Object.assign(this.products[index], item);
-          this.flash('成功修改一筆資料', 'success', { timeout: 3000 });
+          this.flash('成功修改一筆資料', 'success');
         }).catch(error => {
           this.flash(error.message, 'error');
         })
@@ -266,7 +257,7 @@ export default {
         // let uri = 'http://localhost:8888/api/products';
         this.axios.post(`products`, item).then(() => {
           this.products.push(item);
-          this.flash('成功新增一筆資料', 'success', { timeout: 3000 });
+          this.flash('成功新增一筆資料', 'success');
         }).catch(error => {
           this.flash(error.message, 'error');
         })

@@ -284,8 +284,8 @@ export default {
   methods: {
     getDataFromApi() {
       return new Promise((resolve) => {
-        const { page, itemsPerPage } = this.options
-        const url = `invoices?page=${page}&itemsPerPage=${itemsPerPage}`
+        const { sortBy, sortDesc, page, itemsPerPage } = this.options
+        const url = `invoices?page=${page}&itemsPerPage=${itemsPerPage}&sortBy=${sortBy}&sortDesc=${sortDesc}`
         this.axios.get(url)
           .then(res => {
             return resolve(res.data)

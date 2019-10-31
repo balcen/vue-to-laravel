@@ -268,12 +268,6 @@ export default {
             this.loading = false
           })
       }
-    },
-    editItem: {
-      handler() {
-        console.log(this.editItem)
-      },
-      deep: true
     }
   },
   created () {
@@ -289,7 +283,7 @@ export default {
   },
   methods: {
     getDataFromApi() {
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve) => {
         const { page, itemsPerPage } = this.options
         const url = `invoices?page=${page}&itemsPerPage=${itemsPerPage}`
         this.axios.get(url)

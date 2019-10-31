@@ -150,8 +150,8 @@
     </template>
 
     <template v-slot:no-data>
-      <v-alert :value="noDataAlert" color="error" icon="warning">
-        抱歉，這裡沒有任何資料 :( {{ amount }}
+      <v-alert type="error" class="text-left my-3">
+        抱歉，這裡沒有任何資料 :(
       </v-alert>
     </template>
   </v-data-table>

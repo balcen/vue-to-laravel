@@ -1,52 +1,50 @@
 <template>
   <div class="pa-5 back">
-    <!-- <md-content> -->
-      <v-layout fill-height align-center wrap justify-center>
-        <!-- <v-flex xs12>
-          <h1 class="text-xs-center mt-3 md-display-3 font-weight-medium source-sans-pro">FILE UPLOAD</h1>
-        </v-flex> -->
-        <v-flex xs6>
-          <v-container grid-list-sm fill-height>
-            <v-layout row wrap align-center justify-center>
-              <v-flex v-if="!dataType" xs6 class="pt-4">
-                <v-btn large color="primary" @click="uploadBtn" block dark :loading="loading">
-                  Click to Upload File
+    <v-container class="fill-height">
+      <v-row row wrap align="center" justify="center">
+        <v-col v-if="!dataType" cols="6" class="pt-4">
+          <v-btn x-large color="primary" @click="uploadBtn" block dark :loading="loading">
+            Click to Upload File
+          </v-btn>
+
+          <input type="file" id="upload" ref="upload" @change="changeFile" accept=".xlsx">
+        </v-col>
+        <v-col v-if="dataType">
+          <template name="upload-button" transition="fade-transition">
+            <v-row wrap justify="center">
+              <v-col cols="auto">
+                <v-btn icon outlined class="ml-5" @click="dataType=''">
+                  <v-icon class="mx-0 px-0">arrow_back</v-icon>
                 </v-btn>
-
-                <input type="file" id="upload" ref="upload" @change="changeFile" accept=".xlsx">
-              </v-flex>
-
-              <template v-if="dataType" name="upload-button" transition="fade-transition">
-                <v-layout wrap justify-center>
-                  <v-flex xs12 offset-xs1>
-                    <v-btn icon outlined class="ml-5" @click="dataType=''">
-                      <v-icon class="mx-0 px-0">arrow_back</v-icon>
-                    </v-btn>
-                  </v-flex>
-                  <v-flex xs4 class="mt-3">
-                    <v-text-field label="檔案名稱" v-model="fileName" readonly></v-text-field>
-                  </v-flex>
-                  <v-flex xs4 class="mt-3">
-                    <v-select
-                      v-model="dataType"
-                      :items="fileType"
-                      item-text="state"
-                      item-value="abbr"
-                      label="檔案類型"
-                    >
-                    </v-select>
-                  </v-flex>
-                  <v-flex xs6 offset-xs3 class="mt-3">
-                    <span>總共{{ dataLength }}筆資料</span>
-                    <v-btn color="info" @click="fileUpload" :loading="loading">確認上傳</v-btn>
-                  </v-flex>
-                </v-layout>
-              </template>
-            </v-layout>
-          </v-container>
-        </v-flex>
-      </v-layout>
-    <!-- </md-content> -->
+              </v-col>
+              <v-col cols="3" class="mt-3">
+                <v-text-field label="檔案名稱" v-model="fileName" readonly></v-text-field>
+              </v-col>
+              <v-col cols="3" class="mt-3">
+                <v-select
+                  v-model="dataType"
+                  :items="fileType"
+                  item-text="state"
+                  item-value="abbr"
+                  label="檔案類型"
+                >
+                </v-select>
+              </v-col>
+            </v-row>
+            <v-row justify="center">
+              <v-col cols="auto">
+                <span>總共{{ dataLength }}筆資料</span>
+              </v-col>
+            </v-row>
+            <v-row justify="center">
+              <v-col cols="auto">
+                <v-btn color="info" @click="fileUpload" :loading="loading">確認上傳</v-btn>
+              </v-col>
+            </v-row>
+          </template>
+        </v-col>
+      </v-row>
+    </v-container>
   </div>
 </template>
 

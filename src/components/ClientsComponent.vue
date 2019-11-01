@@ -72,6 +72,7 @@
         delete
       </v-icon>
     </template>
+    
     <template v-slot:no-data>
       <v-alert type="error" class="text-left my-3">
         抱歉，這裡沒有任何資料 :(

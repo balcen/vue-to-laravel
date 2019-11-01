@@ -1,53 +1,52 @@
 <template>
-  <v-container>
-    <v-layout justify-center align-center>
-      <v-flex xs6>
+  <v-container fill-height>
+    <v-row justify="center" align="center">
+      <v-col cols="6">
         <v-card flat>
           <v-card-title>
-            <v-layout justify-center>
-              <h1 class="text-center">LOGIN</h1>
-            </v-layout>
+            <v-row justify="center">
+              <h1>LOGIN</h1>
+            </v-row>
           </v-card-title>
           <v-card-text>
             <v-form ref="form">
-              <v-layout wrap justify-center>
-                <v-flex xs8>
+              <v-row wrap justify="center">
+                <v-col cols="8">
                   <v-text-field
                     label="用戶名稱"
                     v-model="user.name"
                   ></v-text-field>
-                </v-flex>
-                <v-flex xs8 class="mt-2">
+                </v-col>
+                <v-col cols="8" class="mt-2">
                   <v-text-field
                     type="password"
                     label="密碼"
                     v-model="user.password"
                   ></v-text-field>
-                </v-flex>
-              </v-layout>
+                </v-col>
+              </v-row>
             </v-form>
           </v-card-text>
           <v-card-actions>
-            <v-layout justify-center align-center wrap column>
-              <v-flex>
-                <v-btn 
-                  flat 
-                  outline 
+            <v-row justify="center" align="center" class="d-flex flex-column">
+              <v-col cols="auto">
+                <v-btn
                   color="primary" 
                   @click="login"
                   :loading="loading"
+                  large
                 >
                   登入
                 </v-btn>  
-              </v-flex>
-              <v-flex class="mt-1" shrink>
+              </v-col>
+              <v-col class="pt-0" cols="auto">
                 <router-link :to="{name: 'register'}">註冊帳號</router-link>
-              </v-flex>
-            </v-layout>
+              </v-col>
+            </v-row>
           </v-card-actions>
         </v-card>
-      </v-flex>
-    </v-layout>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 

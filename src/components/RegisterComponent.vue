@@ -1,17 +1,17 @@
 <template>
   <v-container fill-height>
-    <v-layout justify-center align-center>
-      <v-flex xs6>
+    <v-row justify="center" align="center">
+      <v-col cols="6">
         <v-card flat>
           <v-card-title>
-            <v-layout justify-center>
+            <v-row justify="center">
               <h1>Register</h1>
-            </v-layout>
+            </v-row>
           </v-card-title>
           <v-card-text>
             <v-form ref="form" v-model="valid" lazy-validation>
-              <v-layout wrap justify-center>
-                <v-flex xs8>
+              <v-row wrap justify="center">
+                <v-col cols="8">
                   <v-text-field 
                     v-model="name" 
                     :rules="[rules.required]"
@@ -19,8 +19,8 @@
                     :messages="error && message.name ? message.name : ''" 
                     label="用戶名稱"
                   ></v-text-field>
-                </v-flex>
-                <v-flex xs8>
+                </v-col>
+                <v-col cols="8">
                   <v-text-field
                     :append-icon="show ? 'visibility' : 'visibility_off'"
                     :rules="[rules.required, rules.min]" 
@@ -29,8 +29,8 @@
                     label="密碼"
                     @click:append="show = !show"
                   ></v-text-field>
-                </v-flex>
-                <v-flex xs8>
+                </v-col>
+                <v-col cols="8">
                   <v-text-field
                     :append-icon="show ? 'visibility' : 'visibility_off'" 
                     :rules="[rules.required, rules.password]" 
@@ -38,8 +38,8 @@
                     label="再次輸入密碼"
                     @click:append="show2 = !show"
                   ></v-text-field>
-                </v-flex>
-                <v-flex xs8>
+                </v-col>
+                <v-col cols="8">
                   <v-text-field 
                     v-model="email" 
                     :rules="[rules.required, rules.email]" 
@@ -47,31 +47,30 @@
                     :messages="error && message.email ? message.email : ''"
                     label="電子信箱"
                   ></v-text-field>
-                </v-flex>
-              </v-layout>
+                </v-col>
+              </v-row>
             </v-form>
           </v-card-text>
           <v-card-actions>
-            <v-layout column align-center justify-center>
-              <v-flex>
-                <v-btn 
-                  flat 
-                  outline 
-                  color="indigo" 
+            <v-row class="d-flex flex-column" align="center" justify="center">
+              <v-col cols="auto">
+                <v-btn  
+                  color="primary" 
                   @click="register" 
                   :loading="loading"
+                  large
                 >
                   註冊
                 </v-btn>
-              </v-flex>
-              <v-flex class="mt-1">
+              </v-col>
+              <v-col class="pt-0" cols="auto">
                 <router-link :to="{name: 'login'}">已有帳號</router-link>
-              </v-flex>
-            </v-layout>
+              </v-col>
+            </v-row>
           </v-card-actions>
         </v-card>
-      </v-flex>
-    </v-layout>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 

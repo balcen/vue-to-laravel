@@ -148,12 +148,18 @@ export default {
     options: {
       handler () {
         this.loading = true
-        this.getDataFromApi() 
-          .then(data => {
-            this.clients = data.data
-            this.totalItems = data.total
-            this.loading = false
-          })
+        if(this.search.length === 0) {
+          console.log(!this.search)
+          this.getDataFromApi() 
+            .then(data => {
+              this.clients = data.data
+              this.totalItems = data.total
+              this.loading = false
+            })
+        } else {
+          // If serach exist
+          this.getSearch()
+        }
       },
       deep: true
     }
@@ -228,7 +234,20 @@ export default {
     },
     reset() {
       this.$refs.form.reset();
+    },
+    getSearch() {
+      this.loading = true
+      const { page, itemsPerPage } = this.options
+      const encode = encodeURI(this.search)
+      this.axios.get(`clients/search?q=${encode}&page=${page}&itemsPerPage=${itemsPerPage}`)
+        .then(res => {
+          this.clients = res.data.data
+          this.totalItems = res.data.total
+          this.loading = false
+        }).catch(err => {
+          this.loading = false
+        })
     }
   }
-};
+}
 </script>

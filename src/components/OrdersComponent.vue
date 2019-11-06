@@ -206,16 +206,16 @@ export default {
     formTitle() {
       return this.editIndex === -1 ? '新增資料' : '修改資料'
     },
-    // amount: {
-    //   get: function(){
-    //     let sum = Math.round(this.editItem.o_product_price * this.editItem.o_quantity * 1000) / 1000
-    //     return sum
-    //   },
-    //   // 如果手動修改amount就執行set賦值給o_amount
-    //   set: function(newVal) {
-    //     this.editItem.o_amount = newVal
-    //   }
-    // }
+    srcUrl: function() {
+      const q = encodeURI(this.search)
+      const { sortBy, sortDesc, page, itemsPerPage } = this.options
+      const root = `orders/search?q=${q}&page=${page}&itemsPerPage=${itemsPerPage}`
+      if (!sortBy.length) {
+        return root
+      } else {
+        return root + `&sortBy=${sortBy}&sortDesc=${sortDesc[0] ? 'desc' : 'asc'}`
+      }
+    }
   },
   watch: {
     selected: function() {
@@ -225,12 +225,21 @@ export default {
     options: {
       handler() {
         this.loading = true
-        this.getDataFromApi()
-          .then(data => {
-            this.orders = data.data
-            this.totalItems = data.total
-            this.loading = false
-          }) 
+        if(this.search.length === 0) {
+          this.getDataFromApi()
+            .then(data => {
+              this.orders = data.data
+              this.totalItems = data.total
+              this.loading = false
+            }) 
+        } else {
+          this.getSearch()
+            .then( data => {
+              this.orders = data.data
+              this.totalItems = data.total
+              this.loading = false
+            })
+        }
       },
       deep: true
     }
@@ -248,7 +257,7 @@ export default {
   },
   methods: {
     getDataFromApi() {
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve) => {
         const { sortBy, sortDesc, page, itemsPerPage } = this.options
         const url = `orders?page=${page}&itemsPerPage=${itemsPerPage}&sortBy=${sortBy}&sortDesc=${sortDesc}`
         this.axios.get(url)
@@ -307,6 +316,23 @@ export default {
     },
     amount() {
       this.editItem.o_amount = Math.round(this.editItem.o_product_price * this.editItem.o_quantity * 1000) / 1000
+    },
+    useSearch() {
+      this.loading = true
+      this.getSearch()
+        .then( data => {
+          this.orders = data.data
+          this.totalItems = data.total
+          this.loading = false
+        })
+    },
+    getSearch() {
+      return new Promise((resolve) => {
+        this.axios.get(this.srcUrl)
+          .then( res => {
+            resolve(res.data)
+          })
+      })
     }
   }
 }

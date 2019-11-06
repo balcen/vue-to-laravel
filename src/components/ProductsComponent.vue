@@ -181,7 +181,7 @@ export default {
       if(!sortBy.length) {
         return root
       } else {
-        return `${root}&sortBy=${sortBy}&sortDesc=${sortDesc === 'true' ? 'desc' : 'asc'}`
+        return `${root}&sortBy=${sortBy}&sortDesc=${sortDesc[0] ? 'desc' : 'asc'}`
       }
     }
   },

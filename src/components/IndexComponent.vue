@@ -21,6 +21,7 @@
               single-line
               hide-details
               class="pt-1"
+              @keyup.enter="searchAll"
             ></v-text-field>
           </v-col>
           <v-col align-self="center" cols="auto">
@@ -100,7 +101,10 @@ export default {
     // 取得array裡面的column
     getColumn (array, column) {
       // 取出Array裡面每一個元素的id，做成array
-      return array.map((el) => {return el[column]});
+      return array.map((el) => {return el[column]})
+    },
+    searchAll() {
+      this.$refs.table.useSearch()
     }
   }
 }

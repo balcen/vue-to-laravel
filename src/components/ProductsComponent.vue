@@ -174,6 +174,16 @@ export default {
     formTitle: function () {
       return this.editIndex === -1 ? 'New Item' : 'Edit Item';
     },
+    srcUrl: function() {
+      const search = encodeURI(this.search)
+      const { sortBy, sortDesc, page, itemsPerPage } = this.options
+      const root = `products/search?q=${search}&page=${page}&itemsPerPage=${itemsPerPage}`
+      if(!sortBy.length) {
+        return root
+      } else {
+        return `${root}&sortBy=${sortBy}&sortDesc=${sortDesc === 'true' ? 'desc' : 'asc'}`
+      }
+    }
   },
   watch: {
     selected: function() {
@@ -183,12 +193,21 @@ export default {
     options: {
       handler() {
         this.loading = true
-        this.getDataFromApi()
-          .then(data => {
-            this.products = data.data
-            this.totalItems = data.total
-            this.loading = false
-          })
+        if(this.search.length === 0) {
+          this.getDataFromApi()
+            .then(data => {
+              this.products = data.data
+              this.totalItems = data.total
+              this.loading = false
+            })
+        } else {
+          this.getSearch()
+            .then(data => {
+              this.products = data.data
+              this.totalItmes = data.total
+              this.loading = false
+            })
+        }
       },
       deep: true
     }
@@ -280,6 +299,25 @@ export default {
       const input = this.$refs.image;
       input.type = 'text';
       input.type = 'file';
+    },
+    useSearch() {
+      this.loading = true
+      this.getSearch()
+        .then (data => {
+          this.prodcuts = data.data
+          this.totalItems = data.total
+          this.loading = false
+        })
+    },
+    getSearch() {
+      return new Promise ((resolve) => {
+        const url = this.srcUrl
+        this.axios.get(url)
+          .then (res => {
+            resolve(res.data)
+          })
+      })
+      
     }
   }
 }

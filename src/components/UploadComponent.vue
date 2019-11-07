@@ -1,46 +1,63 @@
 <template>
   <div class="pa-5 back">
-    <v-container class="fill-height">
-      <v-row row wrap align="center" justify="center">
-        <v-col v-if="!dataType" cols="6" class="pt-4">
-          <v-btn x-large color="primary" @click="uploadBtn" block dark :loading="loading">
-            Click to Upload File
-          </v-btn>
-
-          <input type="file" id="upload" ref="upload" @change="changeFile" accept=".xlsx">
+    <v-container class="fill-height d-flex justify-center align-center">
+      <v-row align="center" justify="center">
+        <v-col cols="12" class="text-center">
+          <p class="display-1 red--text text--darken-1">File Upload & Data Type Preview</p>
         </v-col>
-        <v-col v-if="dataType">
+        <v-col v-if="!dataType" cols="5">
+          <v-hover v-slot:default="{ hover }">
+            <v-card id="dropzone" color="rgba(255, 255, 255, 0.9)">
+              <v-card-text class="d-flex flex-column align-center">
+                <v-icon size="60px">save_alt</v-icon>
+                <p class="body-1 mt-2">Select a file or drag here</p>
+                <v-btn class="mt-3" color="red darken-1 white--text" @click="uploadBtn" :loading="loading">
+                  Select
+                </v-btn>
+              </v-card-text>
+
+              <input type="file" id="upload" ref="upload" @change="changeFile" accept=".xlsx">
+            </v-card>
+          </v-hover>
+        </v-col>
+
+        <!-- Check card -->
+        <v-col v-if="dataType" cols="6">
           <template name="upload-button" transition="fade-transition">
-            <v-row wrap justify="center">
-              <v-col cols="auto">
-                <v-btn icon outlined class="ml-5" @click="dataType=''">
+            <v-card color="rgba(255, 255, 255, 0.9)"> 
+              <v-card-head>
+                <v-btn icon outlined class="ma-3" @click="dataType=''">
                   <v-icon class="mx-0 px-0">arrow_back</v-icon>
                 </v-btn>
-              </v-col>
-              <v-col cols="3" class="mt-3">
-                <v-text-field label="檔案名稱" v-model="fileName" readonly></v-text-field>
-              </v-col>
-              <v-col cols="3" class="mt-3">
-                <v-select
-                  v-model="dataType"
-                  :items="fileType"
-                  item-text="state"
-                  item-value="abbr"
-                  label="檔案類型"
-                >
-                </v-select>
-              </v-col>
-            </v-row>
-            <v-row justify="center">
-              <v-col cols="auto">
-                <span>總共{{ dataLength }}筆資料</span>
-              </v-col>
-            </v-row>
-            <v-row justify="center">
-              <v-col cols="auto">
-                <v-btn color="info" @click="fileUpload" :loading="loading">確認上傳</v-btn>
-              </v-col>
-            </v-row>
+              </v-card-head> 
+              <v-card-text>
+                <v-row justify="center">
+                  <v-col cols="8">
+                    <v-text-field label="檔案名稱" v-model="fileName" readonly></v-text-field>
+                  </v-col>
+                  <v-col cols="8" class="mt-2">
+                    <v-select
+                      v-model="dataType"
+                      :items="fileType"
+                      item-text="state"
+                      item-value="abbr"
+                      label="檔案類型"
+                    >
+                    </v-select>
+                  </v-col>
+                </v-row>
+                <v-row justify="center">
+                  <v-col cols="auto">
+                    <span>總共<b>{{ dataLength }}</b>筆資料</span>
+                  </v-col>
+                </v-row>
+                <v-row justify="center">
+                  <v-col cols="auto">
+                    <v-btn color="info" @click="fileUpload" :loading="loading">確認上傳</v-btn>
+                  </v-col>
+                </v-row>
+              </v-card-text>
+            </v-card>
           </template>
         </v-col>
       </v-row>
@@ -49,7 +66,6 @@
 </template>
 
 <script>
-// import { setTimeout } from 'timers';
 export default {
   data () {
     return {
@@ -79,7 +95,6 @@ export default {
       let formData = new FormData();
       formData.append('file', e.target.files[0]);
       this.formData = formData;
-      // let uri = 'https://calm-ocean-96461.herokuapp.com/api/upload';
       this.axios.post('upload', formData).then(response => {
         this.dataType = response.data.type;
         // 如果有找到檔案類型
@@ -102,10 +117,10 @@ export default {
     fileUpload () {
       this.loading = true;
       if (this.formData) {
-        // let uri = `https://calm-ocean-96461.herokuapp.com/api/${this.dataType}/upload`;
-        this.axios.post(`${this.dataType}/upload`, this.formData).then((res) => {
-          this.$router.push({ name: this.dataType })
-          this.flash('上傳成功', 'success')
+        this.axios.post(`${this.dataType}/upload`, this.formData)
+          .then(() => {
+            this.$router.push({ name: this.dataType })
+            this.flash('上傳成功', 'success')
         }).catch(error => {
           this.flash(error.message, 'error')
           this.loading = false;
@@ -137,4 +152,8 @@ export default {
     height: 100%;
   }
 
+  #dropzone.v-card:hover {
+    border: #E53935 2px !important;
+  }
+  
 </style>

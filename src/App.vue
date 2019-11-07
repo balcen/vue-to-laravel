@@ -78,14 +78,6 @@ export default {
   },
   methods: {
     logout: function() {
-      // this.$auth.logout({
-      //   // 用來通知 api，如果 false 的話就只會刪除本地 token
-      //   makeRequest: true,
-      //   params: {},
-      //   success: function() {},
-      //   error: function() {},
-      //   redirect: '/login'
-      // });
       this.$store.dispatch('logout')
       .then(() => {
         this.$router.push('/login')

@@ -241,32 +241,42 @@ export default {
   },
   computed: {
     formTitle: function() {
-      return this.editIndex === -1 ? 'New Item' : 'Edit Item';
+      return this.editIndex === -1 ? 'New Item' : 'Edit Item'
     },
-    // amount: {
-    //   get: function() {
-    //     let sum = Math.round(this.editItem.i_product_price * this.editItem.i_quantity * 1000) / 1000;
-    //     return sum;
-    //   },
-    //   set: function(newVal) {
-    //     this.editItem.i_amount = newVal;
-    //   }
-    // }
+    srcUrl: function() {
+      const { sortBy, sortDesc, page, itemsPerPage } = this.options
+      const q = encodeURI(this.search)
+      const root = `invoices/search?q=${q}&page=${page}&itemsPerPage=${itemsPerPage}`
+      if(!sortBy.length) {
+        return root
+      } else {
+        return root + `&sortBy=${sortBy}&sortDesc=${sortDesc[0] ? 'desc' : 'asc'}`
+      }
+    }
   },
   watch: {
     selected: function() {
-      this.$emit('update:selected', this.selected);
-      this.$emit('getDataType', 'invoices');
+      this.$emit('update:selected', this.selected)
+      this.$emit('getDataType', 'invoices')
     },
     options: {
       handler() {
         this.loading = true
-        this.getDataFromApi()
-          .then(data => {
-            this.invoices = data.data
-            this.totalItems = data.total
-            this.loading = false
-          })
+        if(this.search.length === 0) {
+          this.getDataFromApi()
+            .then(data => {
+              this.invoices = data.data
+              this.totalItems = data.total
+              this.loading = false
+            })
+        } else {
+          this.getSearch()
+            .then(data => {
+              this.invoices = data.data
+              this.totalItems = data.total
+              this.loading = false
+            })
+        }
       }
     }
   },
@@ -350,6 +360,23 @@ export default {
     },
     amount() {
       this.editItem.i_amount = Math.round(this.editItem.i_product_price * this.editItem.i_quantity * 1000) / 1000
+    },
+    useSearch() {
+      this.loading = true
+      this.getSearch()
+        .then(data => {
+          this.invoices = data.data
+          this.totalItems = data.total
+          this.loading = false
+        })
+    },
+    getSearch() {
+      return new Promise((resolve) => {
+        this.axios.get(this.srcUrl)
+          .then(res => {
+            resolve(res.data)
+          })
+      })
     }
   }
 }

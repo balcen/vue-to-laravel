@@ -11,15 +11,19 @@
       </v-col>
       <v-spacer></v-spacer>
       <v-col cols="4">
-        <v-row no-gutters align-content="center" justify="space-around">
-          <v-col cols="10" class="pr-2">
+        <v-row no-gutters align="center" justify="end">
+          <!-- Search bar -->
+          <v-col cols="6" class="mr-1">
             <v-text-field
               v-model="search"
               label="Search"
               append-icon="search"
               color="red draken-1"
               single-line
+              outlined
+              rounded
               hide-details
+              dense
               class="pt-1"
               @keyup.enter="searchAll"
             ></v-text-field>

@@ -2,64 +2,90 @@
   <div class="pa-5 back">
     <v-container class="fill-height d-flex justify-center align-center">
       <v-row align="center" justify="center">
-        <v-col cols="12" class="text-center">
-          <p class="display-1 red--text text--darken-1">File Upload & Data Type Preview</p>
-        </v-col>
-        <v-col v-if="!dataType" cols="5">
-          <v-hover v-slot:default="{ hover }">
-            <v-card id="dropzone" color="rgba(255, 255, 255, 0.9)">
-              <v-card-text class="d-flex flex-column align-center">
+        <transition name="fade">
+          <v-col v-if="!dataType" cols="5">
+            <p
+              class="display-1 red--text text--darken-1 text-center font-weight-bold"
+            >File Upload & Data Type Preview</p>
+            <v-card 
+              id="dropzone" 
+              color="rgba(0, 0, 0, 0.2)"
+              class="d-flex align-center justify-center"
+              min-height="212px"
+            >
+              <v-card-text
+                v-if="!loading"
+                class="d-flex flex-column align-center"
+                @drop="drop"
+                @dragenter="dragenter"
+                @dragover="dragover"
+              >
                 <v-icon size="60px">save_alt</v-icon>
                 <p class="body-1 mt-2">Select a file or drag here</p>
-                <v-btn class="mt-3" color="red darken-1 white--text" @click="uploadBtn" :loading="loading">
-                  Select
-                </v-btn>
+                <v-btn
+                  class="mt-3"
+                  color="red darken-1 white--text"
+                  @click="uploadBtn"
+                  :loading="loading"
+                >Select</v-btn>
               </v-card-text>
-
-              <input type="file" id="upload" ref="upload" @change="changeFile" accept=".xlsx">
+              <transition name="fade">
+                <v-progress-circular 
+                  v-if="loading"
+                  color="red darken-1"
+                  size="96"
+                  width="12"
+                  indeterminate 
+                ></v-progress-circular>
+              </transition>
+              <input type="file" id="upload" ref="upload" @change="changeFile" accept=".xlsx" />
             </v-card>
-          </v-hover>
-        </v-col>
+          </v-col>
+        </transition>
 
+        <transition name="fade">
         <!-- Check card -->
-        <v-col v-if="dataType" cols="6">
-          <template name="upload-button" transition="fade-transition">
-            <v-card color="rgba(255, 255, 255, 0.9)"> 
-              <v-card-head>
-                <v-btn icon outlined class="ma-3" @click="dataType=''">
-                  <v-icon class="mx-0 px-0">arrow_back</v-icon>
-                </v-btn>
-              </v-card-head> 
-              <v-card-text>
-                <v-row justify="center">
-                  <v-col cols="8">
-                    <v-text-field label="檔案名稱" v-model="fileName" readonly></v-text-field>
-                  </v-col>
-                  <v-col cols="8" class="mt-2">
-                    <v-select
-                      v-model="dataType"
-                      :items="fileType"
-                      item-text="state"
-                      item-value="abbr"
-                      label="檔案類型"
-                    >
-                    </v-select>
-                  </v-col>
-                </v-row>
-                <v-row justify="center">
-                  <v-col cols="auto">
-                    <span>總共<b>{{ dataLength }}</b>筆資料</span>
-                  </v-col>
-                </v-row>
-                <v-row justify="center">
-                  <v-col cols="auto">
-                    <v-btn color="info" @click="fileUpload" :loading="loading">確認上傳</v-btn>
-                  </v-col>
-                </v-row>
-              </v-card-text>
-            </v-card>
-          </template>
-        </v-col>
+          <v-col v-if="dataType" cols="5">
+            <template name="upload-button" transition="fade-transition">
+              <v-card color="rgba(255, 255, 255, 0.3)">
+                <v-card-title>
+                  <v-btn icon outlined class="ma-3" @click="dataType=''">
+                    <v-icon class="mx-0 px-0">arrow_back</v-icon>
+                  </v-btn>
+                </v-card-title>
+                <v-card-text>
+                  <v-row justify="center">
+                    <v-col cols="8">
+                      <v-text-field label="檔案名稱" v-model="fileName" readonly></v-text-field>
+                    </v-col>
+                    <v-col cols="8" class="mt-2">
+                      <v-select
+                        v-model="dataType"
+                        :items="fileType"
+                        item-text="state"
+                        item-value="abbr"
+                        label="檔案類型"
+                      ></v-select>
+                    </v-col>
+                  </v-row>
+                  <v-row justify="center">
+                    <v-col cols="auto">
+                      <span>
+                        總共
+                        <b>{{ dataLength }}</b>筆資料
+                      </span>
+                    </v-col>
+                  </v-row>
+                  <v-row justify="center">
+                    <v-col cols="auto">
+                      <v-btn color="info" @click="fileUpload" :loading="loading">確認上傳</v-btn>
+                    </v-col>
+                  </v-row>
+                </v-card-text>
+              </v-card>
+            </template>
+          </v-col>
+        </transition>
       </v-row>
     </v-container>
   </div>
@@ -67,93 +93,139 @@
 
 <script>
 export default {
-  data () {
+  data() {
     return {
-      dataType: '',
-      upload: null,
+      uploadCard: true,
+      selectCard: false,
+      dataType: "",
+      uploadFile: null,
       dataLength: 0,
       loading: false,
       formData: null,
-      fileName: '',
+      fileName: "",
       fileType: [
-        { state: 'Clients', abbr: 'clients' },
-        { state: 'Products', abbr: 'products' },
-        { state: 'Orders', abbr: 'orders' },
-        { state: 'Invoices', abbr: 'invoices' }
+        { state: "Clients", abbr: "clients" },
+        { state: "Products", abbr: "products" },
+        { state: "Orders", abbr: "orders" },
+        { state: "Invoices", abbr: "invoices" }
       ]
-    }
+    };
   },
-  computed: {
-  },
+  computed: {},
   methods: {
-    uploadBtn () {
+    uploadBtn() {
       let uploadbtn = this.$refs.upload;
       uploadbtn.click();
     },
-    changeFile(e) {
+    changeFile() {
       this.loading = true;
-      let formData = new FormData();
-      formData.append('file', e.target.files[0]);
-      this.formData = formData;
-      this.axios.post('upload', formData).then(response => {
-        this.dataType = response.data.type;
-        // 如果有找到檔案類型
-        if(this.dataType) {
-          this.dataLength = response.data.length;
-          this.fileName = e.target.files[0].name;
-        // 如果沒有找到檔案類型
-        }else {
-          let col = response.data.col;
-          this.flash(`檔案類型有誤，請確認檔案 colume: ${col}`, 'warning');
-          this.$refs.upload.value = '';
-        }
-          this.loading = false;
-      }).catch(error => {
-        this.flash(error.message, 'error');
-        this.loading = false;
-        this.$refs.upload.value = '';
-      })
-    },
-    fileUpload () {
-      this.loading = true;
-      if (this.formData) {
-        this.axios.post(`${this.dataType}/upload`, this.formData)
-          .then(() => {
-            this.$router.push({ name: this.dataType })
-            this.flash('上傳成功', 'success')
-        }).catch(error => {
-          this.flash(error.message, 'error')
+      this.uploadFile = this.$refs.upload.files[0]
+      let uploadForm = new FormData();
+      uploadForm.append("file", this.uploadFile)
+      this.formData = uploadForm;
+      this.axios
+        .post("upload", uploadForm)
+        .then(response => {
+          this.dataType = response.data.type
+          // 如果有找到檔案類型
+          if (this.dataType) {
+            this.dataLength = response.data.length
+            this.fileName = this.uploadFile.name
+            // 如果沒有找到檔案類型
+          } else {
+            let col = response.data.col;
+            this.flash(`檔案類型有誤，請確認檔案 colume: ${col}`, "warning")
+            this.$refs.upload.value = ""
+          }
           this.loading = false;
         })
+        .catch(error => {
+          this.flash(error.message, "error")
+          this.loading = false
+          this.$refs.upload.value = ""
+        });
+    },
+    // 確認檔案後上傳
+    fileUpload() {
+      this.loading = true;
+      if (this.formData) {
+        this.axios
+          .post(`${this.dataType}/upload`, this.formData)
+          .then(() => {
+            this.$router.push({ name: this.dataType });
+            this.flash("上傳成功", "success");
+          })
+          .catch(error => {
+            this.flash(error.message, "error");
+            this.loading = false;
+          });
+      }
+    },
+    dragenter(e) {
+      e.stopPropagation();
+      e.preventDefault();
+    },
+    dragover(e) {
+      e.stopPropagation();
+      e.preventDefault();
+    },
+    drop(e) {
+      e.stopPropagation();
+      e.preventDefault();
+      const dt = e.dataTransfer
+      // 不允許多個 file 上傳
+      if (dt.files.length > 1) return
+      let file = dt.files[0];
+      if (
+        file.type ===
+          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ||
+        file.type === "application/vnd.ms-excel"
+      ) {
+        this.$refs.upload.files = dt.files
+        this.changeFile()
       }
     }
   }
-}
+};
 </script>
 
 <style>
-  .upload-button-enter-active, .upload-button-leave-active {
-    transition: opacity .5s
-  }
-  .upload-button-enter, .upload-button-leave-to /* .fade-leave-active in <2.1.8 */ {
-    opacity: 0
-  }
+.upload-button-enter-active,
+.upload-button-leave-active {
+  transition: opacity 0.5s;
+}
+.upload-button-enter, .upload-button-leave-to /* .fade-leave-active in <2.1.8 */ {
+  opacity: 0;
+}
 
-  #upload {
-    width: 0;
-    height: 0;
-    visibility: hidden;
-  }
+#upload {
+  width: 0;
+  height: 0;
+  visibility: hidden;
+}
 
-  .back {
-    background-image: url(https://images.unsplash.com/photo-1464278533981-50106e6176b1?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1567&q=80);
-    background-position: center;
-    background-size: cover;
-    height: 100%;
-  }
+.back {
+  background-image: url(https://images.unsplash.com/photo-1464278533981-50106e6176b1?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1567&q=80);
+  background-position: center;
+  background-size: cover;
+  height: 100%;
+}
 
-  #dropzone.v-card:hover {
-    border: #E53935 2px !important;
-  }
-  
+#dropzone.v-card:hover {
+  border: #e53935 2px !important;
+}
+
+.fade-leave-active {
+  transition: opacity 0s;
+}
+
+.fade-enter-active {
+  transition: opacity 0.3s 0.2s;
+}
+
+.fade-enter,
+.fade-leave {
+  opacity: 0;
+}
+
 </style>

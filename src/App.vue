@@ -16,10 +16,12 @@
     </v-toolbar>
 
     <v-content>
-      <flash-message transitionName="slide-y-transition" id="flashMessage" class="customMessage ma-2"></flash-message>
-      <router-view
-        :key="$route.fullPath"
-      ></router-view>
+      <flash-message id="flashMessage" class="customMessage ma-2"></flash-message>
+      <transition name="fade">
+        <router-view
+          :key="$route.fullPath"
+        ></router-view>
+      </transition>
     </v-content>
   </v-app>
 </template>
@@ -30,8 +32,16 @@ a:not(.md-button):hover {
     text-decoration: none !important;
 }
 
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+
+.fade-enter, .fade-leave {
+  opacity: 0;
+}
+
 .customMessage {
-  transition: all 0.5s ease-in-out;
+  transition: all .5s ease-in-out;
   width: 60%;
   position: fixed;
   left: 50%;

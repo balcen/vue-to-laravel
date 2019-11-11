@@ -20,6 +20,7 @@
               color="red draken-1"
               single-line
               outlined
+              hide-details
               rounded
               dense
               @keyup.enter="searchAll"

@@ -27,6 +27,7 @@
 </template>
 
 <style>
+html { overflow-y: auto !important }
 /* v-btn 加上 link 的底線 */
 a:not(.md-button):hover {
     text-decoration: none !important;

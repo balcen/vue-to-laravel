@@ -10,23 +10,26 @@
         </v-tabs>
       </v-col>
       <v-spacer></v-spacer>
-      <v-col cols="4">
+      <v-col cols="4" class="d-flex align-center">
         <v-row no-gutters align="center" justify="end">
           <!-- Search bar -->
-          <v-col cols="6" class="mr-1">
+          <v-col cols="6" class="mr-1 d-flex align-center">
             <v-text-field
               v-model="search"
               label="Search"
-              append-icon="search"
               color="red draken-1"
               single-line
               outlined
               rounded
-              hide-details
               dense
-              class="pt-1"
               @keyup.enter="searchAll"
-            ></v-text-field>
+            >
+              <template v-slot:append>
+                <v-btn text icon @click="searchAll">
+                  <v-icon>search</v-icon>
+                </v-btn>
+              </template>
+            </v-text-field>
           </v-col>
           <v-col align-self="center" cols="auto">
             <v-btn 
@@ -115,4 +118,12 @@ export default {
 </script>
 
 <style>
+.v-text-field.v-text-field--enclosed.v-input--dense:not(.v-text-field--solo).v-text-field--outlined .v-input__append-inner {
+  margin: auto;
+  padding: 0;
+}
+
+.v-text-field--rounded > .v-input__control > .v-input__slot {
+  padding-right: 12px !important;
+}
 </style>

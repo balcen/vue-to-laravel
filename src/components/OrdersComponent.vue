@@ -206,10 +206,14 @@ export default {
     formTitle() {
       return this.editIndex === -1 ? '新增資料' : '修改資料'
     },
-    srcUrl: function() {
-      const q = encodeURI(this.search)
+    getUrl: function() {
+      let root = '?'
+      if(this.search.length > 0) {
+        const q = encodeURI(this.search)
+        root += `q=${q}&`
+      }
       const { sortBy, sortDesc, page, itemsPerPage } = this.options
-      const root = `orders/search?q=${q}&page=${page}&itemsPerPage=${itemsPerPage}`
+      root += `page=${page}&itemsPerPage=${itemsPerPage}`
       if (!sortBy.length) {
         return root
       } else {
@@ -223,23 +227,22 @@ export default {
       this.$emit('getDataType', 'orders')
     },
     options: {
-      handler() {
+      async handler() {
         this.loading = true
-        if(this.search.length === 0) {
-          this.getDataFromApi()
-            .then(data => {
-              this.orders = data.data
-              this.totalItems = data.total
-              this.loading = false
-            }) 
+        let result
+        if(this.search.length > 0) {
+          await this.getSearch()
+            .then( data => result = data) 
+        } else if (this.$route.query.id) {
+          await this.show()
+            .then(data => result = data)
         } else {
-          this.getSearch()
-            .then( data => {
-              this.orders = data.data
-              this.totalItems = data.total
-              this.loading = false
-            })
+          await this.getDataFromApi()
+            .then(data => result = data)
         }
+        this.orders = result.data
+        this.totalItems = result.total
+        this.loading = false
       },
       deep: true
     }
@@ -247,20 +250,18 @@ export default {
   created() {
   },
   mounted() {
-    this.loading = true
-    this.getDataFromApi()
-      .then(data => {
-        this.orders = data.data
-        this.totalItems = data.total
-        this.loading = false
-      })
+    // this.loading = true
+    // this.getDataFromApi()
+    //   .then(data => {
+    //     this.orders = data.data
+    //     this.totalItems = data.total
+    //     this.loading = false
+    //   })
   },
   methods: {
     getDataFromApi() {
       return new Promise((resolve) => {
-        const { sortBy, sortDesc, page, itemsPerPage } = this.options
-        const url = `orders?page=${page}&itemsPerPage=${itemsPerPage}&sortBy=${sortBy}&sortDesc=${sortDesc}`
-        this.axios.get(url)
+        this.axios.get(`orders${this.getUrl}`)
           .then(res => {
             return resolve(res.data)
           })
@@ -328,10 +329,14 @@ export default {
     },
     getSearch() {
       return new Promise((resolve) => {
-        this.axios.get(this.srcUrl)
-          .then( res => {
-            resolve(res.data)
-          })
+        this.axios.get(`orders/search${this.getUrl}`)
+          .then( res => resolve(res.data))
+      })
+    },
+    show() {
+      return new Promise((resolve) => {
+        this.axios(`orders/${this.$route.query.id}${this.getUrl}`)
+          .then(res => resolve(res.data))
       })
     }
   }

@@ -78,7 +78,7 @@
                   </v-row>
                   <v-row justify="center">
                     <v-col cols="auto">
-                      <v-btn color="info" @click="fileUpload" :loading="loading">確認上傳</v-btn>
+                      <v-btn color="red darken-1 white--text" @click="fileUpload" :loading="loading">確認上傳</v-btn>
                     </v-col>
                   </v-row>
                 </v-card-text>
@@ -109,20 +109,20 @@ export default {
         { state: "Orders", abbr: "orders" },
         { state: "Invoices", abbr: "invoices" }
       ]
-    };
+    }
   },
   computed: {},
   methods: {
     uploadBtn() {
-      let uploadbtn = this.$refs.upload;
-      uploadbtn.click();
+      let uploadbtn = this.$refs.upload
+      uploadbtn.click()
     },
     changeFile() {
-      this.loading = true;
+      this.loading = true
       this.uploadFile = this.$refs.upload.files[0]
-      let uploadForm = new FormData();
+      let uploadForm = new FormData()
       uploadForm.append("file", this.uploadFile)
-      this.formData = uploadForm;
+      this.formData = uploadForm
       this.axios
         .post("upload", uploadForm)
         .then(response => {
@@ -133,49 +133,50 @@ export default {
             this.fileName = this.uploadFile.name
             // 如果沒有找到檔案類型
           } else {
-            let col = response.data.col;
+            let col = response.data.col
             this.flash(`檔案類型有誤，請確認檔案 colume: ${col}`, "warning")
             this.$refs.upload.value = ""
           }
-          this.loading = false;
+          this.loading = false
         })
         .catch(error => {
           this.flash(error.message, "error")
           this.loading = false
           this.$refs.upload.value = ""
-        });
+        })
     },
     // 確認檔案後上傳
     fileUpload() {
-      this.loading = true;
+      this.loading = true
       if (this.formData) {
         this.axios
           .post(`${this.dataType}/upload`, this.formData)
-          .then(() => {
-            this.$router.push({ name: this.dataType });
-            this.flash("上傳成功", "success");
+          .then((res) => {
+            // this.$router.push({ name: this.dataType, params: { id: res.data.id }})
+            this.$router.push({ name: this.dataType, query: {id: res.data.id}})
+            this.flash("上傳成功", "success")
           })
           .catch(error => {
-            this.flash(error.message, "error");
-            this.loading = false;
-          });
+            this.flash(error.message, "error")
+            this.loading = false
+          })
       }
     },
     dragenter(e) {
-      e.stopPropagation();
-      e.preventDefault();
+      e.stopPropagation()
+      e.preventDefault()
     },
     dragover(e) {
-      e.stopPropagation();
-      e.preventDefault();
+      e.stopPropagation()
+      e.preventDefault()
     },
     drop(e) {
-      e.stopPropagation();
-      e.preventDefault();
+      e.stopPropagation()
+      e.preventDefault()
       const dt = e.dataTransfer
       // 不允許多個 file 上傳
       if (dt.files.length > 1) return
-      let file = dt.files[0];
+      let file = dt.files[0]
       if (
         file.type ===
           "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ||
@@ -186,7 +187,7 @@ export default {
       }
     }
   }
-};
+}
 </script>
 
 <style>

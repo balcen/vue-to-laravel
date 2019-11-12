@@ -174,10 +174,14 @@ export default {
     formTitle: function () {
       return this.editIndex === -1 ? 'New Item' : 'Edit Item';
     },
-    srcUrl: function() {
-      const search = encodeURI(this.search)
+    getUrl: function () {
+      let root = '?'
+      if (this.search.length > 0) {
+        const search = encodeURI(this.search)
+        root += `q=${search}&`
+      }
       const { sortBy, sortDesc, page, itemsPerPage } = this.options
-      const root = `products/search?q=${search}&page=${page}&itemsPerPage=${itemsPerPage}`
+      root += `page=${page}&itemsPerPage=${itemsPerPage}`
       if(!sortBy.length) {
         return root
       } else {
@@ -191,23 +195,23 @@ export default {
       this.$emit('getDataType', 'products');
     },
     options: {
-      handler() {
+      async handler() {
         this.loading = true
-        if(this.search.length === 0) {
-          this.getDataFromApi()
-            .then(data => {
-              this.products = data.data
-              this.totalItems = data.total
-              this.loading = false
-            })
+        let result
+        if(this.search.length > 0) {
+          await this.getSearch()
+            .then(data => result = data)
+
+        } else if (this.$route.query.id) {
+          await this.show()
+            .then(data => result = data)
         } else {
-          this.getSearch()
-            .then(data => {
-              this.products = data.data
-              this.totalItmes = data.total
-              this.loading = false
-            })
+          await this.getDataFromApi()
+            .then(data => result = data)
         }
+        this.products = result.data
+        this.totalItems = result.total
+        this.loading = false
       },
       deep: true
     }
@@ -215,20 +219,19 @@ export default {
   created () {
   },
   mounted() {
-    this.loading = true
-    this.getDataFromApi()
-      .then(data => {
-        this.products = data.data
-        this.totalItems = data.total
-        this.loading = false
-      })
+    console.log(this.$route.query.id)
+    // this.loading = true
+    // this.getDataFromApi()
+    //   .then(data => {
+    //     this.products = data.data
+    //     this.totalItems = data.total
+    //     this.loading = false
+    //   })
   },
   methods: {
     getDataFromApi() {
       return new Promise((resolve) => {
-        const { sortBy, sortDesc, page, itemsPerPage } = this.options
-        const url = `products?page=${page}&itemsPerPage=${itemsPerPage}&sortBy=${sortBy}&sortDesc=${sortDesc}`
-        this.axios.get(url)
+        this.axios.get(`products${this.getUrl}`)
           .then(res => {
            return resolve(res.data)
           })
@@ -311,13 +314,20 @@ export default {
     },
     getSearch() {
       return new Promise ((resolve) => {
-        const url = this.srcUrl
-        this.axios.get(url)
+        this.axios.get(`products/search${this.getUrl}`)
           .then (res => {
             resolve(res.data)
           })
       })
       
+    },
+    show() {
+      return new Promise((resolve) => {
+        this.axios.get(`products/${this.$route.query.id}${this.getUrl}`)
+          .then(res => {
+            resolve(res.data)
+          })
+      })
     }
   }
 }

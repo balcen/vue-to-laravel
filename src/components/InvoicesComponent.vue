@@ -243,14 +243,19 @@ export default {
     formTitle: function() {
       return this.editIndex === -1 ? 'New Item' : 'Edit Item'
     },
-    srcUrl: function() {
+    getUrl: function() {
+      let root = '?'
+      if(this.search > 0) {
+        const q = encodeURI(this.search)
+        root += `q=${q}&`
+      }
       const { sortBy, sortDesc, page, itemsPerPage } = this.options
-      const q = encodeURI(this.search)
-      const root = `invoices/search?q=${q}&page=${page}&itemsPerPage=${itemsPerPage}`
+      root += `page=${page}&itemsPerPage=${itemsPerPage}`
       if(!sortBy.length) {
         return root
       } else {
-        return root + `&sortBy=${sortBy}&sortDesc=${sortDesc[0] ? 'desc' : 'asc'}`
+        console.log(sortDesc)
+        return `${root}&sortBy=${sortBy}&sortDesc=${sortDesc[0] ? 'desc' : 'asc'}`
       }
     }
   },
@@ -283,23 +288,19 @@ export default {
   created () {
   },
   mounted() {
-    this.loading = true
-    this.getDataFromApi()
-      .then(data => {
-        this.invoices = data.data
-        this.totalItems = data.total
-        this.loading = false
-      })
+    // this.loading = true
+    // this.getDataFromApi()
+    //   .then(data => {
+    //     this.invoices = data.data
+    //     this.totalItems = data.total
+    //     this.loading = false
+    //   })
   },
   methods: {
     getDataFromApi() {
       return new Promise((resolve) => {
-        const { sortBy, sortDesc, page, itemsPerPage } = this.options
-        const url = `invoices?page=${page}&itemsPerPage=${itemsPerPage}&sortBy=${sortBy}&sortDesc=${sortDesc}`
-        this.axios.get(url)
-          .then(res => {
-            return resolve(res.data)
-          })
+        this.axios.get(`invoices${this.getUrl}`)
+          .then(res => resolve(res.data))
       })
     },
     getInvoices () {
@@ -372,10 +373,14 @@ export default {
     },
     getSearch() {
       return new Promise((resolve) => {
-        this.axios.get(this.srcUrl)
-          .then(res => {
-            resolve(res.data)
-          })
+        this.axios.get(`invoices/search${this.getUrl}`)
+          .then(res => resolve(res.data))
+      })
+    },
+    show() {
+      return new Promise((resolve) => {
+        this.axios.get(`invoices/${this.$route.query.id}${this.getUrl}`)
+          .then(res => resolve(res.data))
       })
     }
   }

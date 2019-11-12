@@ -146,24 +146,24 @@ export default {
       this.$emit('getDataType', 'clients');
     },
     options: {
-      handler () {
+      async handler () {
         this.loading = true
-        if(this.search.length === 0) {
-          this.getDataFromApi() 
-            .then(data => {
-              this.clients = data.data
-              this.totalItems = data.total
-              this.loading = false
-            })
+        let result
+        if(this.search.length > 0) {
+          // If search exist
+          await this.getSearch()
+            .then(data => result = data)
+
+        } else if (this.$route.query.id) {
+          await this.show()
+            .then(data => result = data)
         } else {
-          // If serach exist
-          this.getSearch()
-            .then(data => {
-              this.clients = data.data
-              this.totalItems = data.total
-              this.loading = false
-            })
+          await this.getDataFromApi() 
+            .then(data => result = data)
         }
+        this.clients = result.data
+        this.totalItems = result.total
+        this.loading = false
       },
       deep: true
     }
@@ -171,19 +171,21 @@ export default {
   created() {
   },
   mounted() {
-    this.loading = true
-    this.getDataFromApi() 
-      .then(data => {
-        this.clients = data.data
-        this.totalItems = data.total
-        this.loading = false
-      })
+    // 每次建立 vue 時 options 必定會改變
+    // 因此都會執行兩次 getDataFromApi
+    // this.loading = true
+    // this.getDataFromApi() 
+    //   .then(data => {
+    //     this.clients = data.data
+    //     this.totalItems = data.total
+    //     this.loading = false
+    //   })
   },
   methods: {
     getDataFromApi() {
       return new Promise((resolve) => {
-        const { sortBy, sortDesc, page, itemsPerPage } = this.options
-        const url = `clients?page=${page}&itemsPerPage=${itemsPerPage}&sortBy=${sortBy}&sortDesc=${sortDesc}`
+        const { page, itemsPerPage } = this.options
+        const url = `clients?page=${page}&itemsPerPage=${itemsPerPage}`
         this.axios.get(url)
           .then(res => {
             return resolve(res.data)
@@ -253,6 +255,16 @@ export default {
         const { page, itemsPerPage } = this.options
         const encode = encodeURI(this.search)
         const url = `clients/search?q=${encode}&page=${page}&itemsPerPage=${itemsPerPage}`
+        this.axios.get(url)
+          .then(res => {
+            resolve(res.data)
+          })
+      })
+    },
+    show() {
+      return new Promise((resolve) => {
+        const { page, itemsPerPage } = this.options
+        const url = `clients/${this.$route.query.id}?page=${page}&itemsPerPage=${itemsPerPage}`
         this.axios.get(url)
           .then(res => {
             resolve(res.data)

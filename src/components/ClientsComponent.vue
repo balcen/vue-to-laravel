@@ -171,15 +171,6 @@ export default {
   created() {
   },
   mounted() {
-    // 每次建立 vue 時 options 必定會改變
-    // 因此都會執行兩次 getDataFromApi
-    // this.loading = true
-    // this.getDataFromApi() 
-    //   .then(data => {
-    //     this.clients = data.data
-    //     this.totalItems = data.total
-    //     this.loading = false
-    //   })
   },
   methods: {
     getDataFromApi() {

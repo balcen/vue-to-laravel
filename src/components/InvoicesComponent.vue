@@ -254,7 +254,6 @@ export default {
       if(!sortBy.length) {
         return root
       } else {
-        console.log(sortDesc)
         return `${root}&sortBy=${sortBy}&sortDesc=${sortDesc[0] ? 'desc' : 'asc'}`
       }
     }
@@ -288,13 +287,6 @@ export default {
   created () {
   },
   mounted() {
-    // this.loading = true
-    // this.getDataFromApi()
-    //   .then(data => {
-    //     this.invoices = data.data
-    //     this.totalItems = data.total
-    //     this.loading = false
-    //   })
   },
   methods: {
     getDataFromApi() {

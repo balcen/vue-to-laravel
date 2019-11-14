@@ -250,13 +250,6 @@ export default {
   created() {
   },
   mounted() {
-    // this.loading = true
-    // this.getDataFromApi()
-    //   .then(data => {
-    //     this.orders = data.data
-    //     this.totalItems = data.total
-    //     this.loading = false
-    //   })
   },
   methods: {
     getDataFromApi() {

@@ -58,7 +58,7 @@ a:not(.md-button):hover {
 </style>
 
 <script>
-require('vue-flash-message/dist/vue-flash-message.min.css')
+import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'App',
   data () {
@@ -70,30 +70,34 @@ export default {
     this.axios.interceptors.response.use((res) => {
       var token = res.headers.authorization
       if (token) {
-        this.$store.dispatch('refresh', token)
+        this.refreshAction()
       }
       return res
     }, function(err) {
       return new Promise(function() {
         if (err.status === 401 && err.config && err.config.__isRetryReqeust) {
-          this.$store.dispatch('logout')
+          this.logoutAction()
         }
         throw err
       })
     })
   },
   computed: {
-    isLoggedIn: function(){
-      return this.$store.getters.isLoggedIn
-    }
+    ...mapGetters({
+      isLoggedIn: 'auth/isLoggedIn',
+    })
   },
   methods: {
-    logout: function() {
-      this.$store.dispatch('logout')
-      .then(() => {
-        this.$router.push('/login')
-      })
-    },
+    ...mapActions({
+      logoutAction: 'auth/logout',
+      refreshAction: 'auth/refresh'
+    }),
+    logout() {
+      this.logoutAction()
+        .then(() => {
+          this.$router.push({name: 'root'})
+        })
+    }
   }
 }
 </script>

@@ -55,6 +55,7 @@
 </style>
 
 <script>
+import { mapActions } from 'vuex'
 export default {
   data() {
     return {
@@ -74,35 +75,22 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      loginAction: 'auth/login'
+    }),
     login() {
-      // this.loading = true;
-
-      // this.$auth.login({
-      //   params: {
-      //     name: this.user.name,
-      //     password: this.user.password
-      //   },
-      //   success: function(res) {
-      //     console.log(res);
-      //     this.loading = false;
-      //   },
-      //   error: function() {
-      //     this.message = '用戶名稱密碼不正確';
-      //     this.loading = false;
-      //   },
-      //   rememberMe: true,
-      //   redirect: '/index',
-      //   fetchUser: true
-      // });
       const name = this.user.name
       const password = this.user.password
 
       this.loading = true
 
       // actions 必須透過 dispatch 來調用
-      this.$store.dispatch('login', {name, password})
-      .then(() => this.$router.push('/index'))
-      .catch(err => console.log(err))
+      this.loginAction({name, password})
+        .then(() => this.$router.push('/index'))
+        .catch(err => {
+          this.$router.push('/')
+          this.flash(`發生錯誤，請重新登入 ${err}`, 'error')
+        })
     }
   }
 }

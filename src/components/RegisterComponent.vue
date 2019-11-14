@@ -75,6 +75,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 export default {
   data() {
     return {
@@ -99,41 +100,24 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      registerAction: 'auth/register'
+    }),
     register() {
-      if(!this.$refs.form.validate()) return;
-      // this.loading = true;
-
-      // this.$auth.register({
-      //   params: {
-      //     name: this.name,
-      //     email: this.email,
-      //     password: this.password
-      //   },
-      //   success: function() {
-      //     this.flash('註冊成功', 'success', {timeout: 3000});
-      //     this.loading = false;
-      //   },
-      //   error: function(res) {
-      //     this.loading = false;
-      //     this.flash('註冊失敗', 'error');
-      //     console.log(res);
-      //     this.error = true;
-      //     if(res) {
-      //       // this.message =
-      //     }
-      //   },
-      //   redirect: null
-      // });
-      // this.loading = false;
+      if(!this.$refs.form.validate()) return
 
       const user = {
         name: this.name, 
         email: this.email,
         password: this.password
       }
-      this.$store.dispatch('register', user)
-      .then(() => this.$router.push('/'))
-      .catch(err => console.log(err))
+
+      this.registerAction(user)
+        .then(() => this.$router.push('/'))
+        .catch(err => {
+          this.$router.push('/')
+          this.flash(`註冊失敗 ${err}`, 'error')
+        })
     }
   }
 }

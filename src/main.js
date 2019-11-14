@@ -1,11 +1,10 @@
-import 'vue-material/dist/vue-material.min.css'
 import Vue from 'vue'
 import axios from 'axios'
 import App from './App.vue'
 import store from './store/Store'
 import VueAxios from 'vue-axios'
 import VueRouter from 'vue-router'
-import VueMaterial from 'vue-material'
+// import VueMaterial from 'vue-material'
 import VueFlashMessage from 'vue-flash-message'
 import router from './router'
 import vuetify from './plugins/vuetify';
@@ -37,7 +36,7 @@ Vue.router = router;
 // });
 
 // Vue-material
-Vue.use(VueMaterial);
+// Vue.use(VueMaterial);
 
 // Vue-Flash-Message
 Vue.use(VueFlashMessage, {

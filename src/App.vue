@@ -15,8 +15,19 @@
       <v-btn icon text v-if="isLoggedIn" @click="logout" :active-class="'red--text text--darken-1'"><v-icon>logout</v-icon></v-btn>
     </v-toolbar>
 
-    <v-content>
-      <flash-message id="flashMessage" class="customMessage ma-2"></flash-message>
+    <v-content id="content">
+      <div class="flash-content" v-if="flash.length">
+        <v-alert v-for="(f, index) in flash"
+          :key="index"
+          :type="f.type"
+          dismissible
+          class="mx-0 customMessage" 
+          min-width="500px"
+        >
+          {{ f.content }}
+        </v-alert>
+      </div>
+      <!-- <flash-message text id="flashMessage" class="customMessage ma-2"></flash-message> -->
       <transition name="fade">
         <router-view
           :key="$route.fullPath"
@@ -26,44 +37,13 @@
   </v-app>
 </template>
 
-<style>
-html { overflow-y: auto !important }
-/* v-btn 加上 link 的底線 */
-a:not(.md-button):hover {
-    text-decoration: none !important;
-}
-
-.fade-enter-active, .fade-leave-active {
-  transition: opacity .5s;
-}
-
-.fade-enter, .fade-leave {
-  opacity: 0;
-}
-
-.customMessage {
-  transition: all .5s ease-in-out;
-  width: 60%;
-  position: fixed;
-  left: 50%;
-  transform:translateX(-50%);
-  z-index: 9999;
-}
-
-#flashMessage .flash__message.success {
-  background-color: #dff0d8 !important;
-  border-color: #d6e9c6 !important;
-}
-
-</style>
-
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapActions, mapState } from 'vuex'
 export default {
   name: 'App',
   data () {
     return {
-      bager: true
+      bager: true,
     }
   },
   created: function() {
@@ -85,7 +65,15 @@ export default {
   computed: {
     ...mapGetters({
       isLoggedIn: 'auth/isLoggedIn',
-    })
+    }),
+    flash: {
+      get: function () {
+        console.log('flash change')
+        return this.$store.state.flash
+      },
+      set: function() {
+      }
+    }
   },
   methods: {
     ...mapActions({
@@ -101,3 +89,40 @@ export default {
   }
 }
 </script>
+
+<style>
+
+html { overflow-y: auto !important }
+/* v-btn 加上 link 的底線 */
+a:not(.md-button):hover {
+    text-decoration: none !important;
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+
+.fade-enter, .fade-leave {
+  opacity: 0;
+}
+
+/* .customMessage {
+  left: 50%;
+  transform:translateX(-50%);
+  z-index: 9999;
+} */
+
+.flash-content {
+  position: fixed !important;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+}
+/* 
+#flashMessage .flash__message.success {
+  background-color: #dff0d8 !important;
+  border-color: #d6e9c6 !important;
+} */
+
+</style>
+

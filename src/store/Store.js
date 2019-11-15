@@ -11,6 +11,26 @@ const store = new Vuex.Store({
   // strict: true,
   modules: {
     auth: AuthStore
+  },
+  state: {
+    selected: [],
+    flash:[]
+  },
+  mutations: {
+    setSelected (state, selected) {
+      state.seletected = selected
+    },
+    updateFlash (state, flash) {
+      state.flash.push(flash)
+    },
+    removeFlash (state, index) {
+      state.flash = state.flash.splice(index, 1)
+    },
+    popFlash (state) {
+      state.flash.pop()
+    }
+  },
+  actions: {
   }
 });
 

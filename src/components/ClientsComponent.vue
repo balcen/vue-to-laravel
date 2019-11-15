@@ -82,10 +82,12 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
 export default {
-  props: ['search', 'dialog', 'selected'],
+  props: ['search', 'dialog'],
   data () {
     return {
+      selected: [],
       valid: true,
       totalItems: 0,
       noDataAlert: false,
@@ -138,11 +140,12 @@ export default {
   computed: {
     formTitle: function() {
       return this.editIndex === -1 ? 'New Item' : 'Edit Item';
-    }
+    },
   },
   watch: {
     selected: function () {
-      this.$emit('update:selected', this.selected);
+      // this.$emit('update:selected', this.selected);
+      this.$emit('setSelected', this.selected)
       this.$emit('getDataType', 'clients');
     },
     options: {
@@ -173,6 +176,9 @@ export default {
   mounted() {
   },
   methods: {
+    ...mapMutations({
+      upFlash: 'updateFlash'
+    }),
     getDataFromApi() {
       return new Promise((resolve) => {
         const { page, itemsPerPage } = this.options
@@ -192,16 +198,16 @@ export default {
       const index = this.clients.indexOf(item);
       confirm('確定刪除這筆資料？') && this.axios.delete(`clients/${item.id}`, item.id).then(() => {
         this.clients.splice(index,1);
-        this.flash('成功刪除一筆資料', 'success');
+        this.upFlash({type: 'success', content: '成功刪除一筆資料'})
       }).catch(error => {
-        this.flash(error.message, 'error');
+        this.upFlash({type: 'error', content: error.message})
       })
     },
     close() {
       this.$emit('toggleDialog', false);
       setTimeout(() => {
         this.editItem = Object.assign({}, this.defaultItem);
-        this.editIndex = -1;
+        this.editIndex = -1
         this.$refs.form.reset()
       },300);
     },
@@ -211,17 +217,18 @@ export default {
       if(!this.$refs.form.validate()) return;
       if (index !== -1) {
         this.axios.put(`clients/${item.id}`, item).then(() => {
-          Object.assign(this.clients[index], item);
-          this.flash('成功修改一筆資料', 'success');
+          Object.assign(this.clients[index], item)
+          this.upFlash({type: 'success', content: '成功修改一筆資料'})
+          this.$store.commit('update')
         }).catch(error => {
-          this.flash(error.message, 'error');
+          this.upFlash({type: 'error', content: error.message})
         })
       } else if (index === -1) {
         this.axios.post('clients', item).then(() => {
           this.clients.push(item);
-          this.flash('成功新增一筆資料', 'success');
+          this.upFlash({type: 'success', content: '成功新增一筆資料'})
         }).catch(error => {
-          this.flash(error.message, 'error');
+          this.upFlash({type: 'error', content: error.message})
         });
       }
       this.close();

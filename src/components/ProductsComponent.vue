@@ -107,6 +107,7 @@
 </style>
 
 <script>
+import { mapMutations } from 'vuex'
 export default {
   props: ['search', 'dialog', 'selected', 'message'],
   data () {
@@ -221,6 +222,9 @@ export default {
   mounted() {
   },
   methods: {
+    ...mapMutations({
+      upFlash: 'updateFlash'
+    }),
     getDataFromApi() {
       return new Promise((resolve) => {
         this.axios.get(`products${this.getUrl}`)
@@ -230,21 +234,21 @@ export default {
       })
     },
     editedItem (item) {
-      this.editIndex = this.products.indexOf(item);
-      this.editItem = Object.assign({}, item);
+      this.editIndex = this.products.indexOf(item)
+      this.editItem = Object.assign({}, item)
       this.$emit('toggleDialog', true);
     },
     deleteItem (item) {
-      const index = this.products.indexOf(item);
+      const index = this.products.indexOf(item)
       confirm('確定刪除這筆資料？') && this.axios.delete(`products/${item.id}`, item.id).then(() => {
-          this.products.splice(index, 1);
-          this.flash('成功刪除一筆資料', 'success');
+          this.products.splice(index, 1)
+          this.upFlash({type: 'success', content: '成功刪除一筆資料'})
       }).catch(error => {
-          this.flash(error.message, 'error');
+          this.upFlash({type: 'error', content: error.message})
       })
     },
     close () {
-      this.$emit('toggleDialog', false);
+      this.$emit('toggleDialog', false)
       setTimeout(() => {
         this.editItem = Object.assign({}, this.defaultItem);
         this.editIndex = -1;
@@ -255,27 +259,27 @@ export default {
       // let formData = new FormData;
       // formData.append('item', JSON.stringify(this.editItem));
       // formData.append('image', this.image);
-      let index = this.editIndex;
+      let index = this.editIndex
       // let item = {item: this.editItem, image: this.image};
-      let item = this.editItem;
-      if(!this.$refs.form.validate()) return;
+      let item = this.editItem
+      if(!this.$refs.form.validate()) return
       if (index !== -1) {
         this.axios.put(`products/${item.id}`, item).then(() => {
-          Object.assign(this.products[index], item);
-          this.flash('成功修改一筆資料', 'success');
+          Object.assign(this.products[index], item)
+          this.upFlash({type: 'success', content: '成功修改一筆資料'})
         }).catch(error => {
-          this.flash(error.message, 'error');
+          this.upFlash({type: 'error', content: error.message})
         })
       } else if(index === -1) {
         this.axios.post(`products`, item).then(() => {
           this.products.push(item);
-          this.flash('成功新增一筆資料', 'success');
+          thiss.upFlash({type: 'success', content: '成功新增一筆資料'})
         }).catch(error => {
-          this.flash(error.message, 'error');
+          this.upFlash({type: 'error', content: error.message})
         })
       }
       
-      this.close();
+      this.close()
     },
     deleteArray() {
       this.products = this.products.filter((el) => !this.selected.includes(el));

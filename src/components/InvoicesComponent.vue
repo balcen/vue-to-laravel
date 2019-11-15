@@ -164,6 +164,7 @@
 </style>
 
 <script>
+import { mapMutations } from 'vuex'
 export default {
   props: ['search', 'dialog', 'selected'],
   data () {
@@ -289,6 +290,9 @@ export default {
   mounted() {
   },
   methods: {
+    ...mapMutations({
+      upFlash: 'updateFlash'
+    }),
     getDataFromApi() {
       return new Promise((resolve) => {
         this.axios.get(`invoices${this.getUrl}`)
@@ -297,25 +301,25 @@ export default {
     },
     getInvoices () {
       this.axios.get('invoices').then(response => {
-        this.invoices = response.data;
-        this.noDataAlert = true;
-        this.loading = false;
+        this.invoices = response.data
+        this.noDataAlert = true
+        this.loading = false
       }).catch(error => {
-        this.flash(error.message, 'error');
+        this.upFlash({type: 'errror', content: error.message})
       });
     },
     editedItem (item) {
-      this.editIndex = this.invoices.indexOf(item);
-      this.editItem = Object.assign({}, item);
-      this.$emit('toggleDialog', true);
+      this.editIndex = this.invoices.indexOf(item)
+      this.editItem = Object.assign({}, item)
+      this.$emit('toggleDialog', true)
     },
     deleteItem (item) {
-      const index = this.invoices.indexOf(item);
+      const index = this.invoices.indexOf(item)
       confirm('確定刪除這筆資料？') && this.axios.delete(`invoices/${item.id}`, item.id).then(() => {
-        this.invoices.splice(index, 1);
-        this.flash('成功刪除一筆資料', 'success');
+        this.invoices.splice(index, 1)
+        this.upFlash({type: 'success', content: '成功刪除一筆資料'})
       }).catch(error => {
-        this.flash(error.message, 'error')
+        this.upFlash({type: 'error', content: error.message})
       })
     },
     close () {
@@ -334,16 +338,16 @@ export default {
       if (index !== -1) {
         this.axios.put(`invoices/${item.id}`, item).then(() => {
           Object.assign(this.invoices[index], item)
-          this.flash('成功修改一筆資料', 'success')
+          this.upFlash({type:'success', content: '成功修改一筆資料'})
         }).catch(error => {
-          this.flash(error.message, 'error')
+          this.upFlash({type: 'error', content: error.message})
         })
       } else if(index === -1) {
         this.axios.post('invoices', item).then(() => {
           this.invoices.push(item)
-          this.flash('成功新增一筆資料', 'success')
+          this.upFlash({type: 'success', content: '成功新增一筆資料'})
         }).catch(error => {
-          this.flash(error.message, 'error')
+          this.upFlash({type: 'error', content: error.message})
         })
       }
       this.close()

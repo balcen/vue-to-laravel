@@ -43,7 +43,8 @@
             <v-btn 
               text 
               icon 
-              color="red darken-1" 
+              color="red darken-1"
+              class="mr-2"
               @click="multipleDelete" 
               :disabled="selectedValue"
             >
@@ -60,9 +61,9 @@
           :key="$route.fullPath"
           :search="search"
           :dialog="dialog"
-          :selected.sync="selected"
           @toggleDialog="toggleDialog"
           @getDataType="getDataType"
+          @setSelected="setSelected"
         ></router-view>
       </v-col>
     </v-row>
@@ -84,7 +85,7 @@ export default {
   computed: {
     selectedValue: function() {
       return this.selected.length < 1;
-    }
+    },
   },
   methods: {
     toggleDialog (bol) {
@@ -113,6 +114,9 @@ export default {
     },
     searchAll() {
       this.$refs.table.useSearch()
+    },
+    setSelected (sel) {
+      this.selected = sel
     }
   }
 }

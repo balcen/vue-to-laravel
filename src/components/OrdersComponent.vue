@@ -133,6 +133,7 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
 export default {
   props: ['search', 'dialog', 'selected'],
   data () {
@@ -252,6 +253,9 @@ export default {
   mounted() {
   },
   methods: {
+    ...mapMutations({
+      upFlash: 'updateFlash'
+    }),
     getDataFromApi() {
       return new Promise((resolve) => {
         this.axios.get(`orders${this.getUrl}`)
@@ -269,9 +273,9 @@ export default {
       const index = this.orders.indexOf(item)
       confirm('確定刪除這筆資料？') && this.axios.delete(`orders/${item.id}`, item.id).then(() => {
         this.orders.splice(index, 1)
-        this.flash('成功刪除一筆資料', 'success')
+        this.upFlash({type: 'success', content: '成功刪除一筆資料'})
       }).catch(error => {
-        this.flash(error.message, 'error')
+        this.upFlash({type: 'error', content: error.message})
       })
     },
     close () {
@@ -291,16 +295,16 @@ export default {
       if (index !== -1) {
         this.axios.put(`orders/${item.id}`, item).then(() => {
           Object.assign(this.orders[index], item)
-          this.flash('成功修改一筆資料', 'success')
+          this.upFlash({type: 'success', content: '成功修改一筆資料'})
         }).catch(error => {
-          this.flash(error.message, 'error')
+          this.upFlash({type: 'error', content: error.message})
         })
       } else if(index === -1) {
         this.axios.post('orders', item).then(() => {
           this.orders.push(item)
-          this.flash('成功新增一筆資料', 'success')
+          this.upFlash({type: 'success', content: '成功新增一筆資料'})
         }).catch(error => {
-          this.flash(error.message, 'error')
+          this.upFlash({type: 'error', content: error.message})
         })
       }
       this.close()

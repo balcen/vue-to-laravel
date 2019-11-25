@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import axios from 'axios'
 import AuthStore from './module/Auth'
 
 Vue.use(Vuex);
@@ -13,13 +12,9 @@ const store = new Vuex.Store({
     auth: AuthStore
   },
   state: {
-    selected: [],
     flash:[]
   },
   mutations: {
-    setSelected (state, selected) {
-      state.seletected = selected
-    },
     updateFlash (state, flash) {
       state.flash.push(flash)
     },

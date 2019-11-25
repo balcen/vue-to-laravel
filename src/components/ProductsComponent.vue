@@ -109,9 +109,10 @@
 <script>
 import { mapMutations } from 'vuex'
 export default {
-  props: ['search', 'dialog', 'selected', 'message'],
+  props: ['search', 'dialog', 'message'],
   data () {
     return {
+      selected: [],
       valid: true,
       noDataAlert: false,
       error: '',
@@ -192,8 +193,9 @@ export default {
   },
   watch: {
     selected: function() {
-      this.$emit('update:selected', this.selected);
-      this.$emit('getDataType', 'products');
+      // this.$emit('update:selected', this.selected)
+      this.$emit('setSelected', this.selected)
+      this.$emit('getDataType', 'products')
     },
     options: {
       async handler() {

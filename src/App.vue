@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions, mapState } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'App',
   data () {
@@ -68,7 +68,6 @@ export default {
     }),
     flash: {
       get: function () {
-        console.log('flash change')
         return this.$store.state.flash
       },
       set: function() {

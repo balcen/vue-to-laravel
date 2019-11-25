@@ -46,7 +46,7 @@
               color="red darken-1"
               class="mr-2"
               @click="multipleDelete" 
-              :disabled="selectedValue"
+              :disabled="selected.length==0"
             >
               <v-icon>delete</v-icon>
             </v-btn>
@@ -71,7 +71,6 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
 export default {
   data () {
     return {

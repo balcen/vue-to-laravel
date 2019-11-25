@@ -135,9 +135,10 @@
 <script>
 import { mapMutations } from 'vuex'
 export default {
-  props: ['search', 'dialog', 'selected'],
+  props: ['search', 'dialog'],
   data () {
     return {
+      selected: [],
       value: 123,
       valid: true,
       menu: false,
@@ -224,7 +225,8 @@ export default {
   },
   watch: {
     selected: function() {
-      this.$emit('update:selected', this.selected)
+      // this.$emit('update:selected', this.selected)
+      this.$emit('setSelected', this.selected)
       this.$emit('getDataType', 'orders')
     },
     options: {

@@ -161,7 +161,7 @@ export default {
               this.$router.push({ name: this.dataType, query: {id: res.data.id}})
               this.upFlash({ type: 'success', content: '上傳成功' })
             } else {
-              this.upFlash({type: 'error', content: res.data[2]})
+              this.upFlash({type: 'error', content: res.data.errorInfo[2]})
               this.loading = false
             }
           })

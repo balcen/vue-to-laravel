@@ -71,6 +71,7 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
 export default {
   data () {
     return {
@@ -84,28 +85,28 @@ export default {
   },
   computed: {
     selectedValue: function() {
-      return this.selected.length < 1;
+      return this.selected.length < 1
     },
   },
   methods: {
     toggleDialog (bol) {
-      this.dialog = bol;
+      this.dialog = bol
     },
     multipleDelete () {
       // let uri = `https://calm-ocean-96461.herokuapp.com/api/${this.dataType}DeleteAll`;
-      let id = this.getColumn(this.selected, 'id');
-      let num = id.length;
-      let idStr = id.join();
+      let id = this.getColumn(this.selected, 'id')
+      let num = id.length
+      let idStr = id.join()
 
       confirm(`確定刪除${num}筆資料？`) && this.axios.delete(`${this.dataType}DeleteAll`, {data: { ids: idStr }}).then(() => {
-        this.flash(`成功刪除${num}筆資料`, 'success', { timeout: 3000 });
-        this.$refs.table.deleteArray();
+        this.upFlash({ typa: 'success', content: `成功刪除${num}筆資料`})
+        this.$refs.table.deleteArray()
       }).catch(error => {
-        this.flash(error.message, 'error');
+        this.upFlash({type: 'error', content: error.message})
       })
     },
     getDataType(type) {
-      this.dataType = type;
+      this.dataType = type
     },
     // 取得array裡面的column
     getColumn (array, column) {

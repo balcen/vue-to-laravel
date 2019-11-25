@@ -273,7 +273,7 @@ export default {
       } else if(index === -1) {
         this.axios.post(`products`, item).then(() => {
           this.products.push(item);
-          thiss.upFlash({type: 'success', content: '成功新增一筆資料'})
+          this.upFlash({type: 'success', content: '成功新增一筆資料'})
         }).catch(error => {
           this.upFlash({type: 'error', content: error.message})
         })

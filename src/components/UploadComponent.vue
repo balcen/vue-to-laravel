@@ -49,7 +49,7 @@
             <template name="upload-button" transition="fade-transition">
               <v-card color="rgba(255, 255, 255, 0.3)">
                 <v-card-title>
-                  <v-btn icon outlined class="ma-3" @click="dataType=''">
+                  <v-btn icon outlined class="ma-3" @click="dataType='';this.loading=false">
                     <v-icon class="mx-0 px-0">arrow_back</v-icon>
                   </v-btn>
                 </v-card-title>
@@ -92,6 +92,7 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
 export default {
   data() {
     return {
@@ -113,6 +114,9 @@ export default {
   },
   computed: {},
   methods: {
+    ...mapMutations({
+      upFlash: 'updateFlash'
+    }),
     uploadBtn() {
       let uploadbtn = this.$refs.upload
       uploadbtn.click()
@@ -134,13 +138,13 @@ export default {
             // 如果沒有找到檔案類型
           } else {
             let col = response.data.col
-            this.flash(`檔案類型有誤，請確認檔案 colume: ${col}`, "warning")
+            this.upFlash({ type: 'warning', content: `檔案類型有誤，請確認檔案 colume: ${col}`})
             this.$refs.upload.value = ""
           }
           this.loading = false
         })
         .catch(error => {
-          this.flash(error.message, "error")
+          this.upFlash({ type: 'error', content: error.message })
           this.loading = false
           this.$refs.upload.value = ""
         })
@@ -153,11 +157,16 @@ export default {
           .post(`${this.dataType}/upload`, this.formData)
           .then((res) => {
             // this.$router.push({ name: this.dataType, params: { id: res.data.id }})
-            this.$router.push({ name: this.dataType, query: {id: res.data.id}})
-            this.flash("上傳成功", "success")
+            if (res.data.id) {
+              this.$router.push({ name: this.dataType, query: {id: res.data.id}})
+              this.upFlash({ type: 'success', content: '上傳成功' })
+            } else {
+              this.upFlash({type: 'error', content: res.data[2]})
+              this.loading = false
+            }
           })
           .catch(error => {
-            this.flash(error.message, "error")
+            this.upFlash({ type: 'error', content: error.message })
             this.loading = false
           })
       }

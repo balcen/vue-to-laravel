@@ -170,6 +170,7 @@ export default {
   data () {
     return {
       selected: [],
+      url: '',
       valid: true,
       menu1: false,
       menu2: false,
@@ -245,20 +246,6 @@ export default {
     formTitle: function() {
       return this.editIndex === -1 ? 'New Item' : 'Edit Item'
     },
-    getUrl: function() {
-      let root = '?'
-      if(this.search > 0) {
-        const q = encodeURI(this.search)
-        root += `q=${q}&`
-      }
-      const { sortBy, sortDesc, page, itemsPerPage } = this.options
-      root += `page=${page}&itemsPerPage=${itemsPerPage}`
-      if(!sortBy.length) {
-        return root
-      } else {
-        return `${root}&sortBy=${sortBy}&sortDesc=${sortDesc[0] ? 'desc' : 'asc'}`
-      }
-    }
   },
   watch: {
     selected: function() {
@@ -268,22 +255,33 @@ export default {
     },
     options: {
       handler() {
-        this.loading = true
-        if(this.search.length === 0) {
-          this.getDataFromApi()
-            .then(data => {
-              this.invoices = data.data
-              this.totalItems = data.total
-              this.loading = false
-            })
-        } else {
-          this.getSearch()
-            .then(data => {
-              this.invoices = data.data
-              this.totalItems = data.total
-              this.loading = false
-            })
+        this.url = `?page=${this.options.page}&itemsPerPage=${this.options.itemsPerPage}`
+        if (this.$route.query.id) {
+          this.url += `&id=${this.$route.query.id}`
         }
+        if (this.options.sortBy.length) {
+          this.url += `&sortBy=${this.options.sortBy}&sortDesc=${this.options.sortDesc[0]}`
+        }
+
+        this.loading = true
+        let result
+        if(this.search.length > 0) {
+          this.getSearch()
+            .then(data => result = data)
+        } else {
+          if(this.$route.query.id) {
+            this.show()
+              .then(data => result = data)
+          } else {
+            this.getDataFromApi()
+              .then(data => result = data)
+              .catch(error => this.upFlash({type: 'error', content: error.message}))
+          }
+        }
+
+        if (result) this.dataAssign(result)
+        
+        this.loading = false
       }
     }
   },
@@ -296,19 +294,11 @@ export default {
       upFlash: 'updateFlash'
     }),
     getDataFromApi() {
-      return new Promise((resolve) => {
-        this.axios.get(`invoices${this.getUrl}`)
+      return new Promise((resolve, reject) => {
+        this.axios.get(`invoices${this.url}`)
           .then(res => resolve(res.data))
+          .catch(error => reject(error))
       })
-    },
-    getInvoices () {
-      this.axios.get('invoices').then(response => {
-        this.invoices = response.data
-        this.noDataAlert = true
-        this.loading = false
-      }).catch(error => {
-        this.upFlash({type: 'errror', content: error.message})
-      });
     },
     editedItem (item) {
       this.editIndex = this.invoices.indexOf(item)
@@ -329,7 +319,7 @@ export default {
       setTimeout(() => {
         this.editItem = Object.assign({}, this.defaultItem)
         this.editIndex = -1
-        this.$refs.form.reset()
+        this.reset()
       }, 300)
     },
     save() {
@@ -357,21 +347,15 @@ export default {
     deleteArray () {
       this.invoices = this.invoices.filter((el) => !this.selected.includes(el));
     },
+    reset() {
+      this.$refs.form.reset();
+    },
     amount() {
       this.editItem.i_amount = Math.round(this.editItem.i_product_price * this.editItem.i_quantity * 1000) / 1000
     },
-    useSearch() {
-      this.loading = true
-      this.getSearch()
-        .then(data => {
-          this.invoices = data.data
-          this.totalItems = data.total
-          this.loading = false
-        })
-    },
     getSearch() {
       return new Promise((resolve) => {
-        this.axios.get(`invoices/search${this.getUrl}`)
+        this.axios.get(`invoices/search${this.url}&q=${this.search}`)
           .then(res => resolve(res.data))
       })
     },
@@ -380,6 +364,10 @@ export default {
         this.axios.get(`invoices/${this.$route.query.id}${this.getUrl}`)
           .then(res => resolve(res.data))
       })
+    },
+    dataAssign(result) {
+      this.invoices = result.data
+      this.totalItems = result.total
     }
   }
 }

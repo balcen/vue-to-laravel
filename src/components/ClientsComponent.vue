@@ -88,6 +88,7 @@ export default {
   data () {
     return {
       selected: [],
+      url: '',
       valid: true,
       totalItems: 0,
       noDataAlert: false,
@@ -150,23 +151,31 @@ export default {
     },
     options: {
       async handler () {
+        this.url = `?page=${this.options.page}&itemsPerPage=${this.options.itemsPerPage}`
+        if (this.$route.query.id) {
+          this.url += `&id=${this.$route.query.id}`
+        }
+        if (this.options.sortBy.length) {
+          this.url += `&sortBy=${this.options.sortBy}&sortDesc=${this.options.sortDesc[0]}`
+        }
         this.loading = true
         let result
-        if(this.search.length > 0) {
-          // If search exist
+        if (this.search.length > 0) {
           await this.getSearch()
             .then(data => result = data)
-
-        } else if (this.$route.query.id) {
-          await this.show()
-            .then(data => result = data)
         } else {
-          await this.getDataFromApi() 
-            .then(data => result = data)
+          if (this.$route.query.id) {
+            await this.show()
+              .then(data => result = data)
+          } else {
+            await this.getDataFromApi()
+              .then(data => result = data)
+              .catch(error => this.upFlash({type: 'error', content: error.message}))
+          }
+          if (result) this.dataAssign(result)
+          
+          this.loading = false
         }
-        this.clients = result.data
-        this.totalItems = result.total
-        this.loading = false
       },
       deep: true
     }
@@ -180,13 +189,10 @@ export default {
       upFlash: 'updateFlash'
     }),
     getDataFromApi() {
-      return new Promise((resolve) => {
-        const { page, itemsPerPage } = this.options
-        const url = `clients?page=${page}&itemsPerPage=${itemsPerPage}`
-        this.axios.get(url)
-          .then(res => {
-            return resolve(res.data)
-        })
+      return new Promise((resolve, reject) => {
+        this.axios.get(`clients${this.url}`)
+          .then(res => resolve(res.data))
+          .catch(error => reject(error))
       })
     },
     editedItem (item) {
@@ -208,7 +214,7 @@ export default {
       setTimeout(() => {
         this.editItem = Object.assign({}, this.defaultItem);
         this.editIndex = -1
-        this.$refs.form.reset()
+        this.reset()
       },300);
     },
     save() {
@@ -237,37 +243,23 @@ export default {
       this.clients = this.clients.filter((el) => !this.selected.includes(el));
     },
     reset() {
-      this.$refs.form.reset();
-    },
-    useSearch() {
-      this.loading = true
-      this.getSearch()
-        .then(data => {
-          this.clients = data.data
-          this.totalItems = data.total
-          this.loding = false
-        })
+      this.$refs.form.reset()
     },
     getSearch() {
       return new Promise((resolve) => {
-        const { page, itemsPerPage } = this.options
-        const encode = encodeURI(this.search)
-        const url = `clients/search?q=${encode}&page=${page}&itemsPerPage=${itemsPerPage}`
-        this.axios.get(url)
-          .then(res => {
-            resolve(res.data)
-          })
+        this.axios.get(`clients/search${this.url}&q=${this.search}`)
+          .then(res => resolve(res.data))
       })
     },
     show() {
       return new Promise((resolve) => {
-        const { page, itemsPerPage } = this.options
-        const url = `clients/${this.$route.query.id}?page=${page}&itemsPerPage=${itemsPerPage}`
-        this.axios.get(url)
-          .then(res => {
-            resolve(res.data)
-          })
+        this.axios.get(`clients/${this.$route.query.id}${this.url}`)
+          .then(res => resolve(res.data))
       })
+    },
+    dataAssign(result) {
+      this.clients = result.data
+      this.totalItems = result.total
     }
   }
 }

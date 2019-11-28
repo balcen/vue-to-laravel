@@ -20,9 +20,11 @@
         <v-alert v-for="(f, index) in flash"
           :key="index"
           :type="f.type"
+          value="f"
+          transition="slide-y-transition"
           dismissible
           class="mx-0 customMessage" 
-          min-width="500px"
+          min-width="65%"
         >
           {{ f.content }}
         </v-alert>

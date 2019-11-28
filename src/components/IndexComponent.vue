@@ -113,7 +113,8 @@ export default {
       return array.map((el) => {return el[column]})
     },
     searchAll() {
-      this.$refs.table.useSearch()
+      this.$refs.table.getSearch()
+        .then(data => this.$refs.table.dataAssign(data))
     },
     setSelected (sel) {
       this.selected = sel

@@ -113,6 +113,7 @@ export default {
   data () {
     return {
       selected: [],
+      url: '',
       valid: true,
       noDataAlert: false,
       error: '',
@@ -176,20 +177,6 @@ export default {
     formTitle: function () {
       return this.editIndex === -1 ? 'New Item' : 'Edit Item';
     },
-    getUrl: function () {
-      let root = '?'
-      if (this.search.length > 0) {
-        const search = encodeURI(this.search)
-        root += `q=${search}&`
-      }
-      const { sortBy, sortDesc, page, itemsPerPage } = this.options
-      root += `page=${page}&itemsPerPage=${itemsPerPage}`
-      if(!sortBy.length) {
-        return root
-      } else {
-        return `${root}&sortBy=${sortBy}&sortDesc=${sortDesc[0] ? 'desc' : 'asc'}`
-      }
-    }
   },
   watch: {
     selected: function() {
@@ -199,21 +186,33 @@ export default {
     },
     options: {
       async handler() {
+        this.url = `?page=${this.options.page}&itemsPerPage=${this.options.itemsPerPage}`
+        if (this.$route.query.id) {
+          this.url += `&id=${this.$route.query.id}`
+        }
+        if (this.options.sortBy.length) {
+          this.url += `&sortBy=${this.options.sortBy}&sortDesc=${this.options.sortDesc[0]}`
+        }
+
         this.loading = true
         let result
         if(this.search.length > 0) {
           await this.getSearch()
             .then(data => result = data)
 
-        } else if (this.$route.query.id) {
-          await this.show()
-            .then(data => result = data)
         } else {
-          await this.getDataFromApi()
-            .then(data => result = data)
+          if (this.$route.query.id) {
+            await this.show()
+              .then(data => result = data)
+          } else {
+            await this.getDataFromApi()
+              .then(data => result = data)
+              .catch(error => this.upFlash({type: 'error', content: error.message}))
+          }
         }
-        this.products = result.data
-        this.totalItems = result.total
+
+        if (result) this.dataAssign(result)
+        
         this.loading = false
       },
       deep: true
@@ -228,11 +227,10 @@ export default {
       upFlash: 'updateFlash'
     }),
     getDataFromApi() {
-      return new Promise((resolve) => {
-        this.axios.get(`products${this.getUrl}`)
-          .then(res => {
-           return resolve(res.data)
-          })
+      return new Promise((resolve, reject) => {
+        this.axios.get(`products${this.url}`)
+          .then(res => resolve(res.data))
+          .catch(error => reject(error))
       })
     },
     editedItem (item) {
@@ -254,7 +252,7 @@ export default {
       setTimeout(() => {
         this.editItem = Object.assign({}, this.defaultItem);
         this.editIndex = -1;
-        this.$refs.form.reset()
+        this.reset()
       }, 300)
     },
     save () {
@@ -286,6 +284,9 @@ export default {
     deleteArray() {
       this.products = this.products.filter((el) => !this.selected.includes(el));
     },
+    reset() {
+      this.$refs.form.reset()
+    },
     // Image Upload Method
     upload() {
       this.$refs.image.click();
@@ -299,31 +300,21 @@ export default {
       input.type = 'text';
       input.type = 'file';
     },
-    useSearch() {
-      this.loading = true
-      this.getSearch()
-        .then (data => {
-          this.prodcuts = data.data
-          this.totalItems = data.total
-          this.loading = false
-        })
-    },
     getSearch() {
       return new Promise ((resolve) => {
-        this.axios.get(`products/search${this.getUrl}`)
-          .then (res => {
-            resolve(res.data)
-          })
+        this.axios.get(`products/search${this.url}`)
+          .then (res => resolve(res.data))
       })
-      
     },
     show() {
       return new Promise((resolve) => {
-        this.axios.get(`products/${this.$route.query.id}${this.getUrl}`)
-          .then(res => {
-            resolve(res.data)
-          })
+        this.axios.get(`products/${this.$route.query.id}${this.url}`)
+          .then(res => resolve(res.data))
       })
+    },
+    dataAssign(result) {
+      this.products = result.data
+      this.totalItems = result.total
     }
   }
 }

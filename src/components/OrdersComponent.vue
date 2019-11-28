@@ -139,6 +139,7 @@ export default {
   data () {
     return {
       selected: [],
+      url: '',
       value: 123,
       valid: true,
       menu: false,
@@ -208,20 +209,6 @@ export default {
     formTitle() {
       return this.editIndex === -1 ? '新增資料' : '修改資料'
     },
-    getUrl: function() {
-      let root = '?'
-      if(this.search.length > 0) {
-        const q = encodeURI(this.search)
-        root += `q=${q}&`
-      }
-      const { sortBy, sortDesc, page, itemsPerPage } = this.options
-      root += `page=${page}&itemsPerPage=${itemsPerPage}`
-      if (!sortBy.length) {
-        return root
-      } else {
-        return root + `&sortBy=${sortBy}&sortDesc=${sortDesc[0] ? 'desc' : 'asc'}`
-      }
-    }
   },
   watch: {
     selected: function() {
@@ -231,20 +218,31 @@ export default {
     },
     options: {
       async handler() {
+        this.url = `?page=${this.options.page}&itemsPerPage=${this.options.itemsPerPage}`
+        if (this.$route.query.id) {
+          this.url += `&id=${this.$route.query.id}`
+        }
+        if (this.options.sortBy.length) {
+          this.url += `$sortBy=${this.options.sortBy}&sortDesc=${this.options.sortDesc[0]}`
+        }
         this.loading = true
         let result
         if(this.search.length > 0) {
           await this.getSearch()
             .then( data => result = data) 
-        } else if (this.$route.query.id) {
-          await this.show()
-            .then(data => result = data)
         } else {
-          await this.getDataFromApi()
-            .then(data => result = data)
+          if (this.$route.query.id) {
+            await this.show()
+              .then(data => result = data)
+          } else {
+            await this.getDataFromApi()
+              .then(data => result = data)
+              .catch(error => this.upFlash({type: 'error', content: error.message}))
+          }
         }
-        this.orders = result.data
-        this.totalItems = result.total
+
+        if (result) this.dataAssign(result)
+
         this.loading = false
       },
       deep: true
@@ -259,11 +257,10 @@ export default {
       upFlash: 'updateFlash'
     }),
     getDataFromApi() {
-      return new Promise((resolve) => {
-        this.axios.get(`orders${this.getUrl}`)
-          .then(res => {
-            return resolve(res.data)
-          })
+      return new Promise((resolve, reject) => {
+        this.axios.get(`orders${this.url}`)
+          .then(res => resolve(res.data))
+          .catch(error => reject(error))
       })
     },
     editedItem (item) {
@@ -285,7 +282,7 @@ export default {
       setTimeout(() => {
         this.editItem = Object.assign({}, this.defaultItem)
         this.editIndex = -1
-        this.$refs.form.reset()
+        this.reset()
         this.loading = false
       },300)
     },
@@ -314,29 +311,27 @@ export default {
     deleteArray () {
       this.orders = this.orders.filter((el) => !this.selected.includes(el))
     },
+    reset() {
+      this.$refs.form.reset()
+    },
     amount() {
       this.editItem.o_amount = Math.round(this.editItem.o_product_price * this.editItem.o_quantity * 1000) / 1000
     },
-    useSearch() {
-      this.loading = true
-      this.getSearch()
-        .then( data => {
-          this.orders = data.data
-          this.totalItems = data.total
-          this.loading = false
-        })
-    },
     getSearch() {
       return new Promise((resolve) => {
-        this.axios.get(`orders/search${this.getUrl}`)
+        this.axios.get(`orders/search${this.url}&q=${this.search}`)
           .then( res => resolve(res.data))
       })
     },
     show() {
       return new Promise((resolve) => {
-        this.axios(`orders/${this.$route.query.id}${this.getUrl}`)
+        this.axios(`orders/${this.$route.query.id}${this.url}`)
           .then(res => resolve(res.data))
       })
+    },
+    dataAssign(result) {
+      this.orders = result.data
+      this.totalItems = result.total
     }
   }
 }

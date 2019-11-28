@@ -62,6 +62,7 @@
                       <v-select
                         v-model="dataType"
                         :items="fileType"
+                        :rules="[rules.required]"
                         item-text="state"
                         item-value="abbr"
                         label="檔案類型"
@@ -104,6 +105,9 @@ export default {
       loading: false,
       formData: null,
       fileName: "",
+      rules: {
+        required: (v) => !!v || 'Required.'
+      },
       fileType: [
         { state: "Clients", abbr: "clients" },
         { state: "Products", abbr: "products" },

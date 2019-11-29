@@ -16,20 +16,21 @@
     </v-toolbar>
 
     <v-content id="content">
-      <div class="flash-content" v-if="flash.length">
-        <v-alert v-for="(f, index) in flash"
-          :key="index"
-          :type="f.type"
-          value="f"
-          transition="slide-y-transition"
-          dismissible
-          class="mx-0 customMessage" 
-          min-width="65%"
+      <v-snackbar
+        v-model="snackbar"
+        :color="flash.type"
+        top
+      >
+        {{ flash.content }}
+        <v-btn
+          dark
+          text
+          @click="closeSnackbar"
         >
-          {{ f.content }}
-        </v-alert>
-      </div>
-      <!-- <flash-message text id="flashMessage" class="customMessage ma-2"></flash-message> -->
+          Close
+        </v-btn>
+      </v-snackbar>
+
       <transition name="fade">
         <router-view
           :key="$route.fullPath"
@@ -40,12 +41,13 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapActions, mapMutations } from 'vuex'
 export default {
   name: 'App',
   data () {
     return {
       bager: true,
+      snackbar: false,
     }
   },
   created: function() {
@@ -70,6 +72,11 @@ export default {
     }),
     flash: {
       get: function () {
+        if (!this.$store.state.flash.type) {
+          this.snackbar = false
+        } else {
+          this.snackbar = true
+        }
         return this.$store.state.flash
       },
       set: function() {
@@ -81,11 +88,18 @@ export default {
       logoutAction: 'auth/logout',
       refreshAction: 'auth/refresh'
     }),
+    ...mapMutations({
+      removeFlash: 'removeFlash'
+    }),
     logout() {
       this.logoutAction()
         .then(() => {
           this.$router.push({name: 'root'})
         })
+    },
+    closeSnackbar() {
+      this.removeFlash
+      this.snackbar = false
     }
   }
 }
@@ -113,10 +127,10 @@ a:not(.md-button):hover {
   z-index: 9999;
 } */
 
-.flash-content {
-  position: fixed !important;
+.customMessage {
+  /* position: fixed !important;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translateX(-50%); */
   z-index: 9999;
 }
 /* 

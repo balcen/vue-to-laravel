@@ -12,17 +12,14 @@ const store = new Vuex.Store({
     auth: AuthStore
   },
   state: {
-    flash:[]
+    flash:{}
   },
   mutations: {
     updateFlash (state, flash) {
-      state.flash.push(flash)
+      state.flash = flash
     },
-    removeFlash (state, index) {
-      state.flash = state.flash.splice(index, 1)
-    },
-    popFlash (state) {
-      state.flash.pop()
+    removeFlash (state) {
+      state.flash = {}
     }
   },
   actions: {

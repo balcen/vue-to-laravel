@@ -196,23 +196,26 @@ export default {
       })
     },
     editedItem (item) {
-      this.editIndex = this.clients.indexOf(item);
-      this.editItem = Object.assign({}, this.clients[this.editIndex]);
-      this.$emit('toggleDialog', true);
+      this.editIndex = this.clients.indexOf(item)
+      this.editItem = Object.assign({}, this.clients[this.editIndex])
+      this.$emit('toggleDialog', true)
     },
     deleteItem (item) {
-      const index = this.clients.indexOf(item);
+      const index = this.clients.indexOf(item)
+      this.loading = true
       confirm('確定刪除這筆資料？') && this.axios.delete(`clients/${item.id}`, item.id).then(() => {
-        this.clients.splice(index,1);
+        this.clients.splice(index,1)
         this.upFlash({type: 'success', content: '成功刪除一筆資料'})
+        this.loading = false
       }).catch(error => {
         this.upFlash({type: 'error', content: error.message})
+        this.loading = false
       })
     },
     close() {
       this.$emit('toggleDialog', false);
       setTimeout(() => {
-        this.editItem = Object.assign({}, this.defaultItem);
+        this.editItem = Object.assign({}, this.defaultItem)
         this.editIndex = -1
         this.reset()
       },300);
@@ -231,7 +234,7 @@ export default {
         })
       } else if (index === -1) {
         this.axios.post('clients', item).then(() => {
-          this.clients.push(item);
+          this.clients.push(item)
           this.upFlash({type: 'success', content: '成功新增一筆資料'})
         }).catch(error => {
           this.upFlash({type: 'error', content: error.message})

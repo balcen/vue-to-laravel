@@ -270,11 +270,14 @@ export default {
     },
     deleteItem (item) {
       const index = this.orders.indexOf(item)
+      this.loading = true
       confirm('確定刪除這筆資料？') && this.axios.delete(`orders/${item.id}`, item.id).then(() => {
         this.orders.splice(index, 1)
         this.upFlash({type: 'success', content: '成功刪除一筆資料'})
+        this.loading = false
       }).catch(error => {
         this.upFlash({type: 'error', content: error.message})
+        this.loading = false
       })
     },
     close () {

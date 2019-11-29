@@ -155,9 +155,6 @@ export default {
         if (this.$route.query.id) {
           this.url += `&id=${this.$route.query.id}`
         }
-        if (this.options.sortBy.length) {
-          this.url += `&sortBy=${this.options.sortBy}&sortDesc=${this.options.sortDesc[0]}`
-        }
         this.loading = true
         let result
         if (this.search.length > 0) {

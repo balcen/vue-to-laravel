@@ -33,6 +33,7 @@
             </v-text-field>
           </v-col>
           <v-col align-self="center" cols="auto">
+            <FilterMenuComponent></FilterMenuComponent>
             <v-btn 
               text 
               icon
@@ -71,7 +72,11 @@
 </template>
 
 <script>
+import FilterMenuComponent from './menu/FilterMenuComponent'
 export default {
+  components: {
+    FilterMenuComponent
+  },
   data () {
     return {
       activeBtn: 1,

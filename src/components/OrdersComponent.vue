@@ -29,7 +29,12 @@
               <v-container grid-list-md>
                 <v-row wrap>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field :rules="[rules.required]" v-model="editItem.o_no" label="訂單號碼" maxlength="30"></v-text-field>
+                    <v-text-field 
+                      :rules="[rules.required]" 
+                      v-model="editItem.o_no" 
+                      label="訂單號碼" 
+                      maxlength="30"
+                    ></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
                     <v-menu
@@ -54,19 +59,39 @@
                     </v-menu>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field :rules="[rules.required]" v-model="editItem.o_seller_name" label="賣家名稱"></v-text-field>
+                    <v-text-field 
+                      :rules="[rules.required]" 
+                      v-model="editItem.o_seller_name" 
+                      label="賣家名稱"
+                    ></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field :rules="[rules.required]" v-model="editItem.o_buyer_name" label="買家名稱"></v-text-field>
+                    <v-text-field 
+                      :rules="[rules.required]" 
+                      v-model="editItem.o_buyer_name" 
+                      label="買家名稱"
+                    ></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field :rules="[rules.required]" v-model="editItem.o_product_name" label="產品名稱"></v-text-field>
+                    <v-text-field 
+                      :rules="[rules.required]" 
+                      v-model="editItem.o_product_name" 
+                      label="產品名稱"
+                    ></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field :rules="[rules.required]" v-model="editItem.o_product_part_no" label="產品料號" maxlength="30"></v-text-field>
+                    <v-text-field 
+                      :rules="[rules.required]" 
+                      v-model="editItem.o_product_part_no" 
+                      label="產品料號" 
+                      maxlength="30"
+                    ></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editItem.o_product_spec" label="產品規格"></v-text-field>
+                    <v-text-field 
+                      v-model="editItem.o_product_spec" 
+                      label="產品規格"
+                    ></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
                     <v-text-field 
@@ -79,7 +104,12 @@
                     ></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field :rules="[rules.required]" v-model="editItem.o_currency" label="幣別" maxlength="10"></v-text-field>
+                    <v-text-field 
+                      :rules="[rules.required]" 
+                      v-model="editItem.o_currency" 
+                      label="幣別" 
+                      maxlength="10"
+                    ></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
                     <v-text-field 
@@ -90,10 +120,16 @@
                     ></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editItem.o_amount" label="採購金額"></v-text-field>
+                    <v-text-field 
+                      v-model="editItem.o_amount" 
+                      label="採購金額"
+                    ></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editItem.o_note" label="付款條件"></v-text-field>
+                    <v-text-field 
+                      v-model="editItem.o_note" 
+                      label="付款條件"
+                    ></v-text-field>
                   </v-col>
                 </v-row>
               </v-container>

@@ -30,35 +30,80 @@
             <v-container grid-list-md>
               <v-row wrap>
                 <v-col cols="12" sm="6" md="4">
-                  <v-text-field :rules="[rules.required]" v-model="editItem.p_type" label="產品類型" maxlength="30"></v-text-field>
+                  <v-text-field 
+                    :rules="[rules.required]" 
+                    v-model="editItem.p_type" 
+                    label="產品類型" 
+                    maxlength="30"
+                  ></v-text-field>
                 </v-col>
                 <v-col cols="12" sm="6" md="4">
-                  <v-text-field v-model="editItem.p_image" label="產品圖片" readonly @click="upload"></v-text-field>
+                  <v-text-field 
+                    v-model="editItem.p_image" 
+                    label="產品圖片" 
+                    readonly 
+                    @click="upload"
+                  ></v-text-field>
                   <input @change="change" type="file" ref="image" id="image" accept="image/*">
                 </v-col>
                 <v-col cols="12" sm="6" md="4">
-                  <v-text-field :rules="[rules.required]" v-model="editItem.p_name" label="產品名稱"></v-text-field>
+                  <v-text-field 
+                    :rules="[rules.required]" 
+                    v-model="editItem.p_name" 
+                    label="產品名稱"
+                  ></v-text-field>
                 </v-col>
                 <v-col cols="12" sm="6" md="4">
-                  <v-text-field :rules="[rules.required]" v-model="editItem.p_part_no" label="產品料號" maxlength="100"></v-text-field>
+                  <v-text-field 
+                    :rules="[rules.required]" 
+                    v-model="editItem.p_part_no" 
+                    label="產品料號" 
+                    maxlength="100"
+                  ></v-text-field>
                 </v-col>
                 <v-col cols="12" sm="6" md="4">
-                  <v-text-field :rules="[rules.required]" v-model="editItem.p_spec" label="產品規格"></v-text-field>
+                  <v-text-field 
+                    :rules="[rules.required]" 
+                    v-model="editItem.p_spec" 
+                    label="產品規格"
+                  ></v-text-field>
                 </v-col>
                 <v-col cols="12" sm="6" md="4">
-                  <v-text-field type="number" :rules="[rules.required]" v-model="editItem.p_price" label="產品價格" maxlength="12"></v-text-field>
+                  <v-text-field 
+                    type="number" 
+                    :rules="[rules.required]" 
+                    v-model="editItem.p_price" 
+                    label="產品價格" 
+                    maxlength="12"
+                  ></v-text-field>
                 </v-col>
                 <v-col cols="12" sm="6" md="4">
-                  <v-text-field :rules="[rules.required]" v-model="editItem.p_currency" label="幣別" maxlength="10"></v-text-field>
+                  <v-text-field 
+                    :rules="[rules.required]" 
+                    v-model="editItem.p_currency" 
+                    label="幣別" 
+                    maxlength="10"
+                  ></v-text-field>
                 </v-col>
                 <v-col cols="12" sm="6" md="4">
-                  <v-text-field v-model="editItem.p_size" label="產品尺寸" maxlegnth="50"></v-text-field>
+                  <v-text-field 
+                    v-model="editItem.p_size" 
+                    label="產品尺寸" 
+                    maxlegnth="50"
+                  ></v-text-field>
                 </v-col>
                 <v-col cols="12" sm="6" md="4">
-                  <v-text-field v-model="editItem.p_weight" label="產品重量" maxlength="15"></v-text-field>
+                  <v-text-field 
+                    v-model="editItem.p_weight" 
+                    label="產品重量" 
+                    maxlength="15"
+                  ></v-text-field>
                 </v-col>
                 <v-col cols="12" sm="6" md="4">
-                  <v-text-field v-model="editItem.p_note" label="備註"></v-text-field>
+                  <v-text-field 
+                    v-model="editItem.p_note" 
+                    label="備註"
+                  ></v-text-field>
                 </v-col>
               </v-row>
             </v-container>

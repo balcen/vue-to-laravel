@@ -7,7 +7,6 @@
     :server-items-length="totalItems"
     :footer-props="footerProps"
     :loading="loading"
-    :search="search"
     show-select
     class="elevation-1"
   >
@@ -152,9 +151,9 @@
 </style>
 
 <script>
-import { mapMutations } from 'vuex'
+import { mapState, mapMutations, mapActions } from 'vuex'
 export default {
-  props: ['search', 'dialog', 'message'],
+  props: ['dialog'],
   data () {
     return {
       selected: [],
@@ -219,6 +218,10 @@ export default {
     }
   },
   computed: {
+    ...mapState({
+      q: 'menu/q',
+      filter: 'menu/search'
+    }),
     formTitle: function () {
       return this.editIndex === -1 ? 'New Item' : 'Edit Item';
     },
@@ -241,7 +244,7 @@ export default {
 
         this.loading = true
         let result
-        if(this.search.length > 0) {
+        if(this.q || this.filter) {
           await this.getSearch()
             .then(data => result = data)
 
@@ -256,7 +259,10 @@ export default {
           }
         }
 
-        if (result) this.dataAssign(result)
+        if (result) {
+          this.products = result.data
+          this.totalItems = result.total
+        }
         
         this.loading = false
       },
@@ -270,6 +276,9 @@ export default {
   methods: {
     ...mapMutations({
       upFlash: 'updateFlash'
+    }),
+    ...mapActions({
+      search: 'menu/search'
     }),
     getDataFromApi() {
       return new Promise((resolve, reject) => {
@@ -349,10 +358,11 @@ export default {
       input.type = 'file';
     },
     getSearch() {
-      return new Promise ((resolve) => {
-        this.axios.get(`products/search${this.url}`)
-          .then (res => resolve(res.data))
-      })
+      // return new Promise ((resolve) => {
+      //   this.axios.get(`products/search${this.url}`)
+      //     .then (res => resolve(res.data))
+      // })
+      return this.search('products')
     },
     show() {
       return new Promise((resolve) => {
@@ -360,9 +370,18 @@ export default {
           .then(res => resolve(res.data))
       })
     },
-    dataAssign(result) {
-      this.products = result.data
-      this.totalItems = result.total
+    dataAssign() {
+      this.loading = true
+      this.getSearch('products')
+        .then(res => {
+          this.products = res.data
+          this.totalItems = res.total
+          this.loading = false
+        })
+        .catch(err => {
+          this.upFlash({type: 'error', content: err.message})
+          this.loading = false
+        })
     }
   }
 }

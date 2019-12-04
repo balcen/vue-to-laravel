@@ -9,6 +9,7 @@
         text
         icon
         v-on="on"
+        :disabled="url === 'clients'"
       >
         <v-icon>mdi-filter-variant</v-icon>
       </v-btn>
@@ -22,7 +23,7 @@
         <v-row justify="space-around">
           <v-col class="ma-0 pb-0" cols="5">
             <v-text-field
-              v-model="product.minPrice"
+              v-model="search.minPrice"
               placeholder="最低價格"
               type="number"
               dense
@@ -31,7 +32,7 @@
           <v-icon small>mdi-tilde</v-icon>
           <v-col class="ma-0 pb-0" cols="5">
             <v-text-field
-              v-model="product.maxPrice"
+              v-model="search.maxPrice"
               placeholder="最高價格"
               type="number"
               dense
@@ -46,6 +47,7 @@
         <v-row>
           <v-col class="ma-0 pb-0">
             <v-text-field
+              v-model="search.minPrice"
               placeholder="最小價格"
               dense
             ></v-text-field>
@@ -53,6 +55,7 @@
           <v-icon small>mdi-tilde</v-icon>
           <v-col class="ma-0 pb-0">
             <v-text-field
+              v-model="search.maxPrice"
               placeholder="最大價格"
               dense
             ></v-text-field>
@@ -62,6 +65,7 @@
         <v-row>
           <v-col class="ma-0 pb-0">
             <v-text-field
+              v-model="search.minAmount"
               placeholder="最小數量"
               dense
             ></v-text-field>
@@ -69,6 +73,7 @@
           <v-icon small>mdi-tilde</v-icon>
           <v-col class="ma-0 pb-0">
             <v-text-field
+              v-model="search.maxAmount"
               placeholder="最大數量"
               dense
             ></v-text-field>
@@ -78,13 +83,13 @@
         <v-row>
           <v-col class="ma-0 pb-0">
             <v-menu
-              v-model="order.date.menu1"
+              v-model="menu1"
               :close-on-content-click="false"
               transition="scale-transition"
             >
               <template v-slot:activator="{ on }">
                 <v-text-field
-                  v-model="order.date.date1"
+                  v-model="search.date1"
                   persistent-hint
                   readonly
                   dense
@@ -92,23 +97,23 @@
                 ></v-text-field>
               </template>
               <v-date-picker 
-                v-model="order.date.date1" 
+                v-model="search.date1" 
                 no-title 
-                :max="order.date.date2"
-                @input="order.date.menu1 = false"
+                :max="search.date2"
+                @input="menu1 = false"
               ></v-date-picker>
             </v-menu>
           </v-col>
           <v-icon small>mdi-tilde</v-icon>
           <v-col class="ma-0 pb-0">
             <v-menu
-              v-model="order.date.menu2"
+              v-model="menu2"
               :close-on-content-click="false"
               transition="scale-transition"
             >
               <template v-slot:activator="{ on }">
                 <v-text-field
-                  v-model="order.date.date2"
+                  v-model="search.date2"
                   persistent-hint
                   readonly
                   dense
@@ -116,10 +121,10 @@
                 ></v-text-field>
               </template>
               <v-date-picker 
-                v-model="order.date.date2" 
+                v-model="search.date2" 
                 no-title 
-                :min="order.date.date1"
-                @input="order.date.menu2 = false"
+                :min="search.date1"
+                @input="menu2 = false"
               ></v-date-picker>
             </v-menu>
           </v-col>
@@ -131,6 +136,7 @@
         <v-row>
           <v-col class="ma-0 pb-0">
             <v-text-field
+              v-model="search.minPrice"
               placeholder="最小價格"
               dense
             ></v-text-field>
@@ -138,6 +144,7 @@
           <v-icon small>mdi-tilde</v-icon>
           <v-col class="ma-0 pb-0">
             <v-text-field
+              v-model="search.maxPrice"
               placeholder="最大價格"
               dense
             ></v-text-field>
@@ -147,6 +154,7 @@
         <v-row>
           <v-col class="ma-0 pb-0">
             <v-text-field
+              v-model="search.minAmount"
               placeholder="最小數量"
               dense
             ></v-text-field>
@@ -154,6 +162,7 @@
           <v-icon small>mdi-tilde</v-icon>
           <v-col class="ma-0 pb-0">
             <v-text-field
+              v-model="search.maxAmount"
               placeholder="最大數量"
               dense
             ></v-text-field>
@@ -163,13 +172,13 @@
         <v-row>
           <v-col class="ma-0 pb-0">
             <v-menu
-              v-model="invoice.date.menu1"
+              v-model="menu1"
               :close-on-content-click="false"
               transition="scale-transition"
             >
               <template v-slot:activator="{ on }">
                 <v-text-field
-                  v-model="invoice.date.date1"
+                  v-model="search.date1"
                   persistent-hint
                   readonly
                   dense
@@ -177,23 +186,23 @@
                 ></v-text-field>
               </template>
               <v-date-picker 
-                v-model="invoice.date.date1" 
+                v-model="search.date1" 
                 no-title 
-                :max="invoice.date.date2"
-                @input="invoice.date.menu1 = false"
+                :max="search.date2"
+                @input="menu1 = false"
               ></v-date-picker>
             </v-menu>
           </v-col>
           <v-icon small>mdi-tilde</v-icon>
           <v-col class="ma-0 pb-0">
             <v-menu
-              v-model="invoice.date.menu2"
+              v-model="menu2"
               :close-on-content-click="false"
               transition="scale-transition"
             >
               <template v-slot:activator="{ on }">
                 <v-text-field
-                  v-model="invoice.date.date2"
+                  v-model="search.date2"
                   persistent-hint
                   readonly
                   dense
@@ -201,10 +210,10 @@
                 ></v-text-field>
               </template>
               <v-date-picker 
-                v-model="invoice.date.date2" 
+                v-model="search.date2" 
                 no-title 
-                :min="invoice.date.date1"
-                @input="invoice.date.menu2 = false"
+                :min="search.date1"
+                @input="menu2 = false"
               ></v-date-picker>
             </v-menu>
           </v-col>
@@ -213,13 +222,13 @@
         <v-row>
           <v-col class="ma-0 pb-0">
             <v-menu
-              v-model="invoice.expireDate.menu1"
+              v-model="menu3"
               :close-on-content-click="false"
               transition="scale-transition"
             >
               <template v-slot:activator="{ on }">
                 <v-text-field
-                  v-model="invoice.expireDate.date1"
+                  v-model="search.expireDate1"
                   persistent-hint
                   readonly
                   dense
@@ -227,23 +236,23 @@
                 ></v-text-field>
               </template>
               <v-date-picker 
-                v-model="invoice.expireDate.date1" 
+                v-model="search.expireDate1" 
                 no-title 
-                :max="invoice.expireDate.date2"
-                @input="invoice.expireDate.menu1 = false"
+                :max="search.expireDate2"
+                @input="menu3 = false"
               ></v-date-picker>
             </v-menu>
           </v-col>
           <v-icon small>mdi-tilde</v-icon>
           <v-col class="ma-0 pb-0">
             <v-menu
-              v-model="invoice.expireDate.menu2"
+              v-model="menu4"
               :close-on-content-click="false"
               transition="scale-transition"
             >
               <template v-slot:activator="{ on }">
                 <v-text-field
-                  v-model="invoice.expireDate.date2"
+                  v-model="search.expireDate2"
                   persistent-hint
                   readonly
                   dense
@@ -251,10 +260,10 @@
                 ></v-text-field>
               </template>
               <v-date-picker 
-                v-model="invoice.expireDate.date2" 
+                v-model="search.expireDate2" 
                 no-title 
-                :min="invoice.expireDate.date1"
-                @input="invoice.expireDate.menu2 = false"
+                :min="search.expireDate1"
+                @input="menu4 = false"
               ></v-date-picker>
             </v-menu>
           </v-col>
@@ -265,6 +274,7 @@
         <v-btn
           text
           color="primary"
+          @click="menuSearch"
         >
           搜尋
         </v-btn>
@@ -274,41 +284,42 @@
 </template>
 
 <script>
+import { mapMutations, mapActions } from 'vuex'
 export default {
   data () {
     return {
-      menu: true,
+      menu: false,
+      menu1: false,
+      menu2: false,
+      menu3: false,
+      menu4: false,
       url: '',
-      product: {
+      search: {
         minPrice: null,
-        maxPrice: null
-      },
-      order: {
-        date: {
-          menu1: false,
-          menu2: false,
-          date1: null,
-          date2: null
-        }
-      },
-      invoice: {
-        date: {
-          menu1: false,
-          menu2: false,
-          date1: null,
-          date2: null,
-        },
-        expireDate: {
-          menu1: false,
-          menu2: false,
-          date1: null,
-          date2: null,
-        }
+        maxPrice: null,
+        minAmount: null,
+        maxAmount: null,
+        date1: null,
+        date2: null,
+        expireDate1: null,
+        expireDate2: null,
       }
     }
   },
   created () {
     this.url = this.$route.name
+  },
+  methods: {
+    ...mapMutations({
+      setSearch: 'menu/setSearch'
+    }),
+    ...mapActions({
+      getSearch: 'menu/search'
+    }),
+    menuSearch () {
+      this.setSearch(this.search)
+      this.$emit('searchAll')
+    }
   }
 }
 </script>

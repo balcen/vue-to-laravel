@@ -3,7 +3,6 @@
     v-model="selected"
     :headers="headers"
     :items="orders"
-    :search="search"
     :options.sync="options"
     :footer-props="footerProps"
     :server-items-length="totalItems"
@@ -169,9 +168,9 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
+import { mapState, mapMutations, mapActions } from 'vuex'
 export default {
-  props: ['search', 'dialog'],
+  props: ['dialog'],
   data () {
     return {
       selected: [],
@@ -242,6 +241,10 @@ export default {
     }
   },
   computed: {
+    ...mapState({
+      q: 'menu/q',
+      filter: 'menu/search'
+    }),
     formTitle() {
       return this.editIndex === -1 ? '新增資料' : '修改資料'
     },
@@ -263,7 +266,7 @@ export default {
         }
         this.loading = true
         let result
-        if(this.search.length > 0) {
+        if(this.q || this.filter) {
           await this.getSearch()
             .then( data => result = data) 
         } else {
@@ -276,8 +279,11 @@ export default {
               .catch(error => this.upFlash({type: 'error', content: error.message}))
           }
         }
-
-        if (result) this.dataAssign(result)
+        
+        if (result) {
+          this.orders = result.data
+          this.totalItems = result.total
+        }
 
         this.loading = false
       },
@@ -291,6 +297,9 @@ export default {
   methods: {
     ...mapMutations({
       upFlash: 'updateFlash'
+    }),
+    ...mapActions({
+      search: 'menu/search'
     }),
     getDataFromApi() {
       return new Promise((resolve, reject) => {
@@ -357,10 +366,7 @@ export default {
       this.editItem.o_amount = Math.round(this.editItem.o_product_price * this.editItem.o_quantity * 1000) / 1000
     },
     getSearch() {
-      return new Promise((resolve) => {
-        this.axios.get(`orders/search${this.url}&q=${this.search}`)
-          .then( res => resolve(res.data))
-      })
+      return this.search('orders')
     },
     show() {
       return new Promise((resolve) => {
@@ -368,9 +374,18 @@ export default {
           .then(res => resolve(res.data))
       })
     },
-    dataAssign(result) {
-      this.orders = result.data
-      this.totalItems = result.total
+    dataAssign() {
+      this.loading = true
+      this.getSearch('orders')
+        .then(res => {
+          this.orders = res.data
+          this.totalItems = res.total
+          this.loading = false
+        })
+        .catch(err => {
+          this.upFlash({type: 'error', content: err.message})
+          this.loading = false
+        })
     }
   }
 }

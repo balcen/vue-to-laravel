@@ -6,7 +6,6 @@
     :options.sync="options"
     :server-items-length="totalItems"
     :footer-props="footerProps"
-    :search="search"
     :loading="loading"
     show-select
     class="elevation-1"
@@ -82,9 +81,9 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
+import { mapState, mapMutations, mapActions } from 'vuex'
 export default {
-  props: ['search', 'dialog'],
+  props: ['dialog'],
   data () {
     return {
       selected: [],
@@ -139,6 +138,10 @@ export default {
     };
   },
   computed: {
+    ...mapState({
+      q: 'menu/q',
+      filter: 'menu/search'
+    }),
     formTitle: function() {
       return this.editIndex === -1 ? 'New Item' : 'Edit Item';
     },
@@ -157,7 +160,7 @@ export default {
         }
         this.loading = true
         let result
-        if (this.search.length > 0) {
+        if (this.q || this.filter) {
           await this.getSearch()
             .then(data => result = data)
         } else {
@@ -184,6 +187,9 @@ export default {
   methods: {
     ...mapMutations({
       upFlash: 'updateFlash'
+    }),
+    ...mapActions({
+      search: 'menu/search'
     }),
     getDataFromApi() {
       return new Promise((resolve, reject) => {
@@ -246,10 +252,7 @@ export default {
       this.$refs.form.reset()
     },
     getSearch() {
-      return new Promise((resolve) => {
-        this.axios.get(`clients/search${this.url}&q=${this.search}`)
-          .then(res => resolve(res.data))
-      })
+      return this.search('clients')
     },
     show() {
       return new Promise((resolve) => {
@@ -257,9 +260,18 @@ export default {
           .then(res => resolve(res.data))
       })
     },
-    dataAssign(result) {
-      this.clients = result.data
-      this.totalItems = result.total
+    dataAssign() {
+      this.loading = true
+      this.getSearch('clients')
+        .then(res => {
+          this.clients = res.data
+          this.totalItems = res.total
+          this.loading = false
+        })
+        .catch(err => {
+          this.upFlash({type: 'error', content: err.message})
+          this.loading = false
+        })
     }
   }
 }

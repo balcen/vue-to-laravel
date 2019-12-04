@@ -33,7 +33,7 @@
             </v-text-field>
           </v-col>
           <v-col align-self="center" cols="auto">
-            <FilterMenuComponent></FilterMenuComponent>
+            <FilterMenuComponent @searchAll="searchAll"></FilterMenuComponent>
             <v-btn 
               text 
               icon
@@ -60,7 +60,6 @@
         <router-view
           ref="table"
           :key="$route.fullPath"
-          :search="search"
           :dialog="dialog"
           @toggleDialog="toggleDialog"
           @getDataType="getDataType"
@@ -80,7 +79,6 @@ export default {
   data () {
     return {
       activeBtn: 1,
-      search: '',
       color: '',
       dialog: false,
       selected: [],
@@ -91,6 +89,14 @@ export default {
     selectedValue: function() {
       return this.selected.length < 1
     },
+    search: {
+      get () {
+        return this.$store.state.q
+      },
+      set (value) {
+        this.$store.commit('menu/setQuery', value)
+      }
+    }
   },
   methods: {
     toggleDialog (bol) {
@@ -118,8 +124,7 @@ export default {
       return array.map((el) => {return el[column]})
     },
     searchAll() {
-      this.$refs.table.getSearch()
-        .then(data => this.$refs.table.dataAssign(data))
+      this.$refs.table.dataAssign()
     },
     setSelected (sel) {
       this.selected = sel

@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import AuthStore from './module/Auth'
-import MenuStore from './module/Menu'
+import FilterStore from './module/Filter'
 
 Vue.use(Vuex);
 
@@ -11,7 +11,7 @@ const store = new Vuex.Store({
   // strict: true,
   modules: {
     auth: AuthStore,
-    menu: MenuStore
+    filter: FilterStore
   },
   state: {
     flash:{}

@@ -91,10 +91,10 @@ export default {
     },
     search: {
       get () {
-        return this.$store.state.q
+        return this.$store.state.filter.q
       },
       set (value) {
-        this.$store.commit('menu/setQuery', value)
+        this.$store.commit('filter/setQuery', value)
       }
     }
   },

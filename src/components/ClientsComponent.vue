@@ -139,9 +139,12 @@ export default {
   },
   computed: {
     ...mapState({
-      q: 'menu/q',
-      filter: 'menu/search'
+      q: store => store.filter.q,
+      filter: store => store.filter.search
     }),
+    filterIsEmpty: function () {
+      return this.$store.getters['filter/filterIsEmpty']
+    },
     formTitle: function() {
       return this.editIndex === -1 ? 'New Item' : 'Edit Item';
     },
@@ -160,7 +163,7 @@ export default {
         }
         this.loading = true
         let result
-        if (this.q || this.filter) {
+        if (this.q || this.filterIsEmpty) {
           await this.getSearch()
             .then(data => result = data)
         } else {
@@ -172,7 +175,11 @@ export default {
               .then(data => result = data)
               .catch(error => this.upFlash({type: 'error', content: error.message}))
           }
-          if (result) this.dataAssign(result)
+
+          if (result) {
+            this.clients = result.data
+            this.totalItems = result.total
+          }
           
           this.loading = false
         }
@@ -189,7 +196,7 @@ export default {
       upFlash: 'updateFlash'
     }),
     ...mapActions({
-      search: 'menu/search'
+      search: 'filter/search'
     }),
     getDataFromApi() {
       return new Promise((resolve, reject) => {
@@ -221,6 +228,7 @@ export default {
         this.editItem = Object.assign({}, this.defaultItem)
         this.editIndex = -1
         this.reset()
+        this.loading = false
       },300);
     },
     save() {
@@ -252,7 +260,7 @@ export default {
       this.$refs.form.reset()
     },
     getSearch() {
-      return this.search('clients')
+      return this.search({type: 'clients', page: this.url})
     },
     show() {
       return new Promise((resolve) => {
@@ -261,17 +269,21 @@ export default {
       })
     },
     dataAssign() {
-      this.loading = true
-      this.getSearch('clients')
-        .then(res => {
-          this.clients = res.data
-          this.totalItems = res.total
-          this.loading = false
-        })
-        .catch(err => {
-          this.upFlash({type: 'error', content: err.message})
-          this.loading = false
-        })
+      if (this.options.page !== 1) {
+        this.options.page = 1
+      } else {
+        this.loading = true
+        this.getSearch('clients')
+          .then(res => {
+            this.clients = res.data
+            this.totalItems = res.total
+            this.loading = false
+          })
+          .catch(err => {
+            this.upFlash({type: 'error', content: err.message})
+            this.loading = false
+          })
+      }
     }
   }
 }

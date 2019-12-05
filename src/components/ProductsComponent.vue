@@ -219,9 +219,12 @@ export default {
   },
   computed: {
     ...mapState({
-      q: 'menu/q',
-      filter: 'menu/search'
+      q: state => state.filter.q,
+      filter: state => state.filter.search
     }),
+    filterIsEmpty: function () {
+      return this.$store.getters['filter/filterIsEmpty']
+    },
     formTitle: function () {
       return this.editIndex === -1 ? 'New Item' : 'Edit Item';
     },
@@ -244,7 +247,7 @@ export default {
 
         this.loading = true
         let result
-        if(this.q || this.filter) {
+        if(this.q || this.filterIsEmpty) {
           await this.getSearch()
             .then(data => result = data)
 
@@ -278,7 +281,7 @@ export default {
       upFlash: 'updateFlash'
     }),
     ...mapActions({
-      search: 'menu/search'
+      search: 'filter/search'
     }),
     getDataFromApi() {
       return new Promise((resolve, reject) => {
@@ -310,6 +313,7 @@ export default {
         this.editItem = Object.assign({}, this.defaultItem);
         this.editIndex = -1;
         this.reset()
+        this.loading = false
       }, 300)
     },
     save () {
@@ -362,7 +366,7 @@ export default {
       //   this.axios.get(`products/search${this.url}`)
       //     .then (res => resolve(res.data))
       // })
-      return this.search('products')
+      return this.search({type: 'products', page: this.url})
     },
     show() {
       return new Promise((resolve) => {
@@ -371,17 +375,21 @@ export default {
       })
     },
     dataAssign() {
-      this.loading = true
-      this.getSearch('products')
-        .then(res => {
-          this.products = res.data
-          this.totalItems = res.total
-          this.loading = false
-        })
-        .catch(err => {
-          this.upFlash({type: 'error', content: err.message})
-          this.loading = false
-        })
+      if (this.options.page !== 1) {
+        this.options = 1
+      } else {
+        this.loading = true
+        this.getSearch({type: 'products', page: this.url})
+          .then(res => {
+            this.products = res.data
+            this.totalItems = res.total
+            this.loading = false
+          })
+          .catch(err => {
+            this.upFlash({type: 'error', content: err.message})
+            this.loading = false
+          })
+      }
     }
   }
 }

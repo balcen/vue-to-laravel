@@ -284,9 +284,12 @@ export default {
   },
   computed: {
     ...mapState({
-      q: 'menu/q',
-      filter: 'menu/search'
+      q: state => state.filter.q,
+      filter: state => state.filter.search
     }),
+    filterIsEmpty: function() {
+      return this.$store.getters['filter/filterIsEmpty']
+    },
     formTitle: function() {
       return this.editIndex === -1 ? 'New Item' : 'Edit Item'
     },
@@ -309,7 +312,7 @@ export default {
 
         this.loading = true
         let result
-        if(this.q || this.filter) {
+        if(this.q || this.filterIsEmpty) {
           await this.getSearch()
             .then(data => result = data)
         } else {
@@ -341,7 +344,7 @@ export default {
       upFlash: 'updateFlash'
     }),
     ...mapActions({
-      search: 'menu/search'
+      search: 'filter/search'
     }),
     getDataFromApi() {
       return new Promise((resolve, reject) => {
@@ -373,6 +376,7 @@ export default {
         this.editItem = Object.assign({}, this.defaultItem)
         this.editIndex = -1
         this.reset()
+        this.loading = false
       }, 300)
     },
     save() {
@@ -407,7 +411,7 @@ export default {
       this.editItem.i_amount = Math.round(this.editItem.i_product_price * this.editItem.i_quantity * 1000) / 1000
     },
     getSearch() {
-      return this.search('invoices')
+      return this.search({type: 'invoices', page: this.url})
     },
     show() {
       return new Promise((resolve) => {
@@ -416,17 +420,21 @@ export default {
       })
     },
     dataAssign() {
-      this.loading = false
-      this.getSearch('invoices')
-        .then(res => {
-          this.invoices = res.data
-          this.totalItems = res.total
-          this.loading = false
-        })
-        .catch(err => {
-          this.upFlash({type: 'error', content: err.message})
-          this.loading = false
-        })
+      if (this.options.page !== 1) {
+        this.options.page = 1
+      } else {
+        this.loading = false
+        this.getSearch('invoices')
+          .then(res => {
+            this.invoices = res.data
+            this.totalItems = res.total
+            this.loading = false
+          })
+          .catch(err => {
+            this.upFlash({type: 'error', content: err.message})
+            this.loading = false
+          })
+      }
     }
   }
 }

@@ -23,7 +23,7 @@
         <v-row justify="space-around">
           <v-col class="ma-0 pb-0" cols="5">
             <v-text-field
-              v-model="search.minPrice"
+              v-model="minPrice"
               placeholder="最低價格"
               type="number"
               dense
@@ -32,7 +32,7 @@
           <v-icon small>mdi-tilde</v-icon>
           <v-col class="ma-0 pb-0" cols="5">
             <v-text-field
-              v-model="search.maxPrice"
+              v-model="maxPrice"
               placeholder="最高價格"
               type="number"
               dense
@@ -47,7 +47,7 @@
         <v-row>
           <v-col class="ma-0 pb-0">
             <v-text-field
-              v-model="search.minPrice"
+              v-model="minPrice"
               placeholder="最小價格"
               dense
             ></v-text-field>
@@ -55,7 +55,7 @@
           <v-icon small>mdi-tilde</v-icon>
           <v-col class="ma-0 pb-0">
             <v-text-field
-              v-model="search.maxPrice"
+              v-model="maxPrice"
               placeholder="最大價格"
               dense
             ></v-text-field>
@@ -65,7 +65,7 @@
         <v-row>
           <v-col class="ma-0 pb-0">
             <v-text-field
-              v-model="search.minAmount"
+              v-model="minAmount"
               placeholder="最小數量"
               dense
             ></v-text-field>
@@ -73,7 +73,7 @@
           <v-icon small>mdi-tilde</v-icon>
           <v-col class="ma-0 pb-0">
             <v-text-field
-              v-model="search.maxAmount"
+              v-model="maxAmount"
               placeholder="最大數量"
               dense
             ></v-text-field>
@@ -89,7 +89,7 @@
             >
               <template v-slot:activator="{ on }">
                 <v-text-field
-                  v-model="search.date1"
+                  v-model="earlierDate"
                   persistent-hint
                   readonly
                   dense
@@ -97,9 +97,9 @@
                 ></v-text-field>
               </template>
               <v-date-picker 
-                v-model="search.date1" 
+                v-model="earlierDate" 
                 no-title 
-                :max="search.date2"
+                :max="laterDate"
                 @input="menu1 = false"
               ></v-date-picker>
             </v-menu>
@@ -113,7 +113,7 @@
             >
               <template v-slot:activator="{ on }">
                 <v-text-field
-                  v-model="search.date2"
+                  v-model="laterDate"
                   persistent-hint
                   readonly
                   dense
@@ -121,9 +121,9 @@
                 ></v-text-field>
               </template>
               <v-date-picker 
-                v-model="search.date2" 
+                v-model="laterDate" 
                 no-title 
-                :min="search.date1"
+                :min="earlierDate"
                 @input="menu2 = false"
               ></v-date-picker>
             </v-menu>
@@ -136,7 +136,7 @@
         <v-row>
           <v-col class="ma-0 pb-0">
             <v-text-field
-              v-model="search.minPrice"
+              v-model="minPrice"
               placeholder="最小價格"
               dense
             ></v-text-field>
@@ -144,7 +144,7 @@
           <v-icon small>mdi-tilde</v-icon>
           <v-col class="ma-0 pb-0">
             <v-text-field
-              v-model="search.maxPrice"
+              v-model="maxPrice"
               placeholder="最大價格"
               dense
             ></v-text-field>
@@ -154,7 +154,7 @@
         <v-row>
           <v-col class="ma-0 pb-0">
             <v-text-field
-              v-model="search.minAmount"
+              v-model="minAmount"
               placeholder="最小數量"
               dense
             ></v-text-field>
@@ -162,7 +162,7 @@
           <v-icon small>mdi-tilde</v-icon>
           <v-col class="ma-0 pb-0">
             <v-text-field
-              v-model="search.maxAmount"
+              v-model="maxAmount"
               placeholder="最大數量"
               dense
             ></v-text-field>
@@ -178,7 +178,7 @@
             >
               <template v-slot:activator="{ on }">
                 <v-text-field
-                  v-model="search.date1"
+                  v-model="earlierDate"
                   persistent-hint
                   readonly
                   dense
@@ -186,9 +186,9 @@
                 ></v-text-field>
               </template>
               <v-date-picker 
-                v-model="search.date1" 
+                v-model="earlierDate" 
                 no-title 
-                :max="search.date2"
+                :max="laterDate"
                 @input="menu1 = false"
               ></v-date-picker>
             </v-menu>
@@ -202,7 +202,7 @@
             >
               <template v-slot:activator="{ on }">
                 <v-text-field
-                  v-model="search.date2"
+                  v-model="laterDate"
                   persistent-hint
                   readonly
                   dense
@@ -210,9 +210,9 @@
                 ></v-text-field>
               </template>
               <v-date-picker 
-                v-model="search.date2" 
+                v-model="laterDate" 
                 no-title 
-                :min="search.date1"
+                :min="earlierDate"
                 @input="menu2 = false"
               ></v-date-picker>
             </v-menu>
@@ -228,7 +228,7 @@
             >
               <template v-slot:activator="{ on }">
                 <v-text-field
-                  v-model="search.expireDate1"
+                  v-model="earlierExpDate"
                   persistent-hint
                   readonly
                   dense
@@ -236,9 +236,9 @@
                 ></v-text-field>
               </template>
               <v-date-picker 
-                v-model="search.expireDate1" 
+                v-model="earlierExpDate" 
                 no-title 
-                :max="search.expireDate2"
+                :max="laterExpDate"
                 @input="menu3 = false"
               ></v-date-picker>
             </v-menu>
@@ -252,7 +252,7 @@
             >
               <template v-slot:activator="{ on }">
                 <v-text-field
-                  v-model="search.expireDate2"
+                  v-model="laterExpDate"
                   persistent-hint
                   readonly
                   dense
@@ -260,9 +260,9 @@
                 ></v-text-field>
               </template>
               <v-date-picker 
-                v-model="search.expireDate2" 
+                v-model="laterExpDate" 
                 no-title 
-                :min="search.expireDate1"
+                :min="earlierExpDate"
                 @input="menu4 = false"
               ></v-date-picker>
             </v-menu>
@@ -294,15 +294,71 @@ export default {
       menu3: false,
       menu4: false,
       url: '',
-      search: {
-        minPrice: null,
-        maxPrice: null,
-        minAmount: null,
-        maxAmount: null,
-        date1: null,
-        date2: null,
-        expireDate1: null,
-        expireDate2: null,
+    }
+  },
+  computed: {
+    minPrice: {
+      get () {
+        return this.$store.state.filter.search.minPrice
+      },
+      set (val) {
+        this.$store.commit('filter/setMinPrice', val)
+      }
+    },
+    maxPrice: {
+      get () {
+        return this.$store.state.filter.search.maxPrice
+      },
+      set (val) {
+        this.$store.commit('filter/setMaxPrice', val)
+      }
+    },
+    minAmount: {
+      get () {
+        return this.$store.state.filter.search.minAmount
+      },
+      set (val) {
+        this.$store.commmit('filter/setMinAmount', val)
+      }
+    },
+    maxAmount: {
+      get () {
+        return this.$store.state.filter.search.maxAmount
+      },
+      set (val) {
+        this.$store.commit('filter/setMaxAmount', val)
+      }
+    },
+    earlierDate: {
+      get() {
+        return this.$store.state.filter.search.earlierDate
+      },
+      set (date) {
+        this.$store.commit('filter/setEarlierDate', date)
+      }
+    },
+    laterDate: {
+      get () {
+        return this.$store.state.filter.search.laterDate
+      },
+      set (date) {
+        this.$store.commit('filter/setLaterDate', date)
+      }
+    },
+    earlierExpDate: {
+      get () {
+        return this.$store.state.filter.search.earlierExpDate
+      },
+      set (date) {
+        this.$store.commit('filter/earlierExpDate', date)
+      }
+    },
+    laterExpDate: {
+      get () {
+        return this.$store.state.filter.search.laterExpDate
+      },
+      set (date) {
+        this.$store.commit('filter/setLaterExpDate', date)
       }
     }
   },
@@ -311,13 +367,12 @@ export default {
   },
   methods: {
     ...mapMutations({
-      setSearch: 'menu/setSearch'
+      setSearch: 'filter/setSearch'
     }),
     ...mapActions({
-      getSearch: 'menu/search'
+      getSearch: 'filter/search'
     }),
     menuSearch () {
-      this.setSearch(this.search)
       this.$emit('searchAll')
     }
   }

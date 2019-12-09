@@ -360,6 +360,9 @@ export default {
       set (date) {
         this.$store.commit('filter/setLaterExpDate', date)
       }
+    },
+    filterIsEmpty () {
+      return this.$store.getters['filter/filterIsEmpty']
     }
   },
   created () {

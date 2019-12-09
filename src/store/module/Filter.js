@@ -77,15 +77,12 @@ export default {
     date: ({ search }) => search.earlierDate || search.laterDate ? [search.earlierDate, search.laterDate] : null,
     expireDate: ({ search }) => search.earlierExpeDate || search.laterExpDate ? [search.earlierExpeDate, search.laterExpDate] : null,
     filterIsEmpty: function (state) {
-      let trigger = false
       for (var index in state.search) {
         if (state.search[index] !== null && state.search[index] !== undefined && state.search[index] !== "") {
-          trigger = true
-          break
+          return true
         }
       }
-      if (state.q === "") return false
-      return trigger
+      return state.q !== ""
     }
   }
 }

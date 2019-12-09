@@ -241,7 +241,7 @@ export default {
         if (this.$route.query.id) {
           this.url += `&id=${this.$route.query.id}`
         }
-        if (this.options.sortBy.length) {
+        if (this.options.sortBy) {
           this.url += `&sortBy=${this.options.sortBy}&sortDesc=${this.options.sortDesc[0] ? 'desc' : 'asc'}`
         }
 

@@ -10,22 +10,46 @@
         <v-btn text to="/index/" :active-class="'red--text text--darken-1'">DATA</v-btn>
       </v-toolbar-items>
       <v-spacer></v-spacer>
-      <v-btn icon text v-if="!isLoggedIn" to="/login" :active-class="'red--text text--darken-1'"><v-icon>mdi-account</v-icon></v-btn>
-      <v-btn icon text v-if="isLoggedIn" to="/dashboard" :active-class="'red--text text--darken-1'"><v-icon>account_circle</v-icon></v-btn>
-      <v-btn icon text v-if="isLoggedIn" @click="logout" :active-class="'red--text text--darken-1'"><v-icon>logout</v-icon></v-btn>
+      <v-btn 
+        v-if="!isLoggedIn" 
+        to="/login" 
+        :active-class="'red--text text--darken-1'"
+        icon 
+        text 
+      >
+        <v-icon>mdi-account</v-icon>
+      </v-btn>
+      <v-btn 
+        v-if="isLoggedIn" 
+        :active-class="'red--text text--darken-1'"
+        to="/dashboard" 
+        icon 
+        text 
+      >
+        <v-icon>account_circle</v-icon>
+      </v-btn>
+      <v-btn 
+        v-if="isLoggedIn" 
+        :active-class="'red--text text--darken-1'"
+        icon 
+        text 
+        @click="logout" 
+      >
+        <v-icon>logout</v-icon>
+      </v-btn>
     </v-toolbar>
 
     <v-content id="content">
       <v-snackbar
-        v-model="snackbar"
-        :color="flash.type"
+        v-model="is_visible"
+        :color="messageType"
         top
       >
-        {{ flash.content }}
+        {{ currentMessage }}
         <v-btn
           dark
           text
-          @click="closeSnackbar"
+          @click="is_visible=false"
         >
           Close
         </v-btn>
@@ -41,13 +65,15 @@
 </template>
 
 <script>
-import { mapGetters, mapActions, mapMutations } from 'vuex'
+import { mapState, mapGetters, mapActions, mapMutations } from 'vuex'
 export default {
   name: 'App',
   data () {
     return {
       bager: true,
-      snackbar: false,
+      is_visible: false,
+      currentMessage: null,
+      messageType: null,
     }
   },
   created: function() {
@@ -70,16 +96,19 @@ export default {
     ...mapGetters({
       isLoggedIn: 'auth/isLoggedIn',
     }),
-    flash: {
-      get: function () {
-        if (!this.$store.state.flash.type) {
-          this.snackbar = false
-        } else {
-          this.snackbar = true
-        }
-        return this.$store.state.flash
-      },
-      set: function() {
+    ...mapState({
+      messageLine: state => state.messageLine
+    })
+  },
+  watch: {
+    messageLine() {
+      if (!this.is_visible) {
+        this.shiftMessage()
+      } else if (this.messageLine.length) {
+        this.is_visible = false
+        setTimeout(() => {
+          this.shiftMessage()
+        }, 300)
       }
     }
   },
@@ -89,7 +118,7 @@ export default {
       refreshAction: 'auth/refresh'
     }),
     ...mapMutations({
-      removeFlash: 'removeFlash'
+      shiftMessage: 'shiftMessage'
     }),
     logout() {
       this.logoutAction()
@@ -97,9 +126,13 @@ export default {
           this.$router.push({name: 'root'})
         })
     },
-    closeSnackbar() {
-      this.removeFlash
-      this.snackbar = false
+    shiftMessage() {
+      const newType = this.messageLine[0].type
+      const newContent = this.messageLine[0].content
+      this.currentMessage = newContent
+      this.messageType = newType
+      this.is_visible = true
+      this.shiftMessage()
     }
   }
 }

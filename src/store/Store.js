@@ -14,14 +14,14 @@ const store = new Vuex.Store({
     filter: FilterStore
   },
   state: {
-    flash:{}
+    messageLine: [],
   },
   mutations: {
-    updateFlash (state, flash) {
-      state.flash = flash
+    pushMessage (state, mes) {
+      return state.messageLine.push(mes)
     },
-    removeFlash (state) {
-      state.flash = {}
+    shiftMessage (state) {
+      return state.messageLine.shift()
     }
   },
   actions: {

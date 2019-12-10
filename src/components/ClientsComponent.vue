@@ -193,7 +193,7 @@ export default {
   },
   methods: {
     ...mapMutations({
-      upFlash: 'updateFlash'
+      upFlash: 'pushMessage'
     }),
     ...mapActions({
       search: 'filter/search'

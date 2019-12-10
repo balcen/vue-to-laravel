@@ -119,7 +119,7 @@ export default {
   computed: {},
   methods: {
     ...mapMutations({
-      upFlash: 'updateFlash'
+      upFlash: 'pushMessage'
     }),
     uploadBtn() {
       let uploadbtn = this.$refs.upload

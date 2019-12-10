@@ -18,39 +18,108 @@
       >
         <v-card>
           <v-card-title>
-            <span class="headline">
-              {{ formTitle }}
-            </span>
+            <span class="headline" v-text="formTitle" />
           </v-card-title>
-          <v-form ref="form" v-model="valid" lazy-validation>
+          <v-form 
+            v-model="valid" 
+            ref="form" 
+            lazy-validation
+          >
             <v-card-text>
               <v-container grid-list-md>
                 <v-row wrap>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field :rules="[rules.required]" v-model="editItem.c_tax_id" label="客戶統編" required></v-text-field>
+                  <v-col 
+                    cols="12" 
+                    sm="6" 
+                    md="4"
+                  >
+                    <v-text-field 
+                      v-model="editItem.c_tax_id" 
+                      :rules="[rules.required]" 
+                      label="客戶統編" 
+                      required
+                    ></v-text-field>
                   </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field :rules="[rules.required]" v-model="editItem.c_name" label="客戶名稱" required></v-text-field>
+                  <v-col 
+                    cols="12" 
+                    sm="6" 
+                    md="4"
+                  >
+                    <v-text-field 
+                      v-model="editItem.c_name" 
+                      :rules="[rules.required]" 
+                      label="客戶名稱" 
+                      required
+                    ></v-text-field>
                   </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field :rules="[rules.required]" v-model="editItem.c_type" label="客戶類型" required></v-text-field>
+                  <v-col 
+                    cols="12" 
+                    sm="6" 
+                    md="4"
+                  >
+                    <v-text-field 
+                      v-model="editItem.c_type" 
+                      :rules="[rules.required]" 
+                      label="客戶類型" 
+                      required
+                    ></v-text-field>
                   </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field :rules="[rules.required]" v-model="editItem.c_contact" label="聯絡人" required></v-text-field>
+                  <v-col 
+                    cols="12" 
+                    sm="6" 
+                    md="4"
+                  >
+                    <v-text-field 
+                      v-model="editItem.c_contact" 
+                      :rules="[rules.required]" 
+                      label="聯絡人" 
+                      required
+                    ></v-text-field>
                   </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field :rules="[rules.required]" v-model="editItem.c_phone" label="聯絡電話" required></v-text-field>
+                  <v-col 
+                    cols="12" 
+                    sm="6" 
+                    md="4"
+                  >
+                    <v-text-field 
+                      v-model="editItem.c_phone" 
+                      :rules="[rules.required]" 
+                      label="聯絡電話" 
+                      required
+                    ></v-text-field>
                   </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field :rules="[rules.required, rules.email]" v-model="editItem.c_mail" label="電子信箱" required></v-text-field>
+                  <v-col 
+                    cols="12" 
+                    sm="6" 
+                    md="4"
+                  >
+                    <v-text-field 
+                      v-model="editItem.c_mail" 
+                      :rules="[rules.required, rules.email]" 
+                      label="電子信箱" 
+                      required
+                    ></v-text-field>
                   </v-col>
                 </v-row>
               </v-container>
             </v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
-              <v-btn color="blue darken-1" text @click="save" :disabled="!valid">Save</v-btn>
+              <v-btn 
+                color="blue darken-1" 
+                text 
+                @click="close"
+              >
+                Cancel
+              </v-btn>
+              <v-btn 
+                :disabled="!valid"
+                color="blue darken-1" 
+                text
+                @click="save" 
+               >
+                Save
+               </v-btn>
             </v-card-actions>
           </v-form>
         </v-card>

@@ -20,15 +20,24 @@
     >
       <v-card>
         <v-card-title>
-          <span class="headline">
-            {{ formTitle }}
-          </span>
+          <span 
+            class="headline" 
+            v-text="formTitle" 
+          />
         </v-card-title>
-        <v-form ref="form" v-model="valid" lazy-validation>
+        <v-form 
+          v-model="valid" 
+          ref="form" 
+          lazy-validation
+        >
           <v-card-text>
             <v-container grid-list-md>
               <v-row wrap>
-                <v-col cols="12" sm="6" md="4">
+                <v-col 
+                  cols="12" 
+                  sm="6" 
+                  md="4"
+                >
                   <v-text-field 
                     :rules="[rules.required]" 
                     v-model="editItem.p_type" 
@@ -36,23 +45,41 @@
                     maxlength="30"
                   ></v-text-field>
                 </v-col>
-                <v-col cols="12" sm="6" md="4">
+                <v-col 
+                  cols="12" 
+                  sm="6" 
+                  md="4"
+                >
                   <v-text-field 
                     v-model="editItem.p_image" 
                     label="產品圖片" 
                     readonly 
                     @click="upload"
                   ></v-text-field>
-                  <input @change="change" type="file" ref="image" id="image" accept="image/*">
+                  <input 
+                    id="image" 
+                    ref="image" 
+                    type="file" 
+                    accept="image/*"
+                    @change="change" 
+                  >
                 </v-col>
-                <v-col cols="12" sm="6" md="4">
+                <v-col 
+                  cols="12" 
+                  sm="6" 
+                  md="4"
+                >
                   <v-text-field 
                     :rules="[rules.required]" 
                     v-model="editItem.p_name" 
                     label="產品名稱"
                   ></v-text-field>
                 </v-col>
-                <v-col cols="12" sm="6" md="4">
+                <v-col 
+                  cols="12" 
+                  sm="6" 
+                  md="4"
+                >
                   <v-text-field 
                     :rules="[rules.required]" 
                     v-model="editItem.p_part_no" 
@@ -60,14 +87,22 @@
                     maxlength="100"
                   ></v-text-field>
                 </v-col>
-                <v-col cols="12" sm="6" md="4">
+                <v-col 
+                  cols="12" 
+                  sm="6" 
+                  md="4"
+                >
                   <v-text-field 
                     :rules="[rules.required]" 
                     v-model="editItem.p_spec" 
                     label="產品規格"
                   ></v-text-field>
                 </v-col>
-                <v-col cols="12" sm="6" md="4">
+                <v-col 
+                  cols="12"
+                  sm="6" 
+                  md="4"
+                >
                   <v-text-field 
                     type="number" 
                     :rules="[rules.required]" 
@@ -76,7 +111,11 @@
                     maxlength="12"
                   ></v-text-field>
                 </v-col>
-                <v-col cols="12" sm="6" md="4">
+                <v-col 
+                  cols="12" 
+                  sm="6" 
+                  md="4"
+                >
                   <v-text-field 
                     :rules="[rules.required]" 
                     v-model="editItem.p_currency" 
@@ -84,21 +123,33 @@
                     maxlength="10"
                   ></v-text-field>
                 </v-col>
-                <v-col cols="12" sm="6" md="4">
+                <v-col 
+                  cols="12"
+                  sm="6" 
+                  md="4"
+                >
                   <v-text-field 
                     v-model="editItem.p_size" 
                     label="產品尺寸" 
                     maxlegnth="50"
                   ></v-text-field>
                 </v-col>
-                <v-col cols="12" sm="6" md="4">
+                <v-col 
+                  cols="12" 
+                  sm="6"
+                  md="4"
+                >
                   <v-text-field 
                     v-model="editItem.p_weight" 
                     label="產品重量" 
                     maxlength="15"
                   ></v-text-field>
                 </v-col>
-                <v-col cols="12" sm="6" md="4">
+                <v-col 
+                  cols="12" 
+                  sm="6" 
+                  md="4"
+                >
                   <v-text-field 
                     v-model="editItem.p_note" 
                     label="備註"
@@ -109,8 +160,21 @@
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
-            <v-btn color="blue darken-1" text @click="save" :disabled="!valid">Save</v-btn>
+            <v-btn 
+              color="blue darken-1" 
+              text 
+              @click="close"
+            >
+              Cancel
+            </v-btn>
+            <v-btn 
+              :disabled="!valid"
+              color="blue darken-1" 
+              text 
+              @click="save" 
+            >
+              Save
+            </v-btn>
           </v-card-actions>
         </v-form>
       </v-card>
@@ -134,7 +198,10 @@
   </template>
 
   <template v-slot:no-data>
-      <v-alert type="error" class="text-left my-3">
+      <v-alert 
+        type="error" 
+        class="text-left my-3"
+      >
         抱歉，這裡沒有任何資料 :(
       </v-alert>
   </template>

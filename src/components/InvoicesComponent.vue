@@ -19,13 +19,24 @@
       >
         <v-card>
           <v-card-title>
-            <span class="headline">{{ formTitle }}</span>
+            <span 
+              class="headline" 
+              v-text="formTitle"
+            />
           </v-card-title>
-          <v-form ref="form" v-model="valid" lazy-validation>
+          <v-form 
+            v-model="valid" 
+            ref="form" 
+            lazy-validation
+          >
             <v-card-text>
               <v-container grid-list-md>
                 <v-row wrap>
-                  <v-col cols="12" sm="6" md="4">
+                  <v-col 
+                    cols="12" 
+                    sm="6" 
+                    md="4"
+                  >
                     <v-text-field 
                       :rules="[rules.required]" 
                       v-model="editItem.i_no" 
@@ -33,7 +44,11 @@
                       maxlength="30"
                     ></v-text-field>
                   </v-col>
-                  <v-col cols="12" sm="6" md="4">
+                  <v-col 
+                    cols="12" 
+                    sm="6" 
+                    md="4"
+                  >
                     <v-menu
                       v-model="menu1"
                       :close-on-content-click="false"
@@ -52,10 +67,17 @@
                           v-on="on"
                         ></v-text-field>
                       </template>
-                      <v-date-picker v-model="editItem.i_date" @input="menu1 = false"></v-date-picker>
+                      <v-date-picker 
+                        v-model="editItem.i_date" 
+                        @input="menu1 = false"
+                      ></v-date-picker>
                     </v-menu>
                   </v-col>
-                  <v-col cols="12" sm="6" md="4">
+                  <v-col 
+                    cols="12" 
+                    sm="6" 
+                    md="4"
+                  >
                     <v-menu
                       v-model="menu2"
                       :close-on-content-click="false"
@@ -75,10 +97,17 @@
                         >
                         </v-text-field>
                       </template>
-                      <v-date-picker v-model="editItem.i_mature" @input="menu2 = false"></v-date-picker>
+                      <v-date-picker 
+                        v-model="editItem.i_mature" 
+                        @input="menu2 = false"
+                      ></v-date-picker>
                     </v-menu>
                   </v-col>
-                  <v-col cols="12" sm="6" md="4">
+                  <v-col 
+                    cols="12" 
+                    sm="6" 
+                    md="4"
+                  >
                     <v-text-field 
                       :rules="[rules.required]" 
                       v-model="editItem.i_order_no" 
@@ -86,28 +115,44 @@
                       maxlength="30"
                     ></v-text-field>
                   </v-col>
-                  <v-col cols="12" sm="6" md="4">
+                  <v-col 
+                    cols="12" 
+                    sm="6" 
+                    md="4"
+                  >
                     <v-text-field 
                       :rules="[rules.required]" 
                       v-model="editItem.i_seller_name" 
                       label="賣家名稱"
                     ></v-text-field>
                   </v-col>
-                  <v-col cols="12" sm="6" md="4">
+                  <v-col 
+                    cols="12" 
+                    sm="6" 
+                    md="4"
+                  >
                     <v-text-field 
                       :rules="[rules.required]" 
                       v-model="editItem.i_buyer_name" 
                       label="買家名稱"
                     ></v-text-field>
                   </v-col>
-                  <v-col cols="12" sm="6" md="4">
+                  <v-col 
+                    cols="12" 
+                    sm="6" 
+                    md="4"
+                  >
                     <v-text-field 
                       :rules="[rules.required]" 
                       v-model="editItem.i_product_name" 
                       label="產品名稱"
                     ></v-text-field>
                   </v-col>
-                  <v-col cols="12" sm="6" md="4">
+                  <v-col 
+                    cols="12" 
+                    sm="6" 
+                    md="4"
+                  >
                     <v-text-field 
                       :rules="[rules.required]" 
                       v-model="editItem.i_product_part_no" 
@@ -115,13 +160,21 @@
                       maxlength="30"
                     ></v-text-field>
                   </v-col>
-                  <v-col cols="12" sm="6" md="4">
+                  <v-col 
+                    cols="12" 
+                    sm="6" 
+                    md="4"
+                  >
                     <v-text-field 
                       v-model="editItem.i_product_spec" 
                       label="產品規格"
                     ></v-text-field>
                   </v-col>
-                  <v-col cols="12" sm="6" md="4">
+                  <v-col 
+                    cols="12" 
+                    sm="6" 
+                    md="4"
+                  >
                     <v-text-field
                       type="number"
                       :rules="[rules.required]"
@@ -132,7 +185,11 @@
                     >
                     </v-text-field>
                   </v-col>
-                  <v-col cols="12" sm="6" md="4">
+                  <v-col 
+                    cols="12" 
+                    sm="6" 
+                    md="4"
+                  >
                     <v-text-field 
                       :rules="[rules.required]" 
                       v-model="editItem.i_currency" 
@@ -140,7 +197,11 @@
                       maxlength="10"
                     ></v-text-field>
                   </v-col>
-                  <v-col cols="12" sm="6" md="4">
+                  <v-col 
+                    cols="12" 
+                    sm="6" 
+                    md="4"
+                  >
                     <v-text-field 
                       :rules="[rules.required]" 
                       v-model="editItem.i_quantity" 
@@ -148,13 +209,21 @@
                       @change="amount"
                     ></v-text-field>
                   </v-col>
-                  <v-col cols="12" sm="6" md="4">
+                  <v-col 
+                    cols="12" 
+                    sm="6" 
+                    md="4"
+                  >
                     <v-text-field 
                       v-model="editItem.i_amount" 
                       label="採購金額"
                     ></v-text-field>
                   </v-col>
-                  <v-col cols="12" sm="6" md="4">
+                  <v-col 
+                    cols="12" 
+                    sm="6" 
+                    md="4"
+                  >
                     <v-text-field 
                       v-model="editItem.i_note" 
                       label="付款條件"
@@ -165,8 +234,21 @@
             </v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
-              <v-btn color="blue darken-1" text @click="save" :disabled="!valid">Save</v-btn>
+              <v-btn 
+                color="blue darken-1" 
+                text 
+                @click="close"
+              >
+                Cancel
+              </v-btn>
+              <v-btn 
+                :disabled="!valid"
+                color="blue darken-1" 
+                text
+                @click="save" 
+               >
+                Save
+               </v-btn>
             </v-card-actions>
           </v-form>
         </v-card>
@@ -190,7 +272,10 @@
     </template>
 
     <template v-slot:no-data>
-      <v-alert type="error" class="text-left my-3">
+      <v-alert 
+        type="error" 
+        class="text-left my-3"
+      >
         抱歉，這裡沒有任何資料 :(
       </v-alert>
     </template>

@@ -1,13 +1,32 @@
 <template>
   <v-app>
-    <v-toolbar flat dense class="shrink">
-      <v-toolbar-title to="/upload" class="headline text-uppercase">
+    <v-toolbar 
+      flat 
+      dense 
+      class="shrink"
+    >
+      <v-toolbar-title 
+        to="/upload" 
+        class="headline text-uppercase"
+      >
         <span class="red--text text--darken-1">TSCL</span>
         <span class="font-weight-light">TRUST-SEARCH</span>
       </v-toolbar-title>
       <v-toolbar-items>
-        <v-btn text to="/upload" :active-class="'red--text text--darken-1'">UPLOAD</v-btn>
-        <v-btn text to="/index/" :active-class="'red--text text--darken-1'">DATA</v-btn>
+        <v-btn 
+          text 
+          to="/upload" 
+          :active-class="'red--text text--darken-1'"
+        >
+          UPLOAD
+        </v-btn>
+        <v-btn 
+          text 
+          to="/index/" 
+          :active-class="'red--text text--darken-1'"
+        >
+          DATA
+        </v-btn>
       </v-toolbar-items>
       <v-spacer></v-spacer>
       <v-btn 
@@ -45,7 +64,7 @@
         :color="messageType"
         top
       >
-        {{ currentMessage }}
+        <span v-text="currentMessage" />
         <v-btn
           dark
           text
@@ -98,7 +117,7 @@ export default {
     }),
     ...mapState({
       messageLine: state => state.messageLine
-    })
+    }),
   },
   watch: {
     messageLine() {

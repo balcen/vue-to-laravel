@@ -1,19 +1,57 @@
 <template>
   <div>
-    <v-row dense no-gutters row no-wrap>
+    <v-row 
+      dense 
+      no-gutters 
+      row 
+      no-wrap
+    >
       <v-col cols="6">
-        <v-tabs fixed-tabs color="red darken-1">
-          <v-tab to="/index/clients" text>CLIENT</v-tab>
-          <v-tab to="/index/products" text>PRODUCT</v-tab>
-          <v-tab to="/index/orders" text>ORDER</v-tab>
-          <v-tab to="/index/invoices" text>INVOICE</v-tab>
+        <v-tabs 
+          fixed-tabs 
+          color="red darken-1"
+        >
+          <v-tab 
+            to="/index/clients" 
+            text
+          >
+            CLIENT
+          </v-tab>
+          <v-tab 
+            to="/index/products" 
+            text
+          >
+            PRODUCT
+          </v-tab>
+          <v-tab 
+            to="/index/orders" 
+            text
+          >
+            ORDER
+          </v-tab>
+          <v-tab 
+            to="/index/invoices" 
+            text
+          >
+            INVOICE 
+          </v-tab>
         </v-tabs>
       </v-col>
       <v-spacer></v-spacer>
-      <v-col cols="4" class="d-flex align-center">
-        <v-row no-gutters align="center" justify="end">
+      <v-col 
+        cols="4" 
+        class="d-flex align-center"
+      >
+        <v-row 
+          no-gutters 
+          align="center" 
+          justify="end"
+        >
           <!-- Search bar -->
-          <v-col cols="6" class="mr-1 d-flex align-center">
+          <v-col 
+            cols="6" 
+            class="mr-1 d-flex align-center"
+          >
             <v-text-field
               v-model="search"
               label="Search"
@@ -26,14 +64,21 @@
               @keyup.enter="searchAll"
             >
               <template v-slot:append>
-                <v-btn text icon @click="searchAll">
+                <v-btn 
+                  text 
+                  icon 
+                  @click="searchAll"
+                >
                   <v-icon>search</v-icon>
                 </v-btn>
               </template>
             </v-text-field>
           </v-col>
-          <v-col align-self="center" cols="auto">
-            <FilterMenuComponent @searchAll="searchAll"></FilterMenuComponent>
+          <v-col 
+            align-self="center" 
+            cols="auto"
+          >
+            <FilterMenuComponent @searchAll="searchAll" />
             <v-btn 
               text 
               icon

@@ -1,9 +1,15 @@
 <template>
   <div class="pa-5 back">
     <v-container class="fill-height d-flex justify-center align-center">
-      <v-row align="center" justify="center">
+      <v-row 
+        align="center" 
+        justify="center"
+      >
         <transition name="fade">
-          <v-col v-if="!dataType" cols="5">
+          <v-col 
+            v-if="!dataType" 
+            cols="5"
+          >
             <p
               class="display-1 red--text text--darken-1 text-center font-weight-bold"
             >File Upload & Data Type Preview</p>
@@ -38,27 +44,51 @@
                   indeterminate 
                 ></v-progress-circular>
               </transition>
-              <input type="file" id="upload" ref="upload" @change="changeFile" accept=".xlsx" />
+              <input 
+              id="upload" 
+              ref="upload" 
+              type="file" 
+              accept=".xlsx" 
+              @change="changeFile" 
+              />
             </v-card>
           </v-col>
         </transition>
 
         <transition name="fade">
         <!-- Check card -->
-          <v-col v-if="dataType" cols="5">
-            <template name="upload-button" transition="fade-transition">
+          <v-col 
+            v-if="dataType" 
+            cols="5"
+          >
+            <template 
+              name="upload-button" 
+              transition="fade-transition"
+            >
               <v-card color="rgba(255, 255, 255, 0.3)">
                 <v-card-title>
-                  <v-btn icon outlined class="ma-3" @click="dataType='';this.loading=false">
+                  <v-btn 
+                    icon 
+                    outlined 
+                    class="ma-3"
+                    @click="dataType='';this.loading=false"
+                  >
                     <v-icon class="mx-0 px-0">arrow_back</v-icon>
                   </v-btn>
                 </v-card-title>
                 <v-card-text>
                   <v-row justify="center">
                     <v-col cols="8">
-                      <v-text-field label="檔案名稱" v-model="fileName" readonly></v-text-field>
+                      <v-text-field 
+                        v-model="fileName" 
+                        label="檔案名稱" 
+                        readonly
+                      ></v-text-field>
                     </v-col>
-                    <v-col cols="8" class="mt-2">
+                    <v-col 
+                      cols="8"
+                      class="mt-2"
+                    >
                       <v-select
                         v-model="dataType"
                         :items="fileType"
@@ -72,14 +102,17 @@
                   <v-row justify="center">
                     <v-col cols="auto">
                       <span>
-                        總共
-                        <b>{{ dataLength }}</b>筆資料
+                        總共<b v-text="dataLength" />筆資料
                       </span>
                     </v-col>
                   </v-row>
                   <v-row justify="center">
                     <v-col cols="auto">
-                      <v-btn color="red darken-1 white--text" @click="fileUpload" :loading="loading">確認上傳</v-btn>
+                      <v-btn 
+                        :loading="loading"
+                        color="red darken-1 white--text"
+                        @click="fileUpload" 
+                      >確認上傳</v-btn>
                     </v-col>
                   </v-row>
                 </v-card-text>

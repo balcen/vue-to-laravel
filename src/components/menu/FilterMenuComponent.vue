@@ -6,10 +6,10 @@
   >
     <template v-slot:activator="{ on }">
       <v-btn
+        :disabled="url === 'clients'"
         text
         icon
         v-on="on"
-        :disabled="url === 'clients'"
       >
         <v-icon>mdi-filter-variant</v-icon>
       </v-btn>
@@ -18,10 +18,16 @@
       max-width="250"
     >
 
-      <v-card-text class="pb-0" v-if="url === 'products'">
+      <v-card-text 
+        v-if="url === 'products'"
+        class="pb-0" 
+      >
         <p class="body-1 mb-0">產品價格</p>
         <v-row justify="space-around">
-          <v-col class="ma-0 pb-0" cols="5">
+          <v-col 
+            class="ma-0 pb-0" 
+            cols="5"
+          >
             <v-text-field
               v-model="minPrice"
               placeholder="最低價格"
@@ -30,7 +36,10 @@
             ></v-text-field>
           </v-col>
           <v-icon small>mdi-tilde</v-icon>
-          <v-col class="ma-0 pb-0" cols="5">
+          <v-col 
+            class="ma-0 pb-0" 
+            cols="5"
+          >
             <v-text-field
               v-model="maxPrice"
               placeholder="最高價格"
@@ -100,7 +109,7 @@
                 v-model="earlierDate" 
                 no-title 
                 :max="laterDate"
-                @input="menu1 = false"
+                @input="menu1=false"
               ></v-date-picker>
             </v-menu>
           </v-col>
@@ -124,7 +133,7 @@
                 v-model="laterDate" 
                 no-title 
                 :min="earlierDate"
-                @input="menu2 = false"
+                @input="menu2=false"
               ></v-date-picker>
             </v-menu>
           </v-col>
@@ -263,7 +272,7 @@
                 v-model="laterExpDate" 
                 no-title 
                 :min="earlierExpDate"
-                @input="menu4 = false"
+                @input="menu4=false"
               ></v-date-picker>
             </v-menu>
           </v-col>

@@ -1,6 +1,9 @@
 <template>
   <v-container fill-height>
-    <v-row justify="center" align="center">
+    <v-row 
+      justify="center" 
+      align="center"
+    >
       <v-col cols="6">
         <v-card flat>
           <v-card-title>
@@ -9,8 +12,15 @@
             </v-row>
           </v-card-title>
           <v-card-text>
-            <v-form ref="form" v-model="valid" lazy-validation>
-              <v-row wrap justify="center">
+            <v-form 
+              ref="form" 
+              v-model="valid" 
+              lazy-validation
+            >
+              <v-row 
+                justify="center"
+                wrap 
+              >
                 <v-col cols="8">
                   <v-text-field 
                     v-model="name" 
@@ -52,7 +62,11 @@
             </v-form>
           </v-card-text>
           <v-card-actions>
-            <v-row class="d-flex flex-column" align="center" justify="center">
+            <v-row 
+              class="d-flex flex-column" 
+              align="center" 
+              justify="center"
+            >
               <v-col cols="auto">
                 <v-btn  
                   color="primary" 
@@ -63,7 +77,10 @@
                   註冊
                 </v-btn>
               </v-col>
-              <v-col class="pt-0" cols="auto">
+              <v-col 
+                class="pt-0"
+                cols="auto"
+              >
                 <router-link :to="{name: 'login'}">已有帳號</router-link>
               </v-col>
             </v-row>

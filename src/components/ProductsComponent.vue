@@ -244,7 +244,6 @@ export default {
         if (this.options.sortBy) {
           this.url += `&sortBy=${this.options.sortBy}&sortDesc=${this.options.sortDesc[0] ? 'desc' : 'asc'}`
         }
-
         this.loading = true
         let result
         if(this.q || this.filterIsEmpty) {
@@ -376,7 +375,7 @@ export default {
     },
     dataAssign() {
       if (this.options.page !== 1) {
-        this.options = 1
+        this.options.page = 1
       } else {
         this.loading = true
         this.getSearch({type: 'products', page: this.url})

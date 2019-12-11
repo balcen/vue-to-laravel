@@ -19,7 +19,7 @@
     >
 
       <v-card-text 
-        v-if="url === 'products'"
+        v-if="isProduct"
         class="pb-0" 
       >
         <p class="body-1 mb-0">產品價格</p>
@@ -51,7 +51,7 @@
         </v-row>
       </v-card-text>
 
-      <v-card-text v-if="url === 'orders'">
+      <v-card-text v-if="isOrder">
         <p class="body-1 mb-0">產品價格</p>
         <v-row>
           <v-col class="ma-0 pb-0">
@@ -140,7 +140,7 @@
         </v-row>
       </v-card-text>
       
-      <v-card-text v-if="url === 'invoices'">
+      <v-card-text v-if="isInvoices">
         <p class="body-1 mb-0">產品價格</p>
         <v-row>
           <v-col class="ma-0 pb-0">
@@ -227,56 +227,58 @@
             </v-menu>
           </v-col>
         </v-row>
-        <p class="body-1 mb-0">發票到期日</p>
-        <v-row>
-          <v-col class="ma-0 pb-0">
-            <v-menu
-              v-model="menu3"
-              :close-on-content-click="false"
-              transition="scale-transition"
-            >
-              <template v-slot:activator="{ on }">
-                <v-text-field
-                  v-model="earlierExpDate"
-                  persistent-hint
-                  readonly
-                  dense
-                  v-on="on"
-                ></v-text-field>
-              </template>
-              <v-date-picker 
-                v-model="earlierExpDate" 
-                no-title 
-                :max="laterExpDate"
-                @input="menu3 = false"
-              ></v-date-picker>
-            </v-menu>
-          </v-col>
-          <v-icon small>mdi-tilde</v-icon>
-          <v-col class="ma-0 pb-0">
-            <v-menu
-              v-model="menu4"
-              :close-on-content-click="false"
-              transition="scale-transition"
-            >
-              <template v-slot:activator="{ on }">
-                <v-text-field
-                  v-model="laterExpDate"
-                  persistent-hint
-                  readonly
-                  dense
-                  v-on="on"
-                ></v-text-field>
-              </template>
-              <v-date-picker 
-                v-model="laterExpDate" 
-                no-title 
-                :min="earlierExpDate"
-                @input="menu4=false"
-              ></v-date-picker>
-            </v-menu>
-          </v-col>
-        </v-row>
+        <div>
+          <p class="body-1 mb-0">發票到期日</p>
+          <v-row>
+            <v-col class="ma-0 pb-0">
+              <v-menu
+                v-model="menu3"
+                :close-on-content-click="false"
+                transition="scale-transition"
+              >
+                <template v-slot:activator="{ on }">
+                  <v-text-field
+                    v-model="earlierExpDate"
+                    persistent-hint
+                    readonly
+                    dense
+                    v-on="on"
+                  ></v-text-field>
+                </template>
+                <v-date-picker 
+                  v-model="earlierExpDate" 
+                  no-title 
+                  :max="laterExpDate"
+                  @input="menu3 = false"
+                ></v-date-picker>
+              </v-menu>
+            </v-col>
+            <v-icon small>mdi-tilde</v-icon>
+            <v-col class="ma-0 pb-0">
+              <v-menu
+                v-model="menu4"
+                :close-on-content-click="false"
+                transition="scale-transition"
+              >
+                <template v-slot:activator="{ on }">
+                  <v-text-field
+                    v-model="laterExpDate"
+                    persistent-hint
+                    readonly
+                    dense
+                    v-on="on"
+                  ></v-text-field>
+                </template>
+                <v-date-picker 
+                  v-model="laterExpDate" 
+                  no-title 
+                  :min="earlierExpDate"
+                  @input="menu4=false"
+                ></v-date-picker>
+              </v-menu>
+            </v-col>
+          </v-row>
+        </div>
       </v-card-text>
 
       <v-card-actions>
@@ -372,6 +374,15 @@ export default {
     },
     filterIsEmpty () {
       return this.$store.getters['filter/filterIsEmpty']
+    },
+    isProduct() {
+      return this.url === 'products'
+    },
+    isOrder() {
+      return this.url === 'orders'
+    },
+    isInvoices() {
+      return this.url === 'invoices'
     }
   },
   created () {

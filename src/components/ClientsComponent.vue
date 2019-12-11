@@ -18,7 +18,10 @@
       >
         <v-card>
           <v-card-title>
-            <span class="headline" v-text="formTitle" />
+            <span 
+              class="headline" 
+              v-text="formTitle" 
+            />
           </v-card-title>
           <v-form 
             v-model="valid" 
@@ -142,7 +145,10 @@
     </template>
     
     <template v-slot:no-data>
-      <v-alert type="error" class="text-left my-3">
+      <v-alert 
+        type="error" 
+        class="text-left my-3"
+      >
         抱歉，這裡沒有任何資料 :(
       </v-alert>
     </template>

@@ -15,222 +15,118 @@
       </v-btn>
     </template>
     <v-card
-      max-width="250"
+      max-width="255"
     >
 
       <v-card-text 
-        v-if="isProduct"
         class="pb-0" 
       >
-        <p class="body-1 mb-0">產品價格</p>
-        <v-row justify="space-around">
-          <v-col 
-            class="ma-0 pb-0" 
-            cols="5"
-          >
-            <v-text-field
-              v-model="minPrice"
-              placeholder="最低價格"
-              type="number"
-              dense
-            ></v-text-field>
-          </v-col>
-          <v-icon small>mdi-tilde</v-icon>
-          <v-col 
-            class="ma-0 pb-0" 
-            cols="5"
-          >
-            <v-text-field
-              v-model="maxPrice"
-              placeholder="最高價格"
-              type="number"
-              dense
-            >
-            </v-text-field>
-          </v-col>
-        </v-row>
-      </v-card-text>
+        <div v-if="textFieldPrice">
+          <p class="body-1 mb-0">產品價格</p>
+          <v-row justify="space-around">
+            <v-col class="ma-0 py-0">
+              <v-text-field
+                v-model="minPrice"
+                placeholder="最低價格"
+                type="number"
+                dense
+                clearable
+              ></v-text-field>
+            </v-col>
+            <v-icon small>mdi-tilde</v-icon>
+            <v-col class="ma-0 py-0">
+              <v-text-field
+                v-model="maxPrice"
+                placeholder="最高價格"
+                type="number"
+                dense
+                clearable
+              >
+              </v-text-field>
+            </v-col>
+          </v-row>
+        </div>
 
-      <v-card-text v-if="isOrder">
-        <p class="body-1 mb-0">產品價格</p>
-        <v-row>
-          <v-col class="ma-0 pb-0">
-            <v-text-field
-              v-model="minPrice"
-              placeholder="最小價格"
-              dense
-            ></v-text-field>
-          </v-col>
-          <v-icon small>mdi-tilde</v-icon>
-          <v-col class="ma-0 pb-0">
-            <v-text-field
-              v-model="maxPrice"
-              placeholder="最大價格"
-              dense
-            ></v-text-field>
-          </v-col>
-        </v-row>
-        <p class="body-1 mb-0">購買數量</p>
-        <v-row>
-          <v-col class="ma-0 pb-0">
-            <v-text-field
-              v-model="minAmount"
-              placeholder="最小數量"
-              dense
-            ></v-text-field>
-          </v-col>
-          <v-icon small>mdi-tilde</v-icon>
-          <v-col class="ma-0 pb-0">
-            <v-text-field
-              v-model="maxAmount"
-              placeholder="最大數量"
-              dense
-            ></v-text-field>
-          </v-col>
-        </v-row>
-        <p class="body-1 mb-0">訂單日期</p>
-        <v-row>
-          <v-col class="ma-0 pb-0">
-            <v-menu
-              v-model="menu1"
-              :close-on-content-click="false"
-              transition="scale-transition"
-            >
-              <template v-slot:activator="{ on }">
-                <v-text-field
-                  v-model="earlierDate"
-                  persistent-hint
-                  readonly
-                  dense
-                  v-on="on"
-                ></v-text-field>
-              </template>
-              <v-date-picker 
-                v-model="earlierDate" 
-                no-title 
-                :max="laterDate"
-                @input="menu1=false"
-              ></v-date-picker>
-            </v-menu>
-          </v-col>
-          <v-icon small>mdi-tilde</v-icon>
-          <v-col class="ma-0 pb-0">
-            <v-menu
-              v-model="menu2"
-              :close-on-content-click="false"
-              transition="scale-transition"
-            >
-              <template v-slot:activator="{ on }">
-                <v-text-field
-                  v-model="laterDate"
-                  persistent-hint
-                  readonly
-                  dense
-                  v-on="on"
-                ></v-text-field>
-              </template>
-              <v-date-picker 
-                v-model="laterDate" 
-                no-title 
-                :min="earlierDate"
-                @input="menu2=false"
-              ></v-date-picker>
-            </v-menu>
-          </v-col>
-        </v-row>
-      </v-card-text>
-      
-      <v-card-text v-if="isInvoices">
-        <p class="body-1 mb-0">產品價格</p>
-        <v-row>
-          <v-col class="ma-0 pb-0">
-            <v-text-field
-              v-model="minPrice"
-              placeholder="最小價格"
-              dense
-            ></v-text-field>
-          </v-col>
-          <v-icon small>mdi-tilde</v-icon>
-          <v-col class="ma-0 pb-0">
-            <v-text-field
-              v-model="maxPrice"
-              placeholder="最大價格"
-              dense
-            ></v-text-field>
-          </v-col>
-        </v-row>
-        <p class="body-1 mb-0">購買數量</p>
-        <v-row>
-          <v-col class="ma-0 pb-0">
-            <v-text-field
-              v-model="minAmount"
-              placeholder="最小數量"
-              dense
-            ></v-text-field>
-          </v-col>
-          <v-icon small>mdi-tilde</v-icon>
-          <v-col class="ma-0 pb-0">
-            <v-text-field
-              v-model="maxAmount"
-              placeholder="最大數量"
-              dense
-            ></v-text-field>
-          </v-col>
-        </v-row>
-        <p class="body-1 mb-0">發票日</p>
-        <v-row>
-          <v-col class="ma-0 pb-0">
-            <v-menu
-              v-model="menu1"
-              :close-on-content-click="false"
-              transition="scale-transition"
-            >
-              <template v-slot:activator="{ on }">
-                <v-text-field
-                  v-model="earlierDate"
-                  persistent-hint
-                  readonly
-                  dense
-                  v-on="on"
-                ></v-text-field>
-              </template>
-              <v-date-picker 
-                v-model="earlierDate" 
-                no-title 
-                :max="laterDate"
-                @input="menu1 = false"
-              ></v-date-picker>
-            </v-menu>
-          </v-col>
-          <v-icon small>mdi-tilde</v-icon>
-          <v-col class="ma-0 pb-0">
-            <v-menu
-              v-model="menu2"
-              :close-on-content-click="false"
-              transition="scale-transition"
-            >
-              <template v-slot:activator="{ on }">
-                <v-text-field
-                  v-model="laterDate"
-                  persistent-hint
-                  readonly
-                  dense
-                  v-on="on"
-                ></v-text-field>
-              </template>
-              <v-date-picker 
-                v-model="laterDate" 
-                no-title 
-                :min="earlierDate"
-                @input="menu2 = false"
-              ></v-date-picker>
-            </v-menu>
-          </v-col>
-        </v-row>
-        <div>
+        <div v-if="textFieldDateAndAmount">
+          <p class="body-1 mb-0">購買數量</p>
+          <v-row>
+            <v-col class="ma-0 py-0">
+              <v-text-field
+                v-model="minAmount"
+                placeholder="最小數量"
+                dense
+                clearable
+              ></v-text-field>
+            </v-col>
+            <v-icon small>mdi-tilde</v-icon>
+            <v-col class="ma-0 py-0">
+              <v-text-field
+                v-model="maxAmount"
+                placeholder="最大數量"
+                dense
+                clearable
+              ></v-text-field>
+            </v-col>
+          </v-row>
+        </div>
+
+        <div v-if="textFieldDateAndAmount">
+          <p class="body-1 mb-0">訂單日期</p>
+          <v-row>
+            <v-col class="ma-0 py-0">
+              <v-menu
+                v-model="menu1"
+                :close-on-content-click="false"
+                transition="scale-transition"
+              >
+                <template v-slot:activator="{ on }">
+                  <v-text-field
+                    v-model="earlierDate"
+                    persistent-hint
+                    readonly
+                    dense
+                    v-on="on"
+                  ></v-text-field>
+                </template>
+                <v-date-picker 
+                  v-model="earlierDate" 
+                  no-title 
+                  :max="laterDate"
+                  @input="menu1=false"
+                ></v-date-picker>
+              </v-menu>
+            </v-col>
+            <v-icon small>mdi-tilde</v-icon>
+            <v-col class="ma-0 py-0">
+              <v-menu
+                v-model="menu2"
+                :close-on-content-click="false"
+                transition="scale-transition"
+              >
+                <template v-slot:activator="{ on }">
+                  <v-text-field
+                    v-model="laterDate"
+                    persistent-hint
+                    readonly
+                    dense
+                    v-on="on"
+                  ></v-text-field>
+                </template>
+                <v-date-picker 
+                  v-model="laterDate" 
+                  no-title 
+                  :min="earlierDate"
+                  @input="menu2=false"
+                ></v-date-picker>
+              </v-menu>
+            </v-col>
+          </v-row>
+        </div>
+
+        <div v-if="textFieldExpDate">
           <p class="body-1 mb-0">發票到期日</p>
           <v-row>
-            <v-col class="ma-0 pb-0">
+            <v-col class="ma-0 py-0">
               <v-menu
                 v-model="menu3"
                 :close-on-content-click="false"
@@ -254,7 +150,7 @@
               </v-menu>
             </v-col>
             <v-icon small>mdi-tilde</v-icon>
-            <v-col class="ma-0 pb-0">
+            <v-col class="ma-0 py-0">
               <v-menu
                 v-model="menu4"
                 :close-on-content-click="false"
@@ -375,13 +271,13 @@ export default {
     filterIsEmpty () {
       return this.$store.getters['filter/filterIsEmpty']
     },
-    isProduct() {
-      return this.url === 'products'
+    textFieldPrice() {
+      return this.url === 'products' || this.url === 'orders' || this.url === 'invoices'
     },
-    isOrder() {
-      return this.url === 'orders'
+    textFieldDateAndAmount() {
+      return this.url === 'orders' || this.url === 'invoices'
     },
-    isInvoices() {
+    textFieldExpDate() {
       return this.url === 'invoices'
     }
   },

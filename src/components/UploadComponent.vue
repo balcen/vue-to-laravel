@@ -10,9 +10,9 @@
             v-if="!dataType" 
             cols="5"
           >
-            <p
-              class="display-1 red--text text--darken-1 text-center font-weight-bold"
-            >File Upload & Data Type Preview</p>
+            <p class="display-3 red--text text--darken-1 text-center">
+              File Upload & Preview
+            </p>
             <v-card 
               id="dropzone" 
               color="rgba(0, 0, 0, 0.2)"
@@ -35,15 +35,25 @@
                   :loading="loading"
                 >Select</v-btn>
               </v-card-text>
-              <transition name="fade">
-                <v-progress-circular 
-                  v-if="loading"
-                  color="red darken-1"
-                  size="96"
-                  width="12"
-                  indeterminate 
-                ></v-progress-circular>
-              </transition>
+              <v-card-text v-if=loading>
+                <transition name="fade">
+                  <v-row justify="center">
+                    <v-col cols="12">
+                      <p class="subtitle-1 text-center font-regular">
+                        File Scanning...
+                      </p>
+                    </v-col>
+                    <v-col cols="6">
+                      <v-progress-linear 
+                        color="red accent-4"
+                        height="12"
+                        rounded
+                        indeterminate 
+                      ></v-progress-linear>
+                    </v-col>
+                  </v-row>
+                </transition>
+              </v-card-text>
               <input 
               id="upload" 
               ref="upload" 
@@ -71,7 +81,7 @@
                     icon 
                     outlined 
                     class="ma-3"
-                    @click="dataType='';this.loading=false"
+                    @click="backToUpload"
                   >
                     <v-icon class="mx-0 px-0">arrow_back</v-icon>
                   </v-btn>
@@ -231,6 +241,10 @@ export default {
         this.$refs.upload.files = dt.files
         this.changeFile()
       }
+    },
+    backToUpload() {
+      this.dataType = ''
+      this.loading = false
     }
   }
 }

@@ -112,6 +112,23 @@
         ></router-view>
       </v-col>
     </v-row>
+
+    <transition name="fade">
+      <v-btn
+        v-show="fabBtn"
+        fab
+        fixed
+        bottom
+        right
+        dark
+        color="red darken-1"
+        @click="toTop"
+        v-scroll="onScroll"
+      >
+        <v-icon>mdi-chevron-up</v-icon>
+      </v-btn>
+    </transition>
+    
   </div>
 </template>
 
@@ -127,7 +144,8 @@ export default {
       color: '',
       dialog: false,
       selected: [],
-      dataType: ''
+      dataType: '',
+      fabBtn: false,
     }
   },
   computed: {
@@ -173,6 +191,13 @@ export default {
     },
     setSelected (sel) {
       this.selected = sel
+    },
+    onScroll(e) {
+      const top = e.target.scrollingElement.scrollTop
+      this.fabBtn = top > 20
+    },
+    toTop() {
+      this.$vuetify.goTo(0, {easing: 'easeInOutCubic'})
     }
   }
 }

@@ -81,7 +81,9 @@
                 class="pt-0"
                 cols="auto"
               >
-                <router-link :to="{name: 'login'}">已有帳號</router-link>
+                <router-link :to="{name: 'login'}">
+                  已有帳號
+                </router-link>
               </v-col>
             </v-row>
           </v-card-actions>

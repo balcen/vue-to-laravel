@@ -45,27 +45,17 @@ export default {
     }
   },
   actions: {
-    search ({ state, getters }, { type, page }) {
+    search ({ state, getters }, { type, page, id }) {
       return new Promise ((resolve, reject) => {
-        let query = []
-        if (getters.price) {
-          query.push(`p=${getters.price}`)
-        }
-        if (getters.amount) {
-          query.push(`a=${getters.amount}`)
-        }
-        if (getters.date) {
-          query.push(`d=${getters.date}`)
-        }
-        if (getters.expireDate) {
-          query.push(`ed=${getters.expireDate}`)
-        }
-        if (state.q) {
-          query.push(`q=${state.q}`)
-        }
-
-        let url = `${type}/search${page}&${query.join('&')}`
-        axios.get(url)
+      let options = Object.assign(page, {
+        p: getters.price,
+        a: getters.amount,
+        d: getters.date,
+        ed: getters.expireDate,
+        q: state.q,
+        id: id
+      })
+        axios.get(`${type}/search`, {params: options})
           .then(res => resolve(res.data))
           .catch(err => reject(err))
       })
@@ -76,7 +66,7 @@ export default {
     amount: ({ search }) => search.minAmount || search.maxAmount ? [search.minAmount, search.maxAmount] : null,
     date: ({ search }) => search.earlierDate || search.laterDate ? [search.earlierDate, search.laterDate] : null,
     expireDate: ({ search }) => search.earlierExpeDate || search.laterExpDate ? [search.earlierExpeDate, search.laterExpDate] : null,
-    filterIsEmpty: function (state) {
+    filterIsNotEmpty: function (state) {
       for (var index in state.search) {
         if (state.search[index] !== null && state.search[index] !== undefined && state.search[index] !== "") {
           return true

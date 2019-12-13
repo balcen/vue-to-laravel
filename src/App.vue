@@ -137,7 +137,7 @@ export default {
       refreshAction: 'auth/refresh'
     }),
     ...mapMutations({
-      shiftMessage: 'shiftMessage'
+      shiftStoreMessage: 'shiftMessage'
     }),
     logout() {
       this.logoutAction()
@@ -146,12 +146,13 @@ export default {
         })
     },
     shiftMessage() {
-      const newType = this.messageLine[0].type
-      const newContent = this.messageLine[0].content
-      this.currentMessage = newContent
-      this.messageType = newType
-      this.is_visible = true
-      this.shiftMessage()
+      const newMessage = this.messageLine[0]
+      if (newMessage) {
+        this.currentMessage = newMessage.content
+        this.messageType = newMessage.type
+        this.is_visible = true
+        this.shiftStoreMessage()
+      }
     }
   }
 }

@@ -179,8 +179,9 @@
 
       <v-card-actions>
         <v-btn
-          text
-          color="primary"
+          block
+          dark
+          color="red"
           @click="menuSearch"
         >
           搜尋

@@ -6,11 +6,9 @@
     >
       <v-col cols="6">
         <v-card flat>
-          <v-card-title>
-            <v-row justify="center">
-              <h1>Register</h1>
-            </v-row>
-          </v-card-title>
+          <h1 class="pt-5 display-2 text-center blue--text text--darken-4">
+            Register
+          </h1>
           <v-card-text>
             <v-form 
               ref="form" 
@@ -21,7 +19,7 @@
                 justify="center"
                 wrap 
               >
-                <v-col cols="8">
+                <v-col cols="6">
                   <v-text-field 
                     v-model="name" 
                     :rules="[rules.required]"
@@ -30,7 +28,12 @@
                     label="用戶名稱"
                   ></v-text-field>
                 </v-col>
-                <v-col cols="8">
+              </v-row>
+              <v-row 
+                wrap
+                justify="center"
+              >
+                <v-col cols="6">
                   <v-text-field
                     :append-icon="show ? 'visibility' : 'visibility_off'"
                     :rules="[rules.required, rules.min]" 
@@ -40,7 +43,12 @@
                     @click:append="show = !show"
                   ></v-text-field>
                 </v-col>
-                <v-col cols="8">
+              </v-row>
+              <v-row
+                wrap
+                justify="center"
+              >
+                <v-col cols="6">
                   <v-text-field
                     :append-icon="show ? 'visibility' : 'visibility_off'" 
                     :rules="[rules.required, rules.password]" 
@@ -49,7 +57,12 @@
                     @click:append="show2 = !show"
                   ></v-text-field>
                 </v-col>
-                <v-col cols="8">
+              </v-row>
+              <v-row
+                wrap
+                justify="center"
+              >
+                <v-col cols="6">
                   <v-text-field 
                     v-model="email" 
                     :rules="[rules.required, rules.email]" 
@@ -81,7 +94,10 @@
                 class="pt-0"
                 cols="auto"
               >
-                <router-link :to="{name: 'login'}">
+                <router-link 
+                  class="body-2" 
+                  :to="{name: 'login'}"
+                >
                   已有帳號
                 </router-link>
               </v-col>
@@ -141,3 +157,10 @@ export default {
   }
 }
 </script>
+
+<style>
+.v-card__actions a {
+  text-decoration: none;
+}
+
+</style>

@@ -35,7 +35,6 @@ const router = new VueRouter({
       path: '/dashboard',
       component: DashboardComponent,
       meta: {
-        auth: true,
         requiresAuth: true
       }
     },
@@ -43,54 +42,36 @@ const router = new VueRouter({
       name: 'upload',
       path: '/upload',
       component: UploadComponent,
-      meta: {
-        auth: undefined
-      }
     },
     {
       name: 'index',
       path: '/index',
       component: IndexComponent,
       redirect: '/index/clients',
-      meta: {
-        auth: undefined
-      },
       children: [
         {
           name: 'clients',
           path: '/index/clients',
           component: ClientsComponent,
           props: true,
-          meta: {
-            auth: undefined
-          }
         },
         {
           name: 'products',
           path: '/index/products',
           component: ProductsComponent,
           props: true,
-          meta: {
-            auth: undefined
-          }
         },
         {
           name: 'orders',
           path: '/index/orders',
           component: OrdersComponent,
           props: true,
-          meta: {
-            auth: undefined
-          }
         },
         {
           name: 'invoices',
           path: '/index/invoices',
           component: InvoicesComponent,
           props: true,
-          meta: {
-            auth: undefined
-          }
         }
       ]
     },
@@ -100,11 +81,12 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   if(to.matched.some(record => record.meta.requiresAuth)) {
-    if(store.getters.isLoggedIn) {
+    if(store.getters['auth/isLoggedIn']) {
       next()
       return 
     }
-    next({name: 'login', query: {status: 'error', flashMessage: '請先登入再繼續操作'}})
+    next({name: 'login'})
+    store.commit('pushMessage', {type: 'error', content: '請先登入再繼續操作'})
   }else {
     next()
   }

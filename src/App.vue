@@ -95,22 +95,6 @@ export default {
       messageType: null,
     }
   },
-  created: function() {
-    this.axios.interceptors.response.use((res) => {
-      var token = res.headers.authorization
-      if (token) {
-        this.refreshAction()
-      }
-      return res
-    }, function(err) {
-      return new Promise(function() {
-        if (err.status === 401 && err.config && err.config.__isRetryReqeust) {
-          this.logoutAction()
-        }
-        throw err
-      })
-    })
-  },
   computed: {
     ...mapGetters({
       isLoggedIn: 'auth/isLoggedIn',
@@ -120,16 +104,35 @@ export default {
     }),
   },
   watch: {
-    messageLine() {
-      if (!this.is_visible) {
-        this.shiftMessage()
-      } else if (this.messageLine.length) {
-        this.is_visible = false
-        setTimeout(() => {
+    messageLine: {
+      handler() {
+        if (!this.is_visible) {
           this.shiftMessage()
-        }, 300)
-      }
+        } else if (this.messageLine.length) {
+          this.is_visible = false
+          setTimeout(() => {
+            this.shiftMessage()
+          }, 300)
+        }
+      },
+      immediate: true
     }
+  },
+  created: function() {
+    this.axios.interceptors.response.use((res) => {
+      var token = res.headers.authorization
+      if (token) {
+        this.refreshAction()
+      }
+      return res
+    }, function(err) {
+      return new Promise(function() {
+        if (err.response.status === 401 && err.response.config && err.response.config.__isRetryReqeust) {
+          this.logoutAction()
+        }
+        throw err
+      })
+    })
   },
   methods: {
     ...mapActions({
@@ -173,24 +176,5 @@ a:not(.md-button):hover {
 .fade-enter, .fade-leave {
   opacity: 0;
 }
-
-/* .customMessage {
-  left: 50%;
-  transform:translateX(-50%);
-  z-index: 9999;
-} */
-
-.customMessage {
-  /* position: fixed !important;
-  left: 50%;
-  transform: translateX(-50%); */
-  z-index: 9999;
-}
-/* 
-#flashMessage .flash__message.success {
-  background-color: #dff0d8 !important;
-  border-color: #d6e9c6 !important;
-} */
-
 </style>
 

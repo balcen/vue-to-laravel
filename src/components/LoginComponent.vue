@@ -6,31 +6,38 @@
     >
       <v-col cols="6">
         <v-card flat>
-          <v-card-title>
-            <v-row justify="center">
-              <h1>LOGIN</h1>
-            </v-row>
-          </v-card-title>
+          <h1 class="pt-5 display-2 text-center blue--text text--darken-4">
+            LOGIN
+          </h1>
           <v-card-text>
             <v-form ref="form">
               <v-row 
                 wrap 
                 justify="center"
               >
-                <v-col cols="8">
+                <v-col cols="6">
                   <v-text-field
-                    label="用戶名稱"
+                    ref="name"
                     v-model="user.name"
+                    :rules="[rules.required]"
+                    label="用戶名稱"
                   ></v-text-field>
                 </v-col>
+              </v-row>
+              <v-row 
+                wrap
+                justify="center"
+              >
                 <v-col 
-                  cols="8" 
+                  cols="6" 
                   class="mt-2"
                 >
                   <v-text-field
+                    ref="password"
+                    v-model="user.password"
+                    :rules="[rules.required]"
                     type="password"
                     label="密碼"
-                    v-model="user.password"
                   ></v-text-field>
                 </v-col>
               </v-row>
@@ -56,7 +63,10 @@
                 class="pt-0" 
                 cols="auto"
               >
-                <router-link :to="{name: 'register'}">
+                <router-link 
+                  class="body-2"
+                  :to="{name: 'register'}"
+                >
                   註冊帳號
                 </router-link>
               </v-col>
@@ -69,7 +79,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapMutations, mapActions } from 'vuex'
 export default {
   data() {
     return {
@@ -79,16 +89,19 @@ export default {
       },
       message: '',
       loading: false,
+      loginError: false,
+      loginErrorMessage: '',
+      rules: {
+        required : v => !!v || "Required"
+      }
     }
   },
   mounted() {
-    // 彈出訊息
-    const query = this.$route.query
-    if(query.status && query.flashMessage) {
-      this.flash(query.flashMessage, query.status, {timeout: 3000})
-    }
   },
   methods: {
+    ...mapMutations({
+      upFlash: 'pushMessage'
+    }),
     ...mapActions({
       loginAction: 'auth/login'
     }),
@@ -96,16 +109,33 @@ export default {
       const name = this.user.name
       const password = this.user.password
 
+      if (!this.$refs.form.validate()) return 
+      
       this.loading = true
-
       // actions 必須透過 dispatch 來調用
       this.loginAction({name, password})
-        .then(() => this.$router.push('/index'))
-        .catch(err => {
-          this.$router.push('/')
-          this.flash(`發生錯誤，請重新登入 ${err}`, 'error')
+        .then(response => {
+          this.upFlash({type: 'success', content: '成功登入'})
+          this.$router.push('/index')
         })
+        .catch(err => {
+          if (err.response.status === 401) {
+            this.upFlash({type: 'error', content: '帳號密碼錯誤'})
+            this.user.password = ''
+            this.loginError = true
+          } else {
+            this.upFlash({type: 'error', content: '發生錯誤，請重新登入'})
+          }
+          this.loading = false
+        })
+      
     }
   }
 }
 </script>
+
+<style>
+.v-card__actions a {
+  text-decoration: none;
+}
+</style>

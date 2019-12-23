@@ -114,7 +114,7 @@ export default {
       this.loading = true
       // actions 必須透過 dispatch 來調用
       this.loginAction({name, password})
-        .then(response => {
+        .then(() => {
           this.upFlash({type: 'success', content: '成功登入'})
           this.$router.push('/index')
         })

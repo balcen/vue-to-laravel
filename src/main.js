@@ -17,7 +17,7 @@ Vue.config.devtools = true;
 
 // Vue Axios
 axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
-axios.defaults.baseURL = process.env.VUE_APP_LOCAL_URL || process.env.URL;
+axios.defaults.baseURL = process.env.VUE_APP_LOCAL_URL;
 const token = localStorage.getItem('token')
 if(token) {
   axios.defaults.headers.common['Authorization'] = token

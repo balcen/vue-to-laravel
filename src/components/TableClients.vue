@@ -295,14 +295,14 @@ export default {
       setTimeout(() => {
         this.editItem = Object.assign({}, this.defaultItem)
         this.editIndex = -1
-        this.reset()
+        // this.reset()
       },300);
     },
     save() {
+      if(!this.$refs.form.validate()) return
       this.loading = true
       let index = this.editIndex
       let item = this.editItem
-      if(!this.$refs.form.validate()) return
       if (index !== -1) {
         this.axios.put(`clients/${item.id}`, item).then(() => {
           Object.assign(this.clients[index], item)

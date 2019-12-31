@@ -367,10 +367,11 @@ export default {
       setTimeout(() => {
         this.editItem = Object.assign({}, this.defaultItem);
         this.editIndex = -1;
-        this.reset()
+        // this.reset()
       }, 300)
     },
     save () {
+      if(!this.$refs.form.validate()) return
       this.loading = true
       // let formData = new FormData;
       // formData.append('item', JSON.stringify(this.editItem));
@@ -378,7 +379,6 @@ export default {
       let index = this.editIndex
       // let item = {item: this.editItem, image: this.image};
       let item = this.editItem
-      if(!this.$refs.form.validate()) return
       if (index !== -1) {
         this.axios.put(`products/${item.id}`, item).then(() => {
           Object.assign(this.products[index], item)

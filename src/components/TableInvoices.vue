@@ -445,17 +445,18 @@ export default {
     },
     close () {
       this.$emit('toggleDialog', false)
+    
       setTimeout(() => {
-        this.editItem = Object.assign({}, this.defaultItem);
+        this.editItem = Object.assign({}, this.defaultItem)
         this.editIndex = -1
-        this.reset()
+        // this.reset()
       }, 300)
     },
     save() {
+      if(!this.$refs.form.validate()) return
       this.loading = true;
       let index = this.editIndex
       let item = this.editItem
-      if(!this.$refs.form.validate()) return
 
       if (index !== -1) {
         this.axios.put(`invoices/${item.id}`, item).then(() => {

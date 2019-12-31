@@ -392,7 +392,6 @@ export default {
         this.editItem = Object.assign({}, this.defaultItem)
         this.editIndex = -1
         this.reset()
-        this.loading = false
       },300)
     },
     save () {
@@ -404,15 +403,19 @@ export default {
         this.axios.put(`orders/${item.id}`, item).then(() => {
           Object.assign(this.orders[index], item)
           this.upFlash({type: 'success', content: '成功修改一筆資料'})
+          this.loading = false
         }).catch(error => {
           this.upFlash({type: 'error', content: error.message})
+          this.loading = false
         })
       } else if(index === -1) {
         this.axios.post('orders', item).then(() => {
           this.orders.push(item)
           this.upFlash({type: 'success', content: '成功新增一筆資料'})
+          this.loading = false
         }).catch(error => {
           this.upFlash({type: 'error', content: error.message})
+          this.loading = false
         })
       }
       this.close()

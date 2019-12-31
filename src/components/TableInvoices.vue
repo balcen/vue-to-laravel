@@ -346,7 +346,7 @@ export default {
         'i_amount': '',
         'i_note':''
       },
-      default: {
+      defaultItem: {
         'i_no': '',
         'i_date': '',
         'i_mature': '',
@@ -446,13 +446,13 @@ export default {
     close () {
       this.$emit('toggleDialog', false)
       setTimeout(() => {
-        this.editItem = Object.assign({}, this.defaultItem)
+        this.editItem = Object.assign({}, this.defaultItem);
         this.editIndex = -1
         this.reset()
-        this.loading = false
       }, 300)
     },
     save() {
+      this.loading = true;
       let index = this.editIndex
       let item = this.editItem
       if(!this.$refs.form.validate()) return
@@ -461,15 +461,19 @@ export default {
         this.axios.put(`invoices/${item.id}`, item).then(() => {
           Object.assign(this.invoices[index], item)
           this.upFlash({type:'success', content: '成功修改一筆資料'})
+          this.loading = false
         }).catch(error => {
           this.upFlash({type: 'error', content: error.message})
+          this.loading = false
         })
       } else if(index === -1) {
         this.axios.post('invoices', item).then(() => {
           this.invoices.push(item)
           this.upFlash({type: 'success', content: '成功新增一筆資料'})
+          this.loading = false
         }).catch(error => {
           this.upFlash({type: 'error', content: error.message})
+          this.loading = false
         })
       }
       this.close()
@@ -481,7 +485,7 @@ export default {
       this.$refs.form.reset();
     },
     amount() {
-      this.editItem.i_amount = Math.round(this.editItem.i_product_price * this.editItem.i_quantity * 1000) / 1000
+      // this.editItem.i_amount = Math.round(this.editItem.i_product_price * this.editItem.i_quantity * 1000) / 1000
     },
     getSearch() {
       return this.search({type: 'invoices', page: this.options, id: this.queryId})

@@ -234,26 +234,22 @@ export default {
       async handler () {
         this.loading = true
         let result
-        if (this.q || this.filterIsNotEmpty) {
+        if (this.q || this.filterIsNotEmpty || this.queryId) {
           await this.getSearch()
             .then(data => result = data)
         } else {
-          if (this.$route.query.id) {
-            await this.show()
-              .then(data => result = data)
-          } else {
             await this.getDataFromApi()
               .then(data => result = data)
               .catch(error => this.upFlash({type: 'error', content: error.message}))
-          }
-
-          if (result) {
-            this.clients = result.data
-            this.totalItems = result.total
-          }
-          
-          this.loading = false
         }
+
+        if (result) {
+          this.clients = result.data
+          this.totalItems = result.total
+        }
+          
+        this.loading = false
+      
       },
       deep: true
     }
@@ -300,30 +296,33 @@ export default {
         this.editItem = Object.assign({}, this.defaultItem)
         this.editIndex = -1
         this.reset()
-        this.loading = false
       },300);
     },
     save() {
-      let index = this.editIndex;
-      let item = this.editItem;
-      if(!this.$refs.form.validate()) return;
+      this.loading = true
+      let index = this.editIndex
+      let item = this.editItem
+      if(!this.$refs.form.validate()) return
       if (index !== -1) {
         this.axios.put(`clients/${item.id}`, item).then(() => {
           Object.assign(this.clients[index], item)
           this.upFlash({type: 'success', content: '成功修改一筆資料'})
-          this.$store.commit('update')
+          this.loading = false
         }).catch(error => {
           this.upFlash({type: 'error', content: error.message})
+          this.loading = false
         })
       } else if (index === -1) {
         this.axios.post('clients', item).then(() => {
           this.clients.push(item)
           this.upFlash({type: 'success', content: '成功新增一筆資料'})
+          this.loading = false
         }).catch(error => {
           this.upFlash({type: 'error', content: error.message})
-        });
+          this.loading = false
+        })
       }
-      this.close();
+      this.close()
     },
     deleteArray () {
       this.clients = this.clients.filter((el) => !this.selected.includes(el));

@@ -368,10 +368,10 @@ export default {
         this.editItem = Object.assign({}, this.defaultItem);
         this.editIndex = -1;
         this.reset()
-        this.loading = false
       }, 300)
     },
     save () {
+      this.loading = true
       // let formData = new FormData;
       // formData.append('item', JSON.stringify(this.editItem));
       // formData.append('image', this.image);
@@ -383,18 +383,21 @@ export default {
         this.axios.put(`products/${item.id}`, item).then(() => {
           Object.assign(this.products[index], item)
           this.upFlash({type: 'success', content: '成功修改一筆資料'})
+          this.loading = false
         }).catch(error => {
           this.upFlash({type: 'error', content: error.message})
+          this.loading = false
         })
       } else if(index === -1) {
         this.axios.post(`products`, item).then(() => {
           this.products.push(item);
           this.upFlash({type: 'success', content: '成功新增一筆資料'})
+          this.loading = false
         }).catch(error => {
           this.upFlash({type: 'error', content: error.message})
+          this.loading = false
         })
       }
-      
       this.close()
     },
     deleteArray() {

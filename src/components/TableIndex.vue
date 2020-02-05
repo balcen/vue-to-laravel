@@ -1,5 +1,6 @@
 <template>
   <div>
+    <NavigationMain></NavigationMain>
     <v-row 
       dense 
       no-gutters 
@@ -134,9 +135,11 @@
 
 <script>
 import FilterMenuComponent from './menu/FilterMenuComponent'
+import NavigationMain from './NavigationMain'
 export default {
   components: {
-    FilterMenuComponent
+    FilterMenuComponent,
+    NavigationMain
   },
   data () {
     return {

@@ -1,6 +1,11 @@
 <template>
-  <div class="pa-5 back">
-    <v-container class="fill-height d-flex justify-center align-center">
+<div class="fill-height">
+  <NavigationMian></NavigationMian>
+  <!-- <div class="pa-5 back"> -->
+    <v-container 
+      class="back d-flex"
+      fluid
+    >
       <v-row 
         align="center" 
         justify="center"
@@ -132,12 +137,17 @@
         </transition>
       </v-row>
     </v-container>
-  </div>
+  <!-- </div> -->
+</div>
 </template>
 
 <script>
 import { mapMutations } from 'vuex'
+import NavigationMian from './NavigationMain'
 export default {
+  components: {
+    NavigationMian
+  },
   data() {
     return {
       uploadCard: true,
@@ -269,7 +279,9 @@ export default {
   background-image: url(https://images.unsplash.com/photo-1464278533981-50106e6176b1?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1567&q=80);
   background-position: center;
   background-size: cover;
-  height: 100%;
+  height: -moz-calc(100% - 48px);
+  height: -webkit-calc(100% - 48px);
+  height: calc(100% - 48px);
 }
 
 #dropzone.v-card:hover {

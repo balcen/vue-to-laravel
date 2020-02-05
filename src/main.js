@@ -4,6 +4,7 @@ import App from './App.vue'
 import store from './store/Store'
 import VueAxios from 'vue-axios'
 import VueRouter from 'vue-router'
+import VueCookies from 'vue-cookies'
 import router from './router'
 import vuetify from './plugins/vuetify';
 import 'roboto-fontface/css/roboto/roboto-fontface.css'
@@ -23,6 +24,9 @@ if(token) {
   axios.defaults.headers.common['Authorization'] = token
 }
 Vue.use(VueAxios, axios);
+
+// Vue Cookies 
+Vue.use(VueCookies);
 
 Vue.use(VueRouter);
 Vue.router = router;

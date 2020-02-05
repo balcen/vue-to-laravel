@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-toolbar 
+    <!-- <v-toolbar 
       flat 
       dense 
       class="shrink"
@@ -56,7 +56,7 @@
       >
         <v-icon>logout</v-icon>
       </v-btn>
-    </v-toolbar>
+    </v-toolbar> -->
 
     <v-content id="content">
       <v-snackbar
@@ -119,20 +119,20 @@ export default {
     }
   },
   created: function() {
-    this.axios.interceptors.response.use((res) => {
-      var token = res.headers.authorization
-      if (token) {
-        this.refreshAction()
-      }
-      return res
-    }, function(err) {
-      return new Promise(function() {
-        if (err.response.status === 401 && err.response.config && err.response.config.__isRetryReqeust) {
-          this.logoutAction()
-        }
-        throw err
-      })
-    })
+    // this.axios.interceptors.response.use((res) => {
+    //   var token = res.headers.authorization
+    //   if (token) {
+    //     this.refreshAction()
+    //   }
+    //   return res
+    // }, function(err) {
+    //   return new Promise(function() {
+    //     if (err.response.status === 401 && err.response.config && err.response.config.__isRetryReqeust) {
+    //       this.logoutAction()
+    //     }
+    //     throw err
+    //   })
+    // })
   },
   methods: {
     ...mapActions({
@@ -162,8 +162,16 @@ export default {
 </script>
 
 <style>
+@import url('https://fonts.googleapis.com/css?family=Noto+Sans+TC:400,500,700&display=swap');
 
-html { overflow-y: auto !important }
+html { 
+  overflow-y: auto !important 
+}
+
+body {
+  font-family: 'Roboto', 'Noto Sans TC';
+}
+
 /* v-btn 加上 link 的底線 */
 a:not(.md-button):hover {
     text-decoration: none !important;

@@ -1,25 +1,34 @@
 <template>
-  <v-container fill-height>
+  <v-container 
+    fluid
+    class="back-full fill-height" 
+  >
     <v-row 
       justify="center" 
       align="center"
     >
-      <v-col cols="6">
+      <v-col cols="auto">
+        <!-- <h1 class="pt-5 display-2 text-center blue--text text--darken-4">
+          LOGIN
+        </h1> -->
         <v-card flat>
-          <h1 class="pt-5 display-2 text-center blue--text text--darken-4">
-            LOGIN
-          </h1>
-          <v-card-text>
+          <h1 class="pt-4 text-center">登入</h1>
+          <v-card-text
+            class="pb-0 px-6"
+          >
             <v-form ref="form">
               <v-row 
                 wrap 
                 justify="center"
               >
-                <v-col cols="6">
+                <v-col
+                  class="auth-text-field"
+                >
                   <v-text-field
+                    outlined
+                    hide-details
                     ref="name"
                     v-model="user.name"
-                    :rules="[rules.required]"
                     label="用戶名稱"
                   ></v-text-field>
                 </v-col>
@@ -29,13 +38,13 @@
                 justify="center"
               >
                 <v-col 
-                  cols="6" 
-                  class="mt-2"
+                  class="auth-text-field"
                 >
                   <v-text-field
+                    outlined
+                    hide-details
                     ref="password"
                     v-model="user.password"
-                    :rules="[rules.required]"
                     type="password"
                     label="密碼"
                   ></v-text-field>
@@ -63,12 +72,12 @@
                 class="pt-0" 
                 cols="auto"
               >
-                <router-link 
+                <!-- <router-link 
                   class="body-2"
                   :to="{name: 'register'}"
                 >
                   註冊帳號
-                </router-link>
+                </router-link> -->
               </v-col>
             </v-row>
           </v-card-actions>
@@ -91,9 +100,6 @@ export default {
       loading: false,
       loginError: false,
       loginErrorMessage: '',
-      rules: {
-        required : v => !!v || "Required"
-      }
     }
   },
   mounted() {
@@ -119,7 +125,7 @@ export default {
           this.$router.push('/index')
         })
         .catch(err => {
-          if (err.response.status === 401) {
+          if (typeof err.response.status !== 'undefined' && err.response.status == 401) {
             this.upFlash({type: 'error', content: '帳號密碼錯誤'})
             this.user.password = ''
             this.loginError = true
@@ -137,5 +143,15 @@ export default {
 <style>
 .v-card__actions a {
   text-decoration: none;
+}
+
+.back-full {
+  background-image: url('https://images.unsplash.com/photo-1487017159836-4e23ece2e4cf?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1951&q=80');
+  background-position: center;
+  background-size: cover;
+}
+
+.auth-text-field {
+  width: 272px;
 }
 </style>

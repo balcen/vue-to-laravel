@@ -17,12 +17,12 @@ window.Vue = Vue;
 Vue.config.devtools = true;
 
 // Vue Axios
-axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
 axios.defaults.baseURL = process.env.VUE_APP_LOCAL_URL;
-const token = localStorage.getItem('token')
-if(token) {
-  axios.defaults.headers.common['Authorization'] = token
-}
+axios.defaults.withCredentials = true;
+// const token = localStorage.getItem('token')
+// if(token) {
+//   axios.defaults.headers.common['Authorization'] = token
+// }
 Vue.use(VueAxios, axios);
 
 // Vue Cookies 

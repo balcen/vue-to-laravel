@@ -59,17 +59,27 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   data() {
     return {
-      
     }
   },
   computed: {
     ...mapGetters({
       isLoggedIn: 'auth/isLoggedIn'
-    })
+    }),
+  },
+  methods:{
+    ...mapActions({
+      logoutAction: 'auth/logout',
+    }),
+    logout() {
+      this.logoutAction()
+        .then(() => {
+          this.$router.push({name: 'root'})
+        })
+    },
   }
 }
 </script>

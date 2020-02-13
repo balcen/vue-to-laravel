@@ -102,8 +102,6 @@ export default {
       loginErrorMessage: '',
     }
   },
-  mounted() {
-  },
   methods: {
     ...mapMutations({
       upFlash: 'pushMessage'

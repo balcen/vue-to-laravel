@@ -1,10 +1,11 @@
 import axios from 'axios'
+import cookie from 'vue-cookies'
 
 export default {
   namespaced: true,
   state: {
     status: '',
-    token: localStorage.getItem('token') || '',
+    token: cookie.get('token') || '',
     user: {}
   },
   mutations: {
@@ -34,11 +35,12 @@ export default {
         commit('auth_request')
         axios.post('/auth/login', user)
         .then(res => {
-          const token = res.data.access_token
-          const user = res.data.user
-          localStorage.setItem('token', token)
-          axios.defaults.headers.common['Authorization'] = token
-          commit('auth_success', token, user)
+          // const token = res.data.access_token
+          // const user = res.data.user
+          // localStorage.setItem('token', token)
+          // axios.defaults.headers.common['Authorization'] = token
+          // commit('auth_success', token, user)
+          commit('auth_success', cookie.get('token'), user)
           resolve(res)
         })
         .catch(err => {
@@ -69,9 +71,10 @@ export default {
     },
     logout({commit}) {
       return new Promise((resolve) => {
-        localStorage.removeItem('token')
+        // localStorage.removeItem('token')
+        cookie.remove('token')
         commit('auth_logout')
-        delete axios.defaults.headers.common['Authorization']
+        // delete axios.defaults.headers.common['Authorization']
         resolve()
       })
     },

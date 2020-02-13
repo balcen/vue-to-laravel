@@ -118,7 +118,7 @@ export default {
       immediate: true
     }
   },
-  created: function() {
+  created() {
     // this.axios.interceptors.response.use((res) => {
     //   var token = res.headers.authorization
     //   if (token) {
@@ -136,18 +136,18 @@ export default {
   },
   methods: {
     ...mapActions({
-      logoutAction: 'auth/logout',
+      // logoutAction: 'auth/logout',
       refreshAction: 'auth/refresh'
     }),
     ...mapMutations({
       shiftStoreMessage: 'shiftMessage'
     }),
-    logout() {
-      this.logoutAction()
-        .then(() => {
-          this.$router.push({name: 'root'})
-        })
-    },
+    // logout() {
+    //   this.logoutAction()
+    //     .then(() => {
+    //       this.$router.push({name: 'root'})
+    //     })
+    // },
     shiftMessage() {
       const newMessage = this.messageLine[0]
       if (newMessage) {

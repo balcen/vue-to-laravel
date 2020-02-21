@@ -133,11 +133,13 @@ export default {
     //     throw err
     //   })
     // })
+    this.checkAuth();
   },
   methods: {
     ...mapActions({
       // logoutAction: 'auth/logout',
-      refreshAction: 'auth/refresh'
+      refreshAuth: 'auth/refresh',
+      checkAuth: 'auth/check'
     }),
     ...mapMutations({
       shiftStoreMessage: 'shiftMessage'

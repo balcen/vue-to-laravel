@@ -110,7 +110,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapMutations } from 'vuex'
 export default {
   data() {
     return {
@@ -135,6 +135,9 @@ export default {
     }
   },
   methods: {
+    ...mapMutations({
+      upFlsh: 'pushMessage'
+    }),
     ...mapActions({
       registerAction: 'auth/register'
     }),
@@ -151,7 +154,7 @@ export default {
         .then(() => this.$router.push('/'))
         .catch(err => {
           this.$router.push('/')
-          this.flash(`註冊失敗 ${err}`, 'error')
+          this.upFlash({type: 'error', content: `註冊失敗 ${err}`})
         })
     }
   }

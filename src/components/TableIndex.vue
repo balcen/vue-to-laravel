@@ -174,7 +174,7 @@ export default {
       let num = id.length
       let idStr = id.join()
 
-      confirm(`確定刪除${num}筆資料？`) && this.axios.delete(`${this.dataType}DeleteAll`, {data: { ids: idStr }}).then(() => {
+      confirm(`確定刪除${num}筆資料？`) && this.axios.delete(`${this.dataType}/DeleteAll`, {data: { ids: idStr }}).then(() => {
         this.upFlash({ typa: 'success', content: `成功刪除${num}筆資料`})
         this.$refs.table.deleteArray()
       }).catch(error => {

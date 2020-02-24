@@ -40,16 +40,19 @@ export default {
           const { token, user, token_type, expires_at } = res.data
           const finalToken = token_type + ' ' + token
           
-          if (typeof(expires_at) !== 'undefined' && Array.length(expires_at) > 0) {
-            localStorage.setItem('token', finalToken)
-            localStorage.setItem('expires_at', expires_at)
-          } else {
-            sessionStorage.setItem('token', finalToken)
+          if (typeof(token) !== 'undefined') {
+            if (typeof(expires_at) !== 'undefined' && Array.length(expires_at) > 0) {
+              localStorage.setItem('token', finalToken)
+              localStorage.setItem('expires_at', expires_at)
+            } else {
+              sessionStorage.setItem('token', finalToken)
+            }
+            axios.defaults.headers.common['Authorization'] = finalToken
+            commit('auth_success', finalToken, user)
+            resolve()
           }
-          axios.defaults.headers.common['Authorization'] = finalToken
-          commit('auth_success', finalToken, user)
+          reject()
           // commit('auth_success', cookie.get('token'), user)
-          resolve()
         })
         .catch(err => {
           commit('auth_error')

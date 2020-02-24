@@ -123,7 +123,7 @@ export default {
           this.$router.push('/index')
         })
         .catch(err => {
-          if (typeof err.response.status !== 'undefined' && err.response.status == 401) {
+          if (typeof(err.response.status) !== 'undefined' && err.response.status == 401) {
             this.upFlash({type: 'error', content: '帳號密碼錯誤'})
             this.user.password = ''
             this.loginError = true

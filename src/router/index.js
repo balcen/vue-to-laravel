@@ -42,12 +42,18 @@ const router = new VueRouter({
       name: 'upload',
       path: '/upload',
       component: UploadComponent,
+      meta: {
+        requiresAuth: true
+      }
     },
     {
       name: 'index',
       path: '/index',
       component: IndexComponent,
       redirect: '/index/clients',
+      meta: {
+        requiresAuth: true
+      },
       children: [
         {
           name: 'clients',

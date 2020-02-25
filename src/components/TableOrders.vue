@@ -401,7 +401,7 @@ export default {
       let item = this.editItem
       if (index !== -1) {
         this.axios.put(`orders/${item.id}`, item).then(() => {
-          Object.assign(this.orders[index], item)
+          Object.assign(this.orders, item)
           this.upFlash({type: 'success', content: '成功修改一筆資料'})
           this.loading = false
         }).catch(error => {

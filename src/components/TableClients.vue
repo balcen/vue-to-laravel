@@ -38,8 +38,10 @@
                   >
                     <v-text-field 
                       v-model="editItem.c_tax_id" 
-                      :rules="[rules.required]" 
+                      :rules="[rules.required]"
                       label="客戶統編" 
+                      maxlength="11"
+                      counter="11"
                       required
                     ></v-text-field>
                   </v-col>
@@ -51,7 +53,9 @@
                     <v-text-field 
                       v-model="editItem.c_name" 
                       :rules="[rules.required]" 
-                      label="客戶名稱" 
+                      label="客戶名稱"
+                      maxlength="50"
+                      counter="50" 
                       required
                     ></v-text-field>
                   </v-col>
@@ -64,6 +68,8 @@
                       v-model="editItem.c_type" 
                       :rules="[rules.required]" 
                       label="客戶類型" 
+                      maxlength="50"
+                      counter="50"
                       required
                     ></v-text-field>
                   </v-col>
@@ -76,6 +82,8 @@
                       v-model="editItem.c_contact" 
                       :rules="[rules.required]" 
                       label="聯絡人" 
+                      maxlength="50"
+                      counter="50"
                       required
                     ></v-text-field>
                   </v-col>
@@ -88,6 +96,8 @@
                       v-model="editItem.c_phone" 
                       :rules="[rules.required]" 
                       label="聯絡電話" 
+                      maxlength="50"
+                      counter="50"
                       required
                     ></v-text-field>
                   </v-col>
@@ -100,6 +110,8 @@
                       v-model="editItem.c_mail" 
                       :rules="[rules.required, rules.email]" 
                       label="電子信箱" 
+                      maxlength="50"
+                      counter="50"
                       required
                     ></v-text-field>
                   </v-col>
@@ -167,6 +179,7 @@ export default {
       totalItems: 0,
       noDataAlert: false,
       options: {},
+      lastPage: 1,
       footerProps: {
         'items-per-page-options': [10, 25, 50, 100, 200, 500]
       },
@@ -244,6 +257,7 @@ export default {
         }
 
         if (result) {
+          this.lastPage = result.last_page
           this.clients = result.data
           this.totalItems = result.total
         }
@@ -314,8 +328,13 @@ export default {
         })
       } else if (index === -1) {
         this.axios.post('clients', item).then(() => {
-          this.clients.push(item)
           this.upFlash({type: 'success', content: '成功新增一筆資料'})
+          // 跳轉到最後一頁
+          if (this.clients.length >= this.options.itemsPerPage) {
+            this.options.page = this.lastPage + 1
+          } else {
+            this.options.page = this.lastPage
+          }
           this.loading = false
         }).catch(error => {
           this.upFlash({type: 'error', content: error.message})

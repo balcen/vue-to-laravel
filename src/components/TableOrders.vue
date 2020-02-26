@@ -42,6 +42,7 @@
                       v-model="editItem.o_no" 
                       label="訂單號碼" 
                       maxlength="30"
+                      counter="30"
                     ></v-text-field>
                   </v-col>
                   <v-col 
@@ -82,6 +83,8 @@
                       :rules="[rules.required]" 
                       v-model="editItem.o_seller_name" 
                       label="賣家名稱"
+                      maxlength="50"
+                      counter="50"
                     ></v-text-field>
                   </v-col>
                   <v-col 
@@ -93,6 +96,8 @@
                       :rules="[rules.required]" 
                       v-model="editItem.o_buyer_name" 
                       label="買家名稱"
+                      maxlength="50"
+                      counter="50"
                     ></v-text-field>
                   </v-col>
                   <v-col 
@@ -104,6 +109,8 @@
                       :rules="[rules.required]" 
                       v-model="editItem.o_product_name" 
                       label="產品名稱"
+                      maxlength="50"
+                      counter="50"
                     ></v-text-field>
                   </v-col>
                   <v-col 
@@ -116,6 +123,7 @@
                       v-model="editItem.o_product_part_no" 
                       label="產品料號" 
                       maxlength="30"
+                      counter="30"
                     ></v-text-field>
                   </v-col>
                   <v-col 
@@ -126,6 +134,8 @@
                     <v-text-field 
                       v-model="editItem.o_product_spec" 
                       label="產品規格"
+                      maxlength="100"
+                      counter="100"
                     ></v-text-field>
                   </v-col>
                   <v-col 
@@ -138,7 +148,7 @@
                       v-model="editItem.o_product_price" 
                       label="產品價格" 
                       :rules="[rules.required]" 
-                      maxlength="12"
+                      maxlength="17"
                       @change="amount"  
                     ></v-text-field>
                   </v-col>
@@ -152,6 +162,7 @@
                       v-model="editItem.o_currency" 
                       label="幣別" 
                       maxlength="10"
+                      counter="10"
                     ></v-text-field>
                   </v-col>
                   <v-col 
@@ -163,6 +174,7 @@
                       :rules="[rules.required]" 
                       v-model="editItem.o_quantity" 
                       label="採購數量"
+                      maxlength="11"
                       @change="amount"
                     ></v-text-field>
                   </v-col>
@@ -174,6 +186,7 @@
                     <v-text-field 
                       v-model="editItem.o_amount" 
                       label="採購金額"
+                      maxlength="20"
                     ></v-text-field>
                   </v-col>
                   <v-col 
@@ -249,6 +262,7 @@ export default {
       menu: false,
       noDataAlert: false,
       options: {},
+      lastPage: 1,
       totalItems: 0,
       footerProps: {
         'items-per-page-options': [10, 25, 50, 100, 200, 500]
@@ -341,6 +355,7 @@ export default {
         }
         
         if (result) {
+          this.lastPage = result.last_page
           this.orders = result.data
           this.totalItems = result.total
         }
@@ -410,8 +425,12 @@ export default {
         })
       } else if(index === -1) {
         this.axios.post('orders', item).then(() => {
-          this.orders.push(item)
           this.upFlash({type: 'success', content: '成功新增一筆資料'})
+          if (this.orders.length >= this.options.itemsPerPage) {
+            this.options.page = this.lastPage + 1
+          } else {
+            this.options.page = this.lastPage
+          }
           this.loading = false
         }).catch(error => {
           this.upFlash({type: 'error', content: error.message})

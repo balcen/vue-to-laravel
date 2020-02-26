@@ -43,6 +43,7 @@
                     v-model="editItem.p_type" 
                     label="產品類型" 
                     maxlength="30"
+                    counter="30"
                   ></v-text-field>
                 </v-col>
                 <v-col 
@@ -73,6 +74,8 @@
                     :rules="[rules.required]" 
                     v-model="editItem.p_name" 
                     label="產品名稱"
+                    maxlength="100"
+                    counter="100"
                   ></v-text-field>
                 </v-col>
                 <v-col 
@@ -85,6 +88,7 @@
                     v-model="editItem.p_part_no" 
                     label="產品料號" 
                     maxlength="100"
+                    counter="100"
                   ></v-text-field>
                 </v-col>
                 <v-col 
@@ -108,7 +112,7 @@
                     :rules="[rules.required]" 
                     v-model="editItem.p_price" 
                     label="產品價格" 
-                    maxlength="12"
+                    maxlength="17"
                   ></v-text-field>
                 </v-col>
                 <v-col 
@@ -121,6 +125,7 @@
                     v-model="editItem.p_currency" 
                     label="幣別" 
                     maxlength="10"
+                    counter="10"
                   ></v-text-field>
                 </v-col>
                 <v-col 
@@ -132,6 +137,7 @@
                     v-model="editItem.p_size" 
                     label="產品尺寸" 
                     maxlegnth="50"
+                    counter="50"
                   ></v-text-field>
                 </v-col>
                 <v-col 
@@ -142,7 +148,8 @@
                   <v-text-field 
                     v-model="editItem.p_weight" 
                     label="產品重量" 
-                    maxlength="15"
+                    maxlength="100"
+                    counter="100"
                   ></v-text-field>
                 </v-col>
                 <v-col 
@@ -229,6 +236,7 @@ export default {
       noDataAlert: false,
       error: '',
       options: {},
+      lastPage: 1,
       totalItems: 0,
       footerProps: {
         'items-per-page-options': [10, 25, 50, 100, 200, 500]
@@ -317,6 +325,7 @@ export default {
         }
 
         if (result) {
+          this.lastPage = result.last_page
           this.products = result.data
           this.totalItems = result.total
         }
@@ -390,8 +399,12 @@ export default {
         })
       } else if(index === -1) {
         this.axios.post(`products`, item).then(() => {
-          this.products.push(item);
           this.upFlash({type: 'success', content: '成功新增一筆資料'})
+          if (this.products.length >= this.options.itemsPerPage) {
+            this.options.page = this.lastPage + 1
+          } else {
+            this.options.page = this.lastPage
+          }
           this.loading = false
         }).catch(error => {
           this.upFlash({type: 'error', content: error.message})

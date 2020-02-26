@@ -465,6 +465,7 @@ export default {
         this.editItem = Object.assign({}, this.defaultItem)
         this.editIndex = -1
         // this.reset()
+        this.$refs.form.resetValidation()
       }, 300)
     },
     save() {
@@ -485,8 +486,10 @@ export default {
       } else if(index === -1) {
         this.axios.post('invoices', item).then(() => {
           this.upFlash({type: 'success', content: '成功新增一筆資料'})
-          if (this.invoices.length >= this.options.itemsPerPage) {
+          if (this.totalItems % this.options.itemsPerPage === 0) {
             this.options.page = this.lastPage + 1
+          } else if (this.options.page === this.lastPage){
+            this.invoices.push(item)
           } else {
             this.options.page = this.lastPage
           }

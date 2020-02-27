@@ -2,6 +2,7 @@
   <v-container 
     fluid
     class="back-full fill-height" 
+    :style="{backgroundImage: 'url(' + require('@/assets/photo-1487017159836-4e23ece2e4cf.jpg') + ')'}"
   >
     <v-row 
       justify="center" 
@@ -99,7 +100,7 @@ export default {
       message: '',
       loading: false,
       loginError: false,
-      loginErrorMessage: '',
+      loginErrorMessage: ''
     }
   },
   methods: {
@@ -144,7 +145,6 @@ export default {
 }
 
 .back-full {
-  background-image: url('https://images.unsplash.com/photo-1487017159836-4e23ece2e4cf?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1951&q=80');
   background-position: center;
   background-size: cover;
 }

@@ -1,7 +1,7 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
-import AuthStore from './module/Auth'
-import FilterStore from './module/Filter'
+import Vue from 'vue';
+import Vuex from 'vuex';
+import AuthStore from './module/Auth';
+import FilterStore from './module/Filter';
 
 Vue.use(Vuex);
 
@@ -11,21 +11,21 @@ const store = new Vuex.Store({
   // strict: true,
   modules: {
     auth: AuthStore,
-    filter: FilterStore
+    filter: FilterStore,
   },
   state: {
     messageLine: [],
   },
   mutations: {
-    pushMessage (state, mes) {
-      return state.messageLine.push(mes)
+    pushMessage(state, mes) {
+      return state.messageLine.push(mes);
     },
-    shiftMessage (state) {
-      return state.messageLine.shift()
-    }
+    shiftMessage(state) {
+      return state.messageLine.shift();
+    },
   },
   actions: {
-  }
-})
+  },
+});
 
 export default store;

@@ -19,35 +19,35 @@
       >
         <v-card>
           <v-card-title>
-            <span 
-              class="headline" 
-              v-text="formTitle" 
+            <span
+              class="headline"
+              v-text="formTitle"
             />
           </v-card-title>
-          <v-form 
-            v-model="valid" 
-            ref="form" 
+          <v-form
+            v-model="valid"
+            ref="form"
             lazy-validation
           >
             <v-card-text>
               <v-container grid-list-md>
                 <v-row wrap>
-                  <v-col 
-                    cols="12" 
-                    sm="6" 
+                  <v-col
+                    cols="12"
+                    sm="6"
                     md="4"
                   >
-                    <v-text-field 
-                      :rules="[rules.required]" 
-                      v-model="editItem.o_no" 
-                      label="訂單號碼" 
+                    <v-text-field
+                      :rules="[rules.required]"
+                      v-model="editItem.o_no"
+                      label="訂單號碼"
                       maxlength="30"
                       counter="30"
                     ></v-text-field>
                   </v-col>
-                  <v-col 
-                    cols="12" 
-                    sm="6" 
+                  <v-col
+                    cols="12"
+                    sm="6"
                     md="4"
                   >
                     <v-menu
@@ -68,134 +68,134 @@
                           v-on="on"
                         ></v-text-field>
                       </template>
-                      <v-date-picker 
+                      <v-date-picker
                         v-model="editItem.o_date"
                         @input="menu = false"
                       ></v-date-picker>
                     </v-menu>
                   </v-col>
-                  <v-col 
-                    cols="12" 
+                  <v-col
+                    cols="12"
                     sm="6"
                     md="4"
                   >
-                    <v-text-field 
-                      :rules="[rules.required]" 
-                      v-model="editItem.o_seller_name" 
+                    <v-text-field
+                      :rules="[rules.required]"
+                      v-model="editItem.o_seller_name"
                       label="賣家名稱"
                       maxlength="50"
                       counter="50"
                     ></v-text-field>
                   </v-col>
-                  <v-col 
-                    cols="12" 
-                    sm="6" 
+                  <v-col
+                    cols="12"
+                    sm="6"
                     md="4"
                   >
-                    <v-text-field 
-                      :rules="[rules.required]" 
-                      v-model="editItem.o_buyer_name" 
+                    <v-text-field
+                      :rules="[rules.required]"
+                      v-model="editItem.o_buyer_name"
                       label="買家名稱"
                       maxlength="50"
                       counter="50"
                     ></v-text-field>
                   </v-col>
-                  <v-col 
-                    cols="12" 
-                    sm="6" 
+                  <v-col
+                    cols="12"
+                    sm="6"
                     md="4"
                   >
-                    <v-text-field 
-                      :rules="[rules.required]" 
-                      v-model="editItem.o_product_name" 
+                    <v-text-field
+                      :rules="[rules.required]"
+                      v-model="editItem.o_product_name"
                       label="產品名稱"
                       maxlength="50"
                       counter="50"
                     ></v-text-field>
                   </v-col>
-                  <v-col 
-                    cols="12" 
-                    sm="6" 
+                  <v-col
+                    cols="12"
+                    sm="6"
                     md="4"
                   >
-                    <v-text-field 
-                      :rules="[rules.required]" 
-                      v-model="editItem.o_product_part_no" 
-                      label="產品料號" 
+                    <v-text-field
+                      :rules="[rules.required]"
+                      v-model="editItem.o_product_part_no"
+                      label="產品料號"
                       maxlength="30"
                       counter="30"
                     ></v-text-field>
                   </v-col>
-                  <v-col 
-                    cols="12" 
-                    sm="6" 
+                  <v-col
+                    cols="12"
+                    sm="6"
                     md="4"
                   >
-                    <v-text-field 
-                      v-model="editItem.o_product_spec" 
+                    <v-text-field
+                      v-model="editItem.o_product_spec"
                       label="產品規格"
                       maxlength="100"
                       counter="100"
                     ></v-text-field>
                   </v-col>
-                  <v-col 
-                    cols="12" 
-                    sm="6" 
+                  <v-col
+                    cols="12"
+                    sm="6"
                     md="4"
                   >
-                    <v-text-field 
-                      type="number" 
-                      v-model="editItem.o_product_price" 
-                      label="產品價格" 
-                      :rules="[rules.required]" 
+                    <v-text-field
+                      type="number"
+                      v-model="editItem.o_product_price"
+                      label="產品價格"
+                      :rules="[rules.required]"
                       maxlength="17"
-                      @change="amount"  
+                      @change="amount"
                     ></v-text-field>
                   </v-col>
-                  <v-col 
-                    cols="12" 
-                    sm="6" 
+                  <v-col
+                    cols="12"
+                    sm="6"
                     md="4"
                   >
-                    <v-text-field 
-                      :rules="[rules.required]" 
-                      v-model="editItem.o_currency" 
-                      label="幣別" 
+                    <v-text-field
+                      :rules="[rules.required]"
+                      v-model="editItem.o_currency"
+                      label="幣別"
                       maxlength="10"
                       counter="10"
                     ></v-text-field>
                   </v-col>
-                  <v-col 
-                    cols="12" 
-                    sm="6" 
+                  <v-col
+                    cols="12"
+                    sm="6"
                     md="4"
                   >
-                    <v-text-field 
-                      :rules="[rules.required]" 
-                      v-model="editItem.o_quantity" 
+                    <v-text-field
+                      :rules="[rules.required]"
+                      v-model="editItem.o_quantity"
                       label="採購數量"
                       maxlength="11"
                       @change="amount"
                     ></v-text-field>
                   </v-col>
-                  <v-col 
-                    cols="12" 
-                    sm="6" 
+                  <v-col
+                    cols="12"
+                    sm="6"
                     md="4"
                   >
-                    <v-text-field 
-                      v-model="editItem.o_amount" 
+                    <v-text-field
+                      v-model="editItem.o_amount"
                       label="採購金額"
                       maxlength="20"
                     ></v-text-field>
                   </v-col>
-                  <v-col 
-                    cols="12" 
-                    sm="6" 
+                  <v-col
+                    cols="12"
+                    sm="6"
                     md="4"
                   >
-                    <v-text-field 
-                      v-model="editItem.o_note" 
+                    <v-text-field
+                      v-model="editItem.o_note"
                       label="付款條件"
                     ></v-text-field>
                   </v-col>
@@ -204,18 +204,18 @@
             </v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn 
-                color="blue darken-1" 
-                text 
+              <v-btn
+                color="blue darken-1"
+                text
                 @click="close"
               >
                 Cancel
               </v-btn>
-              <v-btn 
+              <v-btn
                 :disabled="!valid"
-                color="blue darken-1" 
-                text 
-                @click="save" 
+                color="blue darken-1"
+                text
+                @click="save"
               >
                 Save
               </v-btn>
@@ -250,10 +250,11 @@
 </template>
 
 <script>
-import { mapState, mapMutations, mapActions } from 'vuex'
+import { mapState, mapMutations, mapActions } from 'vuex';
+
 export default {
   props: ['dialog'],
-  data () {
+  data() {
     return {
       selected: [],
       queryId: null,
@@ -265,7 +266,7 @@ export default {
       lastPage: 1,
       totalItems: 0,
       footerProps: {
-        'items-per-page-options': [10, 25, 50, 100, 200, 500]
+        'items-per-page-options': [10, 25, 50, 100, 200, 500],
       },
       orders: [],
       loading: true,
@@ -274,204 +275,221 @@ export default {
           text: '訂單號碼',
           value: 'o_no',
           align: 'left',
-          sortable: false
+          sortable: false,
         },
-        { text:'訂單日期', value: 'o_date', width: "7%", align: "center" },
-        { text:'賣方名稱', value: 'o_seller_name', sortable: false, width: "10%", align: "center" },
-        { text:'買方名稱', value: 'o_buyer_name', sortable: false, align: "center" },
-        { text:'產品名稱', value: 'o_product_name', sortable: false, align: "center" },
-        { text:'產品料號', value: 'o_product_part_no', sortable: false },
-        { text:'產品規格', value: 'o_product_spec', sortable: false, align: "center", width: "30%" },
-        { text:'產品價格', value: 'o_product_price' },
-        { text:'幣別', value: 'o_currency', sortable: false, width: "1%" },
-        { text:'採購數量', value: 'o_quantity', width: "1%" },
-        { text:'採購金額', value: 'o_amount', width: "1%" },
-        { text:'付款條件', value: 'o_note', sortable: false },
-        { text: 'Actions', value: 'action', sortable: false, width: "1%" }
+        {
+          text: '訂單日期', value: 'o_date', width: '7%', align: 'center',
+        },
+        {
+          text: '賣方名稱', value: 'o_seller_name', sortable: false, width: '10%', align: 'center',
+        },
+        {
+          text: '買方名稱', value: 'o_buyer_name', sortable: false, align: 'center',
+        },
+        {
+          text: '產品名稱', value: 'o_product_name', sortable: false, align: 'center',
+        },
+        { text: '產品料號', value: 'o_product_part_no', sortable: false },
+        {
+          text: '產品規格', value: 'o_product_spec', sortable: false, align: 'center', width: '30%',
+        },
+        { text: '產品價格', value: 'o_product_price' },
+        {
+          text: '幣別', value: 'o_currency', sortable: false, width: '1%',
+        },
+        { text: '採購數量', value: 'o_quantity', width: '1%' },
+        { text: '採購金額', value: 'o_amount', width: '1%' },
+        { text: '付款條件', value: 'o_note', sortable: false },
+        {
+          text: 'Actions', value: 'action', sortable: false, width: '1%',
+        },
       ],
       editIndex: -1,
       editItem: {
-        'o_no': '',
-        'o_date': '',
-        'o_seller_name': '',
-        'o_buyer_name': '',
-        'o_product_name': '',
-        'o_product_part_no': '',
-        'o_product_spec': '',
-        'o_product_price': '',
-        'o_currency': 'USD',
-        'o_quantity': '',
-        'o_amount': '',
-        'o_note': ''
+        o_no: '',
+        o_date: '',
+        o_seller_name: '',
+        o_buyer_name: '',
+        o_product_name: '',
+        o_product_part_no: '',
+        o_product_spec: '',
+        o_product_price: '',
+        o_currency: 'USD',
+        o_quantity: '',
+        o_amount: '',
+        o_note: '',
       },
       default: {
-        'o_no': '',
-        'o_date': '',
-        'o_seller_name': '',
-        'o_buyer_name': '',
-        'o_product_name': '',
-        'o_product_part_no': '',
-        'o_product_spec': '',
-        'o_product_price': '',
-        'o_currency': 'USD',
-        'o_quantity': '',
-        'o_amount': '',
-        'o_note': ''
+        o_no: '',
+        o_date: '',
+        o_seller_name: '',
+        o_buyer_name: '',
+        o_product_name: '',
+        o_product_part_no: '',
+        o_product_spec: '',
+        o_product_price: '',
+        o_currency: 'USD',
+        o_quantity: '',
+        o_amount: '',
+        o_note: '',
       },
       rules: {
-        required: v => !!v || 'Required'
-      }
-    }
+        required: (v) => !!v || 'Required',
+      },
+    };
   },
   computed: {
     ...mapState({
-      q: state => state.filter.q,
-      filter: state => state.filter.search
+      q: (state) => state.filter.q,
+      filter: (state) => state.filter.search,
     }),
-    filterIsNotEmpty: function () {
-      return this.$store.getters['filter/filterIsNotEmpty']
-    },
-    formTitle() {
-      return this.editIndex === -1 ? '新增資料' : '修改資料'
-    },
+    filterIsNotEmpty: () => this.$store.getters['filter/filterIsNotEmpty'],
+    formTitle: () => (this.editIndex === -1 ? '新增資料' : '修改資料'),
   },
   watch: {
-    selected: function() {
+    selected: () => {
       // this.$emit('update:selected', this.selected)
-      this.$emit('setSelected', this.selected)
-      this.$emit('getDataType', 'orders')
+      this.$emit('setSelected', this.selected);
+      this.$emit('getDataType', 'orders');
     },
     options: {
       async handler() {
-        this.loading = true
-        let result
-        if(this.q || this.filterIsNotEmpty || this.queryId) {
+        this.loading = true;
+        let result;
+        if (this.q || this.filterIsNotEmpty || this.queryId) {
           await this.getSearch()
-            .then( data => result = data) 
+            .then((data) => {
+              result = data;
+            });
         } else {
           await this.getDataFromApi()
-            .then(data => result = data)
-            .catch(error => this.upFlash({type: 'error', content: error.message}))
+            .then((data) => {
+              result = data;
+            })
+            .catch((error) => this.upFlash({ type: 'error', content: error.message }));
         }
-        
         if (result) {
-          this.lastPage = result.last_page
-          this.orders = result.data
-          this.totalItems = result.total
+          this.lastPage = result.last_page;
+          this.orders = result.data;
+          this.totalItems = result.total;
         }
 
-        this.loading = false
+        this.loading = false;
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
   created() {
-    if (this.$route.query.id) this.queryId = this.$route.query.id
+    if (this.$route.query.id) this.queryId = this.$route.query.id;
   },
   mounted() {
   },
   methods: {
     ...mapMutations({
-      upFlash: 'pushMessage'
+      upFlash: 'pushMessage',
     }),
     ...mapActions({
-      search: 'filter/search'
+      search: 'filter/search',
     }),
     getDataFromApi() {
       return new Promise((resolve, reject) => {
-        this.axios.get('orders', {params: this.options})
-          .then(res => resolve(res.data))
-          .catch(error => reject(error))
-      })
+        this.axios.get('orders', { params: this.options })
+          .then((res) => resolve(res.data))
+          .catch((error) => reject(error));
+      });
     },
-    editedItem (item) {
-      this.editIndex = this.orders.indexOf(item)
-      this.editItem = Object.assign({}, item)
-      this.$emit('toggleDialog', true)
+    editedItem(item) {
+      this.editIndex = this.orders.indexOf(item);
+      this.editItem = { ...item };
+      this.$emit('toggleDialog', true);
     },
-    deleteItem (item) {
-      const index = this.orders.indexOf(item)
-      this.loading = true
-      confirm('確定刪除這筆資料？') && this.axios.delete(`orders/${item.id}`, item.id).then(() => {
-        this.orders.splice(index, 1)
-        this.upFlash({type: 'success', content: '成功刪除一筆資料'})
-        this.loading = false
-      }).catch(error => {
-        this.upFlash({type: 'error', content: error.message})
-        this.loading = false
-      })
+    deleteItem(item) {
+      const index = this.orders.indexOf(item);
+      this.loading = true;
+      // eslint-disable-next-line no-restricted-globals
+      if (confirm('確定刪除這筆資料？')) {
+        this.axios.delete(`orders/${item.id}`, item.id).then(() => {
+          this.orders.splice(index, 1);
+          this.upFlash({ type: 'success', content: '成功刪除一筆資料' });
+          this.loading = false;
+        }).catch((error) => {
+          this.upFlash({ type: 'error', content: error.message });
+          this.loading = false;
+        });
+      }
     },
-    close () {
-      this.$emit('toggleDialog', false)
+    close() {
+      this.$emit('toggleDialog', false);
       setTimeout(() => {
-        this.editItem = Object.assign({}, this.defaultItem)
-        this.editIndex = -1
+        this.editItem = { ...this.defaultItem };
+        this.editIndex = -1;
         // this.reset()
         this.$refs.form.resetValidation();
-      },300)
+      }, 300);
     },
-    save () {
-      if(!this.$refs.form.validate()) return
-      this.loading = true
-      let index = this.editIndex
-      let item = this.editItem
+    save() {
+      if (!this.$refs.form.validate()) return;
+      this.loading = true;
+      const index = this.editIndex;
+      const item = this.editItem;
       if (index !== -1) {
         this.axios.put(`orders/${item.id}`, item).then(() => {
-          Object.assign(this.orders, item)
-          this.upFlash({type: 'success', content: '成功修改一筆資料'})
-          this.loading = false
-        }).catch(error => {
-          this.upFlash({type: 'error', content: error.message})
-          this.loading = false
-        })
-      } else if(index === -1) {
+          Object.assign(this.orders, item);
+          this.upFlash({ type: 'success', content: '成功修改一筆資料' });
+          this.loading = false;
+        }).catch((error) => {
+          this.upFlash({ type: 'error', content: error.message });
+          this.loading = false;
+        });
+      } else if (index === -1) {
         this.axios.post('orders', item).then(() => {
-          this.upFlash({type: 'success', content: '成功新增一筆資料'})
+          this.upFlash({ type: 'success', content: '成功新增一筆資料' });
           if (this.totalItems % this.options.itemsPerPage === 0) {
-            this.options.page = this.lastPage + 1
-          } else if (this.options.page === this.lastPage){
-            this.orders.push(item)
+            this.options.page = this.lastPage + 1;
+          } else if (this.options.page === this.lastPage) {
+            this.orders.push(item);
           } else {
-            this.options.page = this.lastPage
+            this.options.page = this.lastPage;
           }
-          this.loading = false
-        }).catch(error => {
-          this.upFlash({type: 'error', content: error.message})
-          this.loading = false
-        })
+          this.loading = false;
+        }).catch((error) => {
+          this.upFlash({ type: 'error', content: error.message });
+          this.loading = false;
+        });
       }
-      this.close()
+      this.close();
     },
-    deleteArray () {
-      this.orders = this.orders.filter((el) => !this.selected.includes(el))
+    deleteArray() {
+      this.orders = this.orders.filter((el) => !this.selected.includes(el));
     },
     reset() {
-      this.$refs.form.reset()
+      this.$refs.form.reset();
     },
     amount() {
-      this.editItem.o_amount = Math.round(this.editItem.o_product_price * this.editItem.o_quantity * 1000) / 1000
+      this.editItem.o_amount = Math.round(
+        this.editItem.o_product_price * this.editItem.o_quantity * 1000,
+      ) / 1000;
     },
     getSearch() {
-      return this.search({type: 'orders', page: this.options, id: this.queryId})
+      return this.search({ type: 'orders', page: this.options, id: this.queryId });
     },
     dataAssign() {
       if (this.options.page !== 1) {
-        this.options.page = 1
+        this.options.page = 1;
       } else {
-        this.loading = true
+        this.loading = true;
         this.getSearch()
-          .then(res => {
-            this.orders = res.data
-            this.totalItems = res.total
-            this.loading = false
+          .then((res) => {
+            this.orders = res.data;
+            this.totalItems = res.total;
+            this.loading = false;
           })
-          .catch(err => {
-            this.upFlash({type: 'error', content: err.message})
-            this.loading = false
-          })
+          .catch((err) => {
+            this.upFlash({ type: 'error', content: err.message });
+            this.loading = false;
+          });
       }
-
-    }
-  }
-}
+    },
+  },
+};
 </script>

@@ -1,11 +1,13 @@
 <template>
-  <v-container 
+  <v-container
     fluid
-    class="back-full fill-height" 
-    :style="{backgroundImage: 'url(' + require('@/assets/photo-1487017159836-4e23ece2e4cf.jpg') + ')'}"
+    class="back-full fill-height"
+    :style="{
+      backgroundImage: 'url(~@/assets/photo-1487017159836-4e23ece2e4cf.jpg)'
+    }"
   >
-    <v-row 
-      justify="center" 
+    <v-row
+      justify="center"
       align="center"
     >
       <v-col cols="auto">
@@ -18,8 +20,8 @@
             class="pb-0 px-6"
           >
             <v-form ref="form">
-              <v-row 
-                wrap 
+              <v-row
+                wrap
                 justify="center"
               >
                 <v-col
@@ -34,11 +36,11 @@
                   ></v-text-field>
                 </v-col>
               </v-row>
-              <v-row 
+              <v-row
                 wrap
                 justify="center"
               >
-                <v-col 
+                <v-col
                   class="auth-text-field"
                 >
                   <v-text-field
@@ -54,26 +56,26 @@
             </v-form>
           </v-card-text>
           <v-card-actions>
-            <v-row 
-              justify="center" 
-              align="center" 
+            <v-row
+              justify="center"
+              align="center"
               class="d-flex flex-column"
             >
               <v-col cols="auto">
                 <v-btn
-                  color="primary" 
+                  color="primary"
                   @click="login"
                   :loading="loading"
                   large
                 >
                   登入
-                </v-btn>  
+                </v-btn>
               </v-col>
-              <v-col 
-                class="pt-0" 
+              <v-col
+                class="pt-0"
                 cols="auto"
               >
-                <!-- <router-link 
+                <!-- <router-link
                   class="body-2"
                   :to="{name: 'register'}"
                 >
@@ -89,54 +91,52 @@
 </template>
 
 <script>
-import { mapMutations, mapActions } from 'vuex'
+import { mapMutations, mapActions } from 'vuex';
+
 export default {
   data() {
     return {
       user: {
         name: '',
-        password: ''
+        password: '',
       },
       message: '',
       loading: false,
       loginError: false,
-      loginErrorMessage: ''
-    }
+      loginErrorMessage: '',
+    };
   },
   methods: {
     ...mapMutations({
-      upFlash: 'pushMessage'
+      upFlash: 'pushMessage',
     }),
     ...mapActions({
-      loginAction: 'auth/login'
+      loginAction: 'auth/login',
     }),
     login() {
-      const name = this.user.name
-      const password = this.user.password
+      const { name, password } = this.user;
 
-      if (!this.$refs.form.validate()) return 
-      
-      this.loading = true
+      if (!this.$refs.form.validate()) return;
+      this.loading = true;
       // actions 必須透過 dispatch 來調用
-      this.loginAction({name, password})
+      this.loginAction({ name, password })
         .then(() => {
-          this.upFlash({type: 'success', content: '成功登入'})
-          this.$router.push('/index')
+          this.upFlash({ type: 'success', content: '成功登入' });
+          this.$router.push('/index');
         })
-        .catch(err => {
-          if (typeof(err.response.status) !== 'undefined' && err.response.status == 401) {
-            this.upFlash({type: 'error', content: '帳號密碼錯誤'})
-            this.user.password = ''
-            this.loginError = true
+        .catch((err) => {
+          if (typeof (err.response.status) !== 'undefined' && err.response.status === 401) {
+            this.upFlash({ type: 'error', content: '帳號密碼錯誤' });
+            this.user.password = '';
+            this.loginError = true;
           } else {
-            this.upFlash({type: 'error', content: '發生錯誤，請重新登入'})
+            this.upFlash({ type: 'error', content: '發生錯誤，請重新登入' });
           }
-          this.loading = false
-        })
-      
-    }
-  }
-}
+          this.loading = false;
+        });
+    },
+  },
+};
 </script>
 
 <style>

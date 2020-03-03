@@ -2,9 +2,6 @@
   <v-container
     fluid
     class="back-full fill-height"
-    :style="{
-      backgroundImage: 'url(~@/assets/photo-1487017159836-4e23ece2e4cf.jpg)'
-    }"
   >
     <v-row
       justify="center"
@@ -139,12 +136,17 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
+@function asset($path) {
+  @return url("~@/assets/#{$path}");
+}
+
 .v-card__actions a {
   text-decoration: none;
 }
 
 .back-full {
+  background-image: asset('photo-1487017159836-4e23ece2e4cf.jpg');
   background-position: center;
   background-size: cover;
 }

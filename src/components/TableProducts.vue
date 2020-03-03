@@ -305,11 +305,15 @@ export default {
       q: (state) => state.filter.q,
       filter: (state) => state.filter.search,
     }),
-    filterIsNotEmpty: () => this.$store.getters['filter/filterIsNotEmpty'],
-    formTitle: () => (this.editIndex === -1 ? 'New Item' : 'Edit Item'),
+    filterIsNotEmpty() {
+      return this.$store.getters['filter/filterIsNotEmpty'];
+    },
+    formTitle() {
+      return this.editIndex === -1 ? 'New Item' : 'Edit Item';
+    },
   },
   watch: {
-    selected: () => {
+    selected() {
       // this.$emit('update:selected', this.selected)
       this.$emit('setSelected', this.selected);
       this.$emit('getDataType', 'products');

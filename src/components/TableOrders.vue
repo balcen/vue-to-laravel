@@ -343,11 +343,15 @@ export default {
       q: (state) => state.filter.q,
       filter: (state) => state.filter.search,
     }),
-    filterIsNotEmpty: () => this.$store.getters['filter/filterIsNotEmpty'],
-    formTitle: () => (this.editIndex === -1 ? '新增資料' : '修改資料'),
+    filterIsNotEmpty() {
+      return this.$store.getters['filter/filterIsNotEmpty'];
+    },
+    formTitle() {
+      return this.editIndex === -1 ? '新增資料' : '修改資料';
+    },
   },
   watch: {
-    selected: () => {
+    selected() {
       // this.$emit('update:selected', this.selected)
       this.$emit('setSelected', this.selected);
       this.$emit('getDataType', 'orders');

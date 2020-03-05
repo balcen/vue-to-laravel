@@ -18,8 +18,8 @@
       max-width="255"
     >
 
-      <v-card-text 
-        class="pb-0" 
+      <v-card-text
+        class="pb-0"
       >
         <div v-if="textFieldPrice">
           <p class="body-1 mb-0">產品價格</p>
@@ -88,9 +88,9 @@
                     v-on="on"
                   ></v-text-field>
                 </template>
-                <v-date-picker 
-                  v-model="earlierDate" 
-                  no-title 
+                <v-date-picker
+                  v-model="earlierDate"
+                  no-title
                   :max="laterDate"
                   @input="menu1=false"
                 ></v-date-picker>
@@ -112,9 +112,9 @@
                     v-on="on"
                   ></v-text-field>
                 </template>
-                <v-date-picker 
-                  v-model="laterDate" 
-                  no-title 
+                <v-date-picker
+                  v-model="laterDate"
+                  no-title
                   :min="earlierDate"
                   @input="menu2=false"
                 ></v-date-picker>
@@ -141,9 +141,9 @@
                     v-on="on"
                   ></v-text-field>
                 </template>
-                <v-date-picker 
-                  v-model="earlierExpDate" 
-                  no-title 
+                <v-date-picker
+                  v-model="earlierExpDate"
+                  no-title
                   :max="laterExpDate"
                   @input="menu3 = false"
                 ></v-date-picker>
@@ -165,9 +165,9 @@
                     v-on="on"
                   ></v-text-field>
                 </template>
-                <v-date-picker 
-                  v-model="laterExpDate" 
-                  no-title 
+                <v-date-picker
+                  v-model="laterExpDate"
+                  no-title
                   :min="earlierExpDate"
                   @input="menu4=false"
                 ></v-date-picker>
@@ -192,9 +192,10 @@
 </template>
 
 <script>
-import { mapMutations, mapActions } from 'vuex'
+import { mapMutations, mapActions } from 'vuex';
+
 export default {
-  data () {
+  data() {
     return {
       menu: false,
       menu1: false,
@@ -202,108 +203,108 @@ export default {
       menu3: false,
       menu4: false,
       url: '',
-    }
+    };
   },
   computed: {
     minPrice: {
-      get () {
-        return this.$store.state.filter.search.minPrice
+      get() {
+        return this.$store.state.filter.search.minPrice;
       },
-      set (val) {
-        this.$store.commit('filter/setMinPrice', val)
-      }
+      set(val) {
+        this.$store.commit('filter/setMinPrice', val);
+      },
     },
     maxPrice: {
-      get () {
-        return this.$store.state.filter.search.maxPrice
+      get() {
+        return this.$store.state.filter.search.maxPrice;
       },
-      set (val) {
-        this.$store.commit('filter/setMaxPrice', val)
-      }
+      set(val) {
+        this.$store.commit('filter/setMaxPrice', val);
+      },
     },
     minAmount: {
-      get () {
-        return this.$store.state.filter.search.minAmount
+      get() {
+        return this.$store.state.filter.search.minAmount;
       },
-      set (val) {
-        this.$store.commmit('filter/setMinAmount', val)
-      }
+      set(val) {
+        this.$store.commmit('filter/setMinAmount', val);
+      },
     },
     maxAmount: {
-      get () {
-        return this.$store.state.filter.search.maxAmount
+      get() {
+        return this.$store.state.filter.search.maxAmount;
       },
-      set (val) {
-        this.$store.commit('filter/setMaxAmount', val)
-      }
+      set(val) {
+        this.$store.commit('filter/setMaxAmount', val);
+      },
     },
     earlierDate: {
       get() {
-        return this.$store.state.filter.search.earlierDate
+        return this.$store.state.filter.search.earlierDate;
       },
-      set (date) {
-        this.$store.commit('filter/setEarlierDate', date)
-      }
+      set(date) {
+        this.$store.commit('filter/setEarlierDate', date);
+      },
     },
     laterDate: {
-      get () {
-        return this.$store.state.filter.search.laterDate
+      get() {
+        return this.$store.state.filter.search.laterDate;
       },
-      set (date) {
-        this.$store.commit('filter/setLaterDate', date)
-      }
+      set(date) {
+        this.$store.commit('filter/setLaterDate', date);
+      },
     },
     earlierExpDate: {
-      get () {
-        return this.$store.state.filter.search.earlierExpDate
+      get() {
+        return this.$store.state.filter.search.earlierExpDate;
       },
-      set (date) {
-        this.$store.commit('filter/earlierExpDate', date)
-      }
+      set(date) {
+        this.$store.commit('filter/earlierExpDate', date);
+      },
     },
     laterExpDate: {
-      get () {
-        return this.$store.state.filter.search.laterExpDate
+      get() {
+        return this.$store.state.filter.search.laterExpDate;
       },
-      set (date) {
-        this.$store.commit('filter/setLaterExpDate', date)
-      }
+      set(date) {
+        this.$store.commit('filter/setLaterExpDate', date);
+      },
     },
-    filterIsEmpty () {
-      return this.$store.getters['filter/filterIsEmpty']
+    filterIsEmpty() {
+      return this.$store.getters['filter/filterIsEmpty'];
     },
     textFieldPrice() {
-      return this.url === 'products' || this.url === 'orders' || this.url === 'invoices'
+      return this.url === 'products' || this.url === 'orders' || this.url === 'invoices';
     },
     textFieldDateAndAmount() {
-      return this.url === 'orders' || this.url === 'invoices'
+      return this.url === 'orders' || this.url === 'invoices';
     },
     textFieldExpDate() {
-      return this.url === 'invoices'
-    }
+      return this.url === 'invoices';
+    },
   },
-  created () {
-    this.url = this.$route.name
+  created() {
+    this.url = this.$route.name;
   },
   methods: {
     ...mapMutations({
-      setSearch: 'filter/setSearch'
+      setSearch: 'filter/setSearch',
     }),
     ...mapActions({
-      getSearch: 'filter/search'
+      getSearch: 'filter/search',
     }),
-    menuSearch () {
-      this.$emit('searchAll')
-    }
-  }
-}
+    menuSearch() {
+      this.$emit('searchAll');
+    },
+  },
+};
 </script>
 
 <style>
 /* 取消 input type number spinner */
-input[type=number]::-webkit-inner-spin-button, 
-input[type=number]::-webkit-outer-spin-button { 
-  -webkit-appearance: none; 
-  margin: 0; 
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 </style>

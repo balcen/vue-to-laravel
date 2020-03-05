@@ -1,14 +1,14 @@
-import Vue from 'vue'
-import axios from 'axios'
-import App from './App.vue'
-import store from './store/Store'
-import VueAxios from 'vue-axios'
-import VueRouter from 'vue-router'
-import VueCookies from 'vue-cookies'
-import router from './router'
+import Vue from 'vue';
+import axios from 'axios';
+import VueAxios from 'vue-axios';
+import VueRouter from 'vue-router';
+import VueCookies from 'vue-cookies';
+import store from './store/Store';
+import App from './App';
+import router from './router';
 import vuetify from './plugins/vuetify';
-import 'roboto-fontface/css/roboto/roboto-fontface.css'
-import '@mdi/font/css/materialdesignicons.css'
+import 'roboto-fontface/css/roboto/roboto-fontface.css';
+import '@mdi/font/css/materialdesignicons.css';
 
 // Set Vue global
 window.Vue = Vue;
@@ -25,7 +25,7 @@ axios.defaults.withCredentials = true;
 // }
 Vue.use(VueAxios, axios);
 
-// Vue Cookies 
+// Vue Cookies
 Vue.use(VueCookies);
 
 Vue.use(VueRouter);
@@ -36,5 +36,5 @@ new Vue({
   store,
   router,
   vuetify,
-  render: h => h(App)
+  render: (h) => h(App),
 }).$mount('#app');

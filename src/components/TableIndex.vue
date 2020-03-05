@@ -1,56 +1,56 @@
 <template>
   <div>
     <NavigationMain></NavigationMain>
-    <v-row 
-      dense 
-      no-gutters 
-      row 
+    <v-row
+      dense
+      no-gutters
+      row
       no-wrap
     >
       <v-col cols="6">
-        <v-tabs 
-          fixed-tabs 
+        <v-tabs
+          fixed-tabs
           color="red darken-1"
         >
-          <v-tab 
-            to="/index/clients" 
+          <v-tab
+            to="/index/clients"
             text
           >
             CLIENT
           </v-tab>
-          <v-tab 
-            to="/index/products" 
+          <v-tab
+            to="/index/products"
             text
           >
             PRODUCT
           </v-tab>
-          <v-tab 
-            to="/index/orders" 
+          <v-tab
+            to="/index/orders"
             text
           >
             ORDER
           </v-tab>
-          <v-tab 
-            to="/index/invoices" 
+          <v-tab
+            to="/index/invoices"
             text
           >
-            INVOICE 
+            INVOICE
           </v-tab>
         </v-tabs>
       </v-col>
       <v-spacer></v-spacer>
-      <v-col 
-        cols="4" 
+      <v-col
+        cols="4"
         class="d-flex align-center"
       >
-        <v-row 
-          no-gutters 
-          align="center" 
+        <v-row
+          no-gutters
+          align="center"
           justify="end"
         >
           <!-- Search bar -->
-          <v-col 
-            cols="6" 
+          <v-col
+            cols="6"
             class="mr-1 d-flex align-center"
           >
             <v-text-field
@@ -65,9 +65,9 @@
               @keyup.enter="searchAll"
             >
               <template v-slot:append>
-                <v-btn 
-                  text 
-                  icon 
+                <v-btn
+                  text
+                  icon
                   @click="searchAll"
                 >
                   <v-icon>search</v-icon>
@@ -75,24 +75,24 @@
               </template>
             </v-text-field>
           </v-col>
-          <v-col 
-            align-self="center" 
+          <v-col
+            align-self="center"
             cols="auto"
           >
             <FilterMenuComponent @searchAll="searchAll" />
-            <v-btn 
-              text 
+            <v-btn
+              text
               icon
-              @click.stop="toggleDialog(true)" 
+              @click.stop="toggleDialog(true)"
             >
               <v-icon>add</v-icon>
             </v-btn>
-            <v-btn 
-              text 
-              icon 
+            <v-btn
+              text
+              icon
               color="red darken-1"
               class="mr-2"
-              @click="multipleDelete" 
+              @click="multipleDelete"
               :disabled="selected.length==0"
             >
               <v-icon>delete</v-icon>
@@ -129,19 +129,19 @@
         <v-icon>mdi-chevron-up</v-icon>
       </v-btn>
     </transition>
-    
   </div>
 </template>
 
 <script>
-import FilterMenuComponent from './menu/FilterMenuComponent'
-import NavigationMain from './NavigationMain'
+import FilterMenuComponent from './menu/FilterMenuComponent';
+import NavigationMain from './NavigationMain';
+
 export default {
   components: {
     FilterMenuComponent,
-    NavigationMain
+    NavigationMain,
   },
-  data () {
+  data() {
     return {
       activeBtn: 1,
       color: '',
@@ -149,65 +149,66 @@ export default {
       selected: [],
       dataType: '',
       fabBtn: false,
-    }
+    };
   },
   computed: {
-    selectedValue: function() {
-      return this.selected.length < 1
-    },
+    selectedValue: () => (this.selected.length < 1),
     search: {
-      get () {
-        return this.$store.state.filter.q
+      get() {
+        return this.$store.state.filter.q;
       },
-      set (value) {
-        this.$store.commit('filter/setQuery', value)
-      }
-    }
+      set(value) {
+        this.$store.commit('filter/setQuery', value);
+      },
+    },
   },
   methods: {
-    toggleDialog (bol) {
-      this.dialog = bol
+    toggleDialog(bol) {
+      this.dialog = bol;
     },
-    multipleDelete () {
+    multipleDelete() {
       // let uri = `https://calm-ocean-96461.herokuapp.com/api/${this.dataType}DeleteAll`;
-      let id = this.getColumn(this.selected, 'id')
-      let num = id.length
-      let idStr = id.join()
-
-      confirm(`確定刪除${num}筆資料？`) && this.axios.delete(`${this.dataType}/DeleteAll`, {data: { ids: idStr }}).then(() => {
-        this.upFlash({ typa: 'success', content: `成功刪除${num}筆資料`})
-        this.$refs.table.deleteArray()
-      }).catch(error => {
-        this.upFlash({type: 'error', content: error.message})
-      })
+      const id = this.getColumn(this.selected, 'id');
+      const num = id.length;
+      const idStr = id.join();
+      // eslint-disable-next-line no-restricted-globals
+      if (confirm(`確定刪除${num}筆資料？`)) {
+        this.axios.delete(`${this.dataType}/DeleteAll`, { data: { ids: idStr } }).then(() => {
+          this.upFlash({ typa: 'success', content: `成功刪除${num}筆資料` });
+          this.$refs.table.deleteArray();
+        }).catch((error) => {
+          this.upFlash({ type: 'error', content: error.message });
+        });
+      }
     },
     getDataType(type) {
-      this.dataType = type
+      this.dataType = type;
     },
     // 取得array裡面的column
-    getColumn (array, column) {
+    getColumn(array, column) {
       // 取出Array裡面每一個元素的id，做成array
-      return array.map((el) => {return el[column]})
+      return array.map((el) => el[column]);
     },
     searchAll() {
-      this.$refs.table.dataAssign()
+      this.$refs.table.dataAssign();
     },
-    setSelected (sel) {
-      this.selected = sel
+    setSelected(sel) {
+      this.selected = sel;
     },
     onScroll(e) {
-      const top = e.target.scrollingElement.scrollTop
-      this.fabBtn = top > 20
+      const top = e.target.scrollingElement.scrollTop;
+      this.fabBtn = top > 20;
     },
     toTop() {
-      this.$vuetify.goTo(0, {easing: 'easeInOutCubic'})
-    }
-  }
-}
+      this.$vuetify.goTo(0, { easing: 'easeInOutCubic' });
+    },
+  },
+};
 </script>
 
 <style>
-.v-text-field.v-text-field--enclosed.v-input--dense:not(.v-text-field--solo).v-text-field--outlined .v-input__append-inner {
+.v-text-field.v-text-field--enclosed.v-input--dense:not(.v-text-field--solo)
+.v-text-field--outlined .v-input__append-inner {
   margin: auto;
   padding: 0;
 }

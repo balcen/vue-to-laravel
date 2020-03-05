@@ -1,17 +1,17 @@
-import Vue from 'vue'
-import ClientsComponent from '../components/TableClients'
-import ProductsComponent from '../components/TableProducts'
-import OrdersComponent from '../components/TableOrders'
-import InvoicesComponent from '../components/TableInvoices'
-import IndexComponent from '../components/TableIndex'
-import UploadComponent from '../components/UploadComponent'
-import RegisterComponent from '../components/RegisterComponent'
-import LoginComponent from '../components/LoginComponent'
-import DashboardComponent from '../components/DashboardComponent'
-import store from '../store/Store'
-import VueRouter from 'vue-router'
+import Vue from 'vue';
+import VueRouter from 'vue-router';
+import ClientsComponent from '../components/TableClients';
+import ProductsComponent from '../components/TableProducts';
+import OrdersComponent from '../components/TableOrders';
+import InvoicesComponent from '../components/TableInvoices';
+import IndexComponent from '../components/TableIndex';
+import UploadComponent from '../components/UploadComponent';
+import RegisterComponent from '../components/RegisterComponent';
+import LoginComponent from '../components/LoginComponent';
+import DashboardComponent from '../components/DashboardComponent';
+import store from '../store/Store';
 
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 
 // Routes
 const router = new VueRouter({
@@ -20,31 +20,31 @@ const router = new VueRouter({
     {
       name: 'register',
       path: '/register',
-      component: RegisterComponent
+      component: RegisterComponent,
     },
     {
       name: 'login',
       path: '/login',
       props(route) {
-        return route.query || {}
+        return route.query || {};
       },
-      component: LoginComponent
+      component: LoginComponent,
     },
     {
       name: 'dashboard',
       path: '/dashboard',
       component: DashboardComponent,
       meta: {
-        requiresAuth: true
-      }
+        requiresAuth: true,
+      },
     },
     {
       name: 'upload',
       path: '/upload',
       component: UploadComponent,
       meta: {
-        requiresAuth: true
-      }
+        requiresAuth: true,
+      },
     },
     {
       name: 'index',
@@ -52,7 +52,7 @@ const router = new VueRouter({
       component: IndexComponent,
       redirect: '/index/clients',
       meta: {
-        requiresAuth: true
+        requiresAuth: true,
       },
       children: [
         {
@@ -78,24 +78,24 @@ const router = new VueRouter({
           path: '/index/invoices',
           component: InvoicesComponent,
           props: true,
-        }
-      ]
+        },
+      ],
     },
-    {name: 'root', path: '/', redirect: '/upload'}
-  ]
-})
+    { name: 'root', path: '/', redirect: '/upload' },
+  ],
+});
 
 router.beforeEach((to, from, next) => {
-  if(to.matched.some(record => record.meta.requiresAuth)) {
-    if(store.getters['auth/isLoggedIn']) {
-      next()
-      return 
+  if (to.matched.some((record) => record.meta.requiresAuth)) {
+    if (store.getters['auth/isLoggedIn']) {
+      next();
+      return;
     }
-    next({name: 'login'})
-    store.commit('pushMessage', {type: 'error', content: '請先登入再繼續操作'})
-  }else {
-    next()
+    next({ name: 'login' });
+    store.commit('pushMessage', { type: 'error', content: '請先登入再繼續操作' });
+  } else {
+    next();
   }
-})
+});
 
-export default router
+export default router;

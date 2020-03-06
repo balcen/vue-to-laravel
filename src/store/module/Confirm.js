@@ -2,7 +2,6 @@ export default {
   namespaced: true,
   state: {
     dialog: false,
-    selected: [],
   },
   mutations: {
     toggleDialog(state, bol) {

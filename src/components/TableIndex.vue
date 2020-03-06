@@ -1,6 +1,7 @@
 <template>
   <div>
     <NavigationMain></NavigationMain>
+    <AlertConfirm :length="id.length" @allow="multipleDelete" @cancel="cancel"></AlertConfirm>
     <v-row
       dense
       no-gutters
@@ -92,7 +93,7 @@
               icon
               color="red darken-1"
               class="mr-2"
-              @click="multipleDelete"
+              @click.stop="tConfirmDialog(true)"
               :disabled="selected.length==0"
             >
               <v-icon>delete</v-icon>
@@ -107,8 +108,8 @@
           ref="table"
           :key="$route.fullPath"
           :dialog="dialog"
+          :selected.sync="selected"
           @toggleDialog="toggleDialog"
-          @getDataType="getDataType"
           @setSelected="setSelected"
         ></router-view>
       </v-col>
@@ -133,13 +134,16 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex';
 import FilterMenuComponent from './menu/FilterMenuComponent';
 import NavigationMain from './NavigationMain';
+import AlertConfirm from './AlertConfirm';
 
 export default {
   components: {
     FilterMenuComponent,
     NavigationMain,
+    AlertConfirm,
   },
   data() {
     return {
@@ -147,42 +151,49 @@ export default {
       color: '',
       dialog: false,
       selected: [],
-      dataType: '',
+      dataType: this.$route.name,
       fabBtn: false,
     };
   },
   computed: {
-    selectedValue: () => (this.selected.length < 1),
+    confirmDialog: {
+      get() {
+        return this.$store.state.confirm.dialog;
+      },
+      set(bol) {
+        this.$store.commit('confirm/toggleDialog', bol);
+      },
+    },
     search: {
       get() {
         return this.$store.state.filter.q;
       },
       set(value) {
-        this.$store.commit('filter/setQuery', value);
+        this.tConfirmDialog(value);
       },
+    },
+    selectedValue: () => (this.selected.length < 1),
+    id() {
+      return this.getColumn(this.selected, 'id');
     },
   },
   methods: {
+    ...mapMutations({
+      upFlash: 'pushMessage',
+      tConfirmDialog: 'confirm/toggleDialog',
+    }),
     toggleDialog(bol) {
       this.dialog = bol;
     },
     multipleDelete() {
       // let uri = `https://calm-ocean-96461.herokuapp.com/api/${this.dataType}DeleteAll`;
-      const id = this.getColumn(this.selected, 'id');
-      const num = id.length;
-      const idStr = id.join();
-      // eslint-disable-next-line no-restricted-globals
-      if (confirm(`確定刪除${num}筆資料？`)) {
-        this.axios.delete(`${this.dataType}/DeleteAll`, { data: { ids: idStr } }).then(() => {
-          this.upFlash({ typa: 'success', content: `成功刪除${num}筆資料` });
-          this.$refs.table.deleteArray();
-        }).catch((error) => {
-          this.upFlash({ type: 'error', content: error.message });
-        });
-      }
-    },
-    getDataType(type) {
-      this.dataType = type;
+      const idStr = this.id.join();
+      this.axios.delete(`${this.dataType}/deleteAll`, { data: { ids: idStr } }).then(() => {
+        this.upFlash({ type: 'success', content: `成功刪除${this.id.length}筆資料` });
+        this.$refs.table.deleteArray();
+      }).catch((error) => {
+        this.upFlash({ type: 'error', content: error.message });
+      });
     },
     // 取得array裡面的column
     getColumn(array, column) {
@@ -201,6 +212,9 @@ export default {
     },
     toTop() {
       this.$vuetify.goTo(0, { easing: 'easeInOutCubic' });
+    },
+    cancel() {
+      this.selected = [];
     },
   },
 };

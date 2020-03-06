@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import AuthStore from './module/Auth';
 import FilterStore from './module/Filter';
+import Confirm from './module/Confirm';
 
 Vue.use(Vuex);
 
@@ -12,6 +13,7 @@ const store = new Vuex.Store({
   modules: {
     auth: AuthStore,
     filter: FilterStore,
+    confirm: Confirm,
   },
   state: {
     messageLine: [],

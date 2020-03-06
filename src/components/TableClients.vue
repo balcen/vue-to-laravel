@@ -1,6 +1,6 @@
 <template>
   <v-data-table
-    v-model="selected"
+    v-model="tableSelected"
     :headers="headers"
     :items="clients"
     :options.sync="options"
@@ -170,10 +170,9 @@
 import { mapState, mapMutations, mapActions } from 'vuex';
 
 export default {
-  props: ['dialog'],
+  props: ['dialog', 'selected'],
   data() {
     return {
-      selected: [],
       queryId: null,
       valid: true,
       totalItems: 0,
@@ -242,6 +241,14 @@ export default {
       q: (store) => store.filter.q,
       filter: (store) => store.filter.search,
     }),
+    tableSelected: {
+      get() {
+        return this.selected;
+      },
+      set(val) {
+        this.$emit('update:selected', val);
+      },
+    },
     filterIsNotEmpty() {
       return this.$store.getters['filter/filterIsNotEmpty'];
     },
@@ -250,11 +257,6 @@ export default {
     },
   },
   watch: {
-    selected() {
-      // this.$emit('update:selected', this.selected);
-      this.$emit('setSelected', this.selected);
-      this.$emit('getDataType', 'clients');
-    },
     options: {
       async handler() {
         this.loading = true;
@@ -290,6 +292,7 @@ export default {
   methods: {
     ...mapMutations({
       upFlash: 'pushMessage',
+      updateSelected: 'table/updateSelected',
     }),
     ...mapActions({
       search: 'filter/search',

@@ -40,7 +40,6 @@ export default {
             const {
               token, account, tokenType, expiresAt,
             } = res.data;
-            console.log(res.data);
             const finalToken = `${tokenType} ${token}`;
             if (typeof (token) !== 'undefined') {
               if (typeof (expiresAt) !== 'undefined' && Array.length(expiresAt) > 0) {

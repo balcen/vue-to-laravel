@@ -268,7 +268,7 @@ export default {
         'items-per-page-options': [10, 25, 50, 100, 200, 500],
       },
       orders: [],
-      loading: true,
+      // loading: true,
       headers: [
         {
           text: '訂單號碼',
@@ -341,7 +341,16 @@ export default {
     ...mapState({
       q: (state) => state.filter.q,
       filter: (state) => state.filter.search,
+      tableLoading: (state) => state.confirm.loading,
     }),
+    loading: {
+      get() {
+        return this.tableLoading;
+      },
+      set(bol) {
+        this.tLoading(bol);
+      },
+    },
     tableSelected: {
       get() {
         return this.selected;
@@ -393,6 +402,7 @@ export default {
   methods: {
     ...mapMutations({
       upFlash: 'pushMessage',
+      tLoading: 'confirm/toggleLoading',
     }),
     ...mapActions({
       search: 'filter/search',

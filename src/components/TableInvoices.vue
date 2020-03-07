@@ -259,9 +259,9 @@
                 color="blue darken-1"
                 text
                 @click="save"
-               >
+              >
                 Save
-               </v-btn>
+              </v-btn>
             </v-card-actions>
           </v-form>
         </v-card>
@@ -320,7 +320,7 @@ export default {
         'items-per-page-options': [10, 25, 50, 100, 200, 500],
       },
       invoices: [],
-      loading: true,
+      // loading: true,
       headers: [
         {
           text: '發票號碼',
@@ -401,7 +401,16 @@ export default {
     ...mapState({
       q: (state) => state.filter.q,
       filter: (state) => state.filter.search,
+      tableLoading: (state) => state.confrim.loading,
     }),
+    loading: {
+      get() {
+        return this.tableLoading;
+      },
+      set(bol) {
+        this.tLoading(bol);
+      },
+    },
     tableSelected: {
       get() {
         return this.selected;
@@ -452,6 +461,7 @@ export default {
   methods: {
     ...mapMutations({
       upFlash: 'pushMessage',
+      tLoading: 'confirm/toggleLoading',
     }),
     ...mapActions({
       search: 'filter/search',

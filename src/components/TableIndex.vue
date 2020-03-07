@@ -181,18 +181,22 @@ export default {
     ...mapMutations({
       upFlash: 'pushMessage',
       tConfirmDialog: 'confirm/toggleDialog',
+      tLoading: 'confirm/toggleLoading',
     }),
     toggleDialog(bol) {
       this.dialog = bol;
     },
     multipleDelete() {
+      this.tLoading(true);
       // let uri = `https://calm-ocean-96461.herokuapp.com/api/${this.dataType}DeleteAll`;
       const idStr = this.id.join();
       this.axios.delete(`${this.dataType}/deleteAll`, { data: { ids: idStr } }).then(() => {
         this.upFlash({ type: 'success', content: `成功刪除${this.id.length}筆資料` });
+        this.tLoading(false);
         this.$refs.table.deleteArray();
       }).catch((error) => {
         this.upFlash({ type: 'error', content: error.message });
+        this.tLoading(false);
       });
     },
     // 取得array裡面的column

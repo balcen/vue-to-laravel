@@ -1,8 +1,11 @@
 <template>
   <v-dialog max-width="420px" v-model="dialog">
     <v-card>
-      <v-card-text class="py-5 title">
+      <v-card-text v-if="isMultiple" class="py-5 title">
         確定要刪除{{ length }}筆資料嗎？
+      </v-card-text>
+      <v-card-text v-else class="py-5 title">
+        確定要刪除這筆資料嗎？
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
@@ -14,6 +17,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
 export default {
   props: ['length'],
   data() {
@@ -21,18 +26,22 @@ export default {
     };
   },
   computed: {
+    ...mapState({
+      tableDialog: (state) => state.confirm.dialog,
+      isMultiple: (state) => state.confirm.isMultiple,
+    }),
     dialog: {
       get() {
-        return this.$store.state.confirm.dialog;
+        return this.tableDialog;
       },
       set(bol) {
-        this.$store.commit('confirm/toggleDialog', bol);
+        this.$store.commit('confirm/toggleDialog', { b: bol });
       },
     },
   },
   methods: {
     allow() {
-      this.$emit('allow');
+      this.$emit('allow', this.isMultiple);
       this.dialog = false;
     },
     cancel() {

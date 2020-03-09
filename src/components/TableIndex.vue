@@ -1,7 +1,11 @@
 <template>
   <div>
     <NavigationMain></NavigationMain>
-    <AlertConfirm :length="id.length" @allow="multipleDelete" @cancel="cancel"></AlertConfirm>
+    <AlertConfirm
+      :length="id.length"
+      @allow="remove"
+      @cancel="cancel">
+    </AlertConfirm>
     <v-row
       dense
       no-gutters
@@ -93,7 +97,7 @@
               icon
               color="red darken-1"
               class="mr-2"
-              @click.stop="tConfirmDialog(true)"
+              @click.stop="tConfirmDialog(true, { b: true, m: true })"
               :disabled="selected.length==0"
             >
               <v-icon>delete</v-icon>
@@ -186,7 +190,6 @@ export default {
       this.dialog = bol;
     },
     multipleDelete() {
-      // let uri = `https://calm-ocean-96461.herokuapp.com/api/${this.dataType}DeleteAll`;
       const idStr = this.id.join();
       this.axios.delete(`${this.dataType}/deleteAll`, { data: { ids: idStr } }).then(() => {
         this.upFlash({ type: 'success', content: `成功刪除${this.id.length}筆資料` });
@@ -215,6 +218,13 @@ export default {
     },
     cancel() {
       this.selected = [];
+    },
+    remove(bol) {
+      if (bol) {
+        this.multipleDelete();
+      } else {
+        this.$refs.table.deleteItem();
+      }
     },
   },
 };

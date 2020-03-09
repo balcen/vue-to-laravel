@@ -278,7 +278,7 @@
       </v-icon>
       <v-icon
         small
-        @click="deleteItem(item)"
+        @click.stop="tConfirmDialog({ b: true, m: false, id: item.id })"
       >
         delete
       </v-icon>
@@ -452,6 +452,7 @@ export default {
   methods: {
     ...mapMutations({
       upFlash: 'pushMessage',
+      tConfirmDialog: 'confirm/toggleDialog',
     }),
     ...mapActions({
       search: 'filter/search',
@@ -468,20 +469,24 @@ export default {
       this.editItem = { ...item };
       this.$emit('toggleDialog', true);
     },
-    deleteItem(item) {
-      const index = this.invoices.indexOf(item);
+    deleteItem() {
+      // const index = this.invoices.indexOf(item);
+      const { id } = this.$store.state.confirm;
       this.loading = true;
-      // eslint-disable-next-line no-restricted-globals
-      if (confirm('確定刪除這筆資料？')) {
-        this.axios.delete(`invoices/${item.id}`, item.id).then(() => {
-          this.invoices.splice(index, 1);
-          this.upFlash({ type: 'success', content: '成功刪除一筆資料' });
-          this.loading = false;
-        }).catch((error) => {
-          this.upFlash({ type: 'error', content: error.message });
-          this.loading = false;
-        });
-      }
+      this.axios.delete(`invoices/${id}`).then(() => {
+        // this.invoices.splice(index, 1);
+        this.upFlash({ type: 'success', content: '成功刪除一筆資料' });
+        this.getDataFromApi()
+          .then((d) => {
+            this.invoices = d.data;
+            this.totalItems = d.total;
+            this.lastPage = d.last_page;
+          });
+      }).catch((error) => {
+        this.upFlash({ type: 'error', content: error.message });
+      }).finally(() => {
+        this.loading = false;
+      });
     },
     close() {
       this.$emit('toggleDialog', false);

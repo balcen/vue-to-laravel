@@ -263,7 +263,11 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
+@function assets($path) {
+  @return url("~@/assets/#{$path}");
+}
+
 .upload-button-enter-active,
 .upload-button-leave-active {
   transition: opacity 0.5s;
@@ -279,7 +283,7 @@ export default {
 }
 
 .back {
-  background-image: url(https://images.unsplash.com/photo-1464278533981-50106e6176b1?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1567&q=80);
+  background-image: assets('photo-1464278533981-50106e6176b1.jpg');
   background-position: center;
   background-size: cover;
   height: -moz-calc(100% - 48px);

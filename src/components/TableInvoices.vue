@@ -470,11 +470,9 @@ export default {
       this.$emit('toggleDialog', true);
     },
     deleteItem() {
-      // const index = this.invoices.indexOf(item);
       const { id } = this.$store.state.confirm;
       this.loading = true;
       this.axios.delete(`invoices/${id}`).then(() => {
-        // this.invoices.splice(index, 1);
         this.upFlash({ type: 'success', content: '成功刪除一筆資料' });
         this.getDataFromApi()
           .then((d) => {
@@ -493,7 +491,6 @@ export default {
       setTimeout(() => {
         this.editItem = { ...this.defaultItem };
         this.editIndex = -1;
-        // this.reset()
         this.$refs.form.resetValidation();
       }, 300);
     },
@@ -537,9 +534,9 @@ export default {
       this.$refs.form.reset();
     },
     amount() {
-      // this.editItem.i_amount = Math.round(
-      // this.editItem.i_product_price * this.editItem.i_quantity * 1000
-      // ) / 1000
+      this.editItem.i_amount = Math.round(
+        this.editItem.i_product_price * this.editItem.i_quantity * 1000,
+      ) / 1000;
     },
     getSearch() {
       return this.search({ type: 'invoices', page: this.options, id: this.queryId });

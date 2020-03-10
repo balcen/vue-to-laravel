@@ -373,11 +373,9 @@ export default {
       this.$emit('toggleDialog', true);
     },
     deleteItem() {
-      // const index = this.products.indexOf(item);
       const { id } = this.$store.state.confirm;
       this.loading = true;
       this.axios.delete(`products/${id}`).then(() => {
-        // this.products.splice(index, 1);
         this.upFlash({ type: 'success', content: '成功刪除一筆資料' });
         this.getDataFromApi()
           .then((d) => {
@@ -396,18 +394,13 @@ export default {
       setTimeout(() => {
         this.editItem = { ...this.defaultItem };
         this.editIndex = -1;
-        // this.reset()
         this.$$refs.form.resetValidation();
       }, 300);
     },
     save() {
       if (!this.$refs.form.validate()) return;
       this.loading = true;
-      // let formData = new FormData;
-      // formData.append('item', JSON.stringify(this.editItem));
-      // formData.append('image', this.image);
       const index = this.editIndex;
-      // let item = {item: this.editItem, image: this.image};
       const item = this.editItem;
       if (index !== -1) {
         this.axios.put(`products/${item.id}`, item).then(() => {

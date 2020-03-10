@@ -411,11 +411,9 @@ export default {
       this.$emit('toggleDialog', true);
     },
     deleteItem() {
-      // const index = this.orders.indexOf(item);
       const { id } = this.$store.state.confirm;
       this.loading = true;
       this.axios.delete(`orders/${id}`).then(() => {
-        // this.orders.splice(index, 1);
         this.upFlash({ type: 'success', content: '成功刪除一筆資料' });
         this.getDataFromApi()
           .then((d) => {
@@ -434,7 +432,6 @@ export default {
       setTimeout(() => {
         this.editItem = { ...this.defaultItem };
         this.editIndex = -1;
-        // this.reset()
         this.$refs.form.resetValidation();
       }, 300);
     },

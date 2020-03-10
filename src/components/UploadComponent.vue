@@ -1,7 +1,6 @@
 <template>
 <div class="fill-height">
   <NavigationMian></NavigationMian>
-  <!-- <div class="pa-5 back"> -->
     <v-container
       class="back d-flex"
       fluid

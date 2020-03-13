@@ -72,13 +72,8 @@ export default {
       search.earlierExpeDate || search.laterExpDate
         ? [search.earlierExpeDate, search.laterExpDate] : null),
     filterIsNotEmpty(state) {
-      Object.keys(state.search).forEach((index) => {
-        if (state.search[index] !== null && state.search[index] !== undefined && state.search[index] !== '') {
-          return true;
-        }
-        return false;
-      });
-      return state.q !== '';
+      if (!state.q) return true;
+      return Object.values(state.search).some((x) => x !== null && x !== '' && x !== undefined);
     },
   },
 };

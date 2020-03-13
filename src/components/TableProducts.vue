@@ -198,7 +198,7 @@
     </v-icon>
     <v-icon
       small
-      @click="deleteItem(item)"
+      @click.stop="tConfirmDialog({ b: true, m: false, id: item.id })"
     >
       delete
     </v-icon>
@@ -339,7 +339,7 @@ export default {
               result = data;
             });
         } else {
-          await this.getDataFromApi()
+          await this.getDataFromApi({ p: this.options, n: 'products' })
             .then((data) => {
               result = data;
             })
@@ -364,55 +364,48 @@ export default {
   methods: {
     ...mapMutations({
       upFlash: 'pushMessage',
-      tLoading: 'confirm/toggleLoading',
+      tConfirmDialog: 'confirm/toggleDialog',
     }),
     ...mapActions({
       search: 'filter/search',
+      getDataFromApi: 'crud/getDataFromApi',
     }),
-    getDataFromApi() {
-      return new Promise((resolve, reject) => {
-        this.axios.get('products', { params: this.options })
-          .then((res) => resolve(res.data))
-          .catch((error) => reject(error));
-      });
-    },
+    // getDataFromApi() {
+    //   return new Promise((resolve, reject) => {
+    //     this.axios.get('products', { params: this.options })
+    //       .then((res) => resolve(res.data))
+    //       .catch((error) => reject(error));
+    //   });
+    // },
     editedItem(item) {
       this.editIndex = this.products.indexOf(item);
       this.editItem = { ...item };
       this.$emit('toggleDialog', true);
     },
-    deleteItem(item) {
-      const index = this.products.indexOf(item);
+    deleteItem() {
+      const { id } = this.$store.state.confirm;
       this.loading = true;
-      // eslint-disable-next-line no-restricted-globals
-      if (confirm('確定刪除這筆資料？')) {
-        this.axios.delete(`products/${item.id}`, item.id).then(() => {
-          this.products.splice(index, 1);
-          this.upFlash({ type: 'success', content: '成功刪除一筆資料' });
-          this.loading = false;
-        }).catch((error) => {
-          this.upFlash({ type: 'error', content: error.message });
-          this.loading = false;
-        });
-      }
+      this.axios.delete(`products/${id}`).then(() => {
+        this.upFlash({ type: 'success', content: '成功刪除一筆資料' });
+        this.refreshData();
+      }).catch((error) => {
+        this.upFlash({ type: 'error', content: error.message });
+      }).finally(() => {
+        this.loading = false;
+      });
     },
     close() {
       this.$emit('toggleDialog', false);
       setTimeout(() => {
         this.editItem = { ...this.defaultItem };
         this.editIndex = -1;
-        // this.reset()
         this.$$refs.form.resetValidation();
       }, 300);
     },
     save() {
       if (!this.$refs.form.validate()) return;
       this.loading = true;
-      // let formData = new FormData;
-      // formData.append('item', JSON.stringify(this.editItem));
-      // formData.append('image', this.image);
       const index = this.editIndex;
-      // let item = {item: this.editItem, image: this.image};
       const item = this.editItem;
       if (index !== -1) {
         this.axios.put(`products/${item.id}`, item).then(() => {
@@ -479,6 +472,17 @@ export default {
             this.loading = false;
           });
       }
+    },
+    refreshData() {
+      this.getDataFromApi({ n: 'products', p: this.options })
+        .then((d) => {
+          this.products = d.data;
+          this.totalItems = d.total;
+          this.lastPage = d.last_page;
+        })
+        .catch((e) => {
+          this.upFlash({ type: 'error', content: e.message });
+        });
     },
   },
 };

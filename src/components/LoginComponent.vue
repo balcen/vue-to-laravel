@@ -8,9 +8,6 @@
       align="center"
     >
       <v-col cols="auto">
-        <!-- <h1 class="pt-5 display-2 text-center blue--text text--darken-4">
-          LOGIN
-        </h1> -->
         <v-card flat>
           <h1 class="pt-4 text-center">登入</h1>
           <v-card-text

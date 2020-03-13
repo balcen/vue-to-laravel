@@ -81,7 +81,7 @@ const router = new VueRouter({
         },
       ],
     },
-    { name: 'root', path: '/', redirect: '/upload' },
+    { name: 'root', path: '/', redirect: '/login' },
   ],
 });
 

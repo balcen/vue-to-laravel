@@ -267,7 +267,7 @@ export default {
               result = data;
             });
         } else {
-          await this.getDataFromApi()
+          await this.getDataFromApi({ p: this.options, n: 'clients' })
             .then((data) => {
               result = data;
             })
@@ -296,14 +296,15 @@ export default {
     }),
     ...mapActions({
       search: 'filter/search',
+      getDataFromApi: 'crud/getDataFromApi',
     }),
-    getDataFromApi() {
-      return new Promise((resolve, reject) => {
-        this.axios.get('clients', { params: this.options })
-          .then((res) => resolve(res.data))
-          .catch((error) => reject(error));
-      });
-    },
+    // getDataFromApi() {
+    //   return new Promise((resolve, reject) => {
+    //     this.axios.get('clients', { params: this.options })
+    //       .then((res) => resolve(res.data))
+    //       .catch((error) => reject(error));
+    //   });
+    // },
     editedItem(item) {
       this.editIndex = this.clients.indexOf(item);
       this.editItem = { ...this.clients[this.editIndex] };
@@ -314,12 +315,7 @@ export default {
       this.loading = true;
       this.axios.delete(`clients/${id}`).then(() => {
         this.upFlash({ type: 'success', content: '成功刪除一筆資料' });
-        this.getDataFromApi()
-          .then((d) => {
-            this.clients = d.data;
-            this.totalItems = d.total;
-            this.lastPage = d.last_page;
-          });
+        this.refreshData();
       }).catch((error) => {
         this.upFlash({ type: 'error', content: error.message });
       }).finally(() => {
@@ -391,6 +387,17 @@ export default {
             this.loading = false;
           });
       }
+    },
+    refreshData() {
+      this.getDataFromApi({ p: this.options, n: 'clients' })
+        .then((d) => {
+          this.clients = d.data;
+          this.totalItems = d.total;
+          this.lastPage = d.last_page;
+        })
+        .catch((e) => {
+          this.upFlash({ type: 'error', content: e.message });
+        });
     },
   },
 };

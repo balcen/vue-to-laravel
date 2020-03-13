@@ -3,6 +3,7 @@ import Vuex from 'vuex';
 import AuthStore from './module/Auth';
 import FilterStore from './module/Filter';
 import Confirm from './module/Confirm';
+import Crud from './module/Crud';
 
 Vue.use(Vuex);
 
@@ -14,6 +15,7 @@ const store = new Vuex.Store({
     auth: AuthStore,
     filter: FilterStore,
     confirm: Confirm,
+    crud: Crud,
   },
   state: {
     messageLine: [],

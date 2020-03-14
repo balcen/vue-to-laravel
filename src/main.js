@@ -19,7 +19,7 @@ Vue.config.devtools = true;
 // Vue Axios
 axios.defaults.baseURL = process.env.VUE_APP_LOCAL_URL;
 axios.defaults.withCredentials = true;
-axios.defaults.timeout = 30000;
+axios.defaults.timeout = 300000;
 // const token = localStorage.getItem('token')
 // if(token) {
 //   axios.defaults.headers.common['Authorization'] = token

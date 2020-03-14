@@ -97,7 +97,7 @@
               icon
               color="red darken-1"
               class="mr-2"
-              @click.stop="tConfirmDialog(true, { b: true, m: true })"
+              @click.stop="tConfirmDialog({ b: true, m: true })"
               :disabled="selected.length==0"
             >
               <v-icon>delete</v-icon>
@@ -172,8 +172,8 @@ export default {
       get() {
         return this.$store.state.filter.q;
       },
-      set(value) {
-        this.tConfirmDialog(value);
+      set(v) {
+        this.setQuery(v);
       },
     },
     selectedValue: () => (this.selected.length < 1),
@@ -184,22 +184,26 @@ export default {
   methods: {
     ...mapMutations({
       upFlash: 'pushMessage',
+      setQuery: 'filter/setQuery',
       tConfirmDialog: 'confirm/toggleDialog',
-      tLoading: 'confirm/toggleLoading',
+      setLoading: 'crud/setLoading',
     }),
     toggleDialog(bol) {
       this.dialog = bol;
     },
     multipleDelete() {
       const idStr = this.id.join();
-      this.axios.delete(`${this.dataType}/deleteAll`, { data: { ids: idStr } }).then(() => {
-        this.upFlash({ type: 'success', content: `成功刪除${this.id.length}筆資料` });
-        this.tLoading(false);
-        this.$refs.table.deleteArray();
-      }).catch((error) => {
-        this.upFlash({ type: 'error', content: error.message });
-        this.tLoading(false);
-      });
+      this.axios.delete(`${this.dataType}/deleteAll`, { data: { ids: idStr } })
+        .then(() => {
+          this.upFlash({ type: 'success', content: `成功刪除${this.id.length}筆資料` });
+          this.setLoading(false);
+          this.$refs.table.deleteArray();
+        }).catch((error) => {
+          this.upFlash({ type: 'error', content: error.message });
+          this.setLoading(false);
+        }).finally(() => {
+          this.cancel();
+        });
     },
     // 取得array裡面的column
     getColumn(array, column) {
@@ -207,7 +211,7 @@ export default {
       return array.map((el) => el[column]);
     },
     searchAll() {
-      this.$refs.table.dataAssign();
+      this.$refs.table.refreshData();
     },
     setSelected(sel) {
       this.selected = sel;

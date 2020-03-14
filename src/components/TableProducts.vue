@@ -303,14 +303,14 @@ export default {
     ...mapState({
       q: (state) => state.filter.q,
       filter: (state) => state.filter.search,
-      tableLoading: (state) => state.confirm.loading,
+      tableLoading: (state) => state.crud.loading,
     }),
     loading: {
       get() {
         return this.tableLoading;
       },
       set(bol) {
-        this.tLoading(bol);
+        this.setLoading(bol);
       },
     },
     tableSelected: {
@@ -330,28 +330,29 @@ export default {
   },
   watch: {
     options: {
-      async handler() {
-        this.loading = true;
-        let result;
-        if (this.q || this.filterIsNotEmpty || this.queryId) {
-          await this.getSearch()
-            .then((data) => {
-              result = data;
-            });
-        } else {
-          await this.getDataFromApi({ p: this.options, n: 'products' })
-            .then((data) => {
-              result = data;
-            })
-            .catch((error) => this.upFlash({ type: 'error', content: error.message }));
-        }
+      handler() {
+        // this.loading = true;
+        // let result;
+        // if (this.q || this.filterIsNotEmpty || this.queryId) {
+        //   await this.getSearch()
+        //     .then((data) => {
+        //       result = data;
+        //     });
+        // } else {
+        //   await this.getDataFromApi({ p: this.options, n: 'products' })
+        //     .then((data) => {
+        //       result = data;
+        //     })
+        //     .catch((error) => this.upFlash({ type: 'error', content: error.message }));
+        // }
 
-        if (result) {
-          this.lastPage = result.last_page;
-          this.products = result.data;
-          this.totalItems = result.total;
-        }
-        this.loading = false;
+        // if (result) {
+        //   this.lastPage = result.last_page;
+        //   this.products = result.data;
+        //   this.totalItems = result.total;
+        // }
+        // this.loading = false;
+        this.refreshData();
       },
       deep: true,
     },
@@ -365,10 +366,12 @@ export default {
     ...mapMutations({
       upFlash: 'pushMessage',
       tConfirmDialog: 'confirm/toggleDialog',
+      setLoading: 'crud/setLoading',
     }),
     ...mapActions({
       search: 'filter/search',
       getDataFromApi: 'crud/getDataFromApi',
+      opChange: 'crud/optionChange',
     }),
     // getDataFromApi() {
     //   return new Promise((resolve, reject) => {
@@ -456,32 +459,34 @@ export default {
     getSearch() {
       return this.search({ type: 'products', page: this.options, id: this.queryId });
     },
-    dataAssign() {
-      if (this.options.page !== 1) {
-        this.options.page = 1;
-      } else {
-        this.loading = true;
-        this.getSearch()
-          .then((res) => {
-            this.products = res.data;
-            this.totalItems = res.total;
-            this.loading = false;
-          })
-          .catch((err) => {
-            this.upFlash({ type: 'error', content: err.message });
-            this.loading = false;
-          });
-      }
-    },
+    // dataAssign() {
+    //   if (this.options.page !== 1) {
+    //     this.options.page = 1;
+    //   } else {
+    //     this.loading = true;
+    //     this.getSearch()
+    //       .then((res) => {
+    //         this.products = res.data;
+    //         this.totalItems = res.total;
+    //         this.loading = false;
+    //       })
+    //       .catch((err) => {
+    //         this.upFlash({ type: 'error', content: err.message });
+    //         this.loading = false;
+    //       });
+    //   }
+    // },
     refreshData() {
-      this.getDataFromApi({ n: 'products', p: this.options })
+      this.loading = true;
+      this.opChange({ p: this.options, n: this.$route.name, q: this.queryId })
         .then((d) => {
           this.products = d.data;
           this.totalItems = d.total;
           this.lastPage = d.last_page;
-        })
-        .catch((e) => {
+        }).catch((e) => {
           this.upFlash({ type: 'error', content: e.message });
+        }).finally(() => {
+          this.loading = false;
         });
     },
   },

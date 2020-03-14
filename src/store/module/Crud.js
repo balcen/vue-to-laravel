@@ -2,9 +2,16 @@ import axios from 'axios';
 
 export default {
   namespaced: true,
-  state: {},
+  state: {
+    loading: false,
+  },
+  mutations: {
+    setLoading(state, bol) {
+      state.loading = bol;
+    },
+  },
   actions: {
-    getDataFromApi({}, payload) {
+    getDataFromApi(context, payload) {
       return new Promise((resolve, reject) => {
         axios.get(payload.n, { params: payload.p })
           .then((d) => resolve(d.data))
@@ -12,9 +19,10 @@ export default {
       });
     },
     optionChange({ dispatch, rootGetters }, payload) {
-      if (rootGetters.filter.filterIsNotEmpty) {
-        dispatch('filter/search', payload.search, { root: true });
+      if (rootGetters['filter/filterIsNotEmpty'] || payload.q) {
+        return dispatch('filter/search', payload, { root: true });
       }
+      return dispatch('getDataFromApi', payload);
     },
   },
 };

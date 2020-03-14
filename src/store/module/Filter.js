@@ -45,7 +45,7 @@ export default {
     },
   },
   actions: {
-    search({ state, getters }, { type, page, id }) {
+    search({ state, getters }, { n: type, p: page, q: id }) {
       return new Promise((resolve, reject) => {
         const options = Object.assign(page, {
           p: getters.price,
@@ -72,7 +72,7 @@ export default {
       search.earlierExpeDate || search.laterExpDate
         ? [search.earlierExpeDate, search.laterExpDate] : null),
     filterIsNotEmpty(state) {
-      if (!state.q) return true;
+      if (state.q) return true;
       return Object.values(state.search).some((x) => x !== null && x !== '' && x !== undefined);
     },
   },

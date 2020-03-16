@@ -8,7 +8,10 @@
       align="center"
     >
       <v-col cols="auto">
-        <v-card flat>
+        <v-card
+          flat
+          color="rgba(255,255,255,0.9)"
+        >
           <h1 class="pt-4 text-center">登入</h1>
           <v-card-text
             class="pb-0 px-6"
@@ -147,7 +150,7 @@ export default {
 }
 
 .back-full {
-  background-image: asset('photo-1487017159836-4e23ece2e4cf.jpg');
+  background-image: asset('philippe-toupet-R261qkc-nDE-unsplash.jpg');
   background-position: center;
   background-size: cover;
 }

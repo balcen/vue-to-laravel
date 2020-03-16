@@ -9,7 +9,7 @@
         align="center"
         justify="center"
       >
-        <transition name="fade" mode="out-in">
+        <transition name="fade">
           <v-col
             v-if="!dataType"
             cols="8"
@@ -22,7 +22,7 @@
               id="dropzone"
               color="rgba(0, 0, 0, 0.2)"
               class="mx-auto d-flex align-center justify-center"
-              min-height="212px"
+              min-height="250px"
               max-width="550px"
             >
               <v-card-text
@@ -33,7 +33,7 @@
                 @dragover="dragover"
               >
                 <v-icon size="60px">save_alt</v-icon>
-                <p class="body-1 mt-2">Select a file or drag here</p>
+                <p class="body-1 mt-2 text-body">Select a file or drag here</p>
                 <v-btn
                   class="mt-3"
                   color="red darken-1 white--text"
@@ -45,7 +45,7 @@
                 <transition name="fade">
                   <v-row justify="center">
                     <v-col cols="12">
-                      <p class="subtitle-2 text-center font-regular">
+                      <p class="text-body subtitle-2 text-center font-regular">
                         Scanning...
                       </p>
                     </v-col>
@@ -284,12 +284,13 @@ export default {
 }
 
 .back {
-  background-image: assets('photo-1464278533981-50106e6176b1.jpg');
+  background-image: assets('philippe-toupet-kziofuhLx1s-unsplash.jpg');
   background-position: center;
   background-size: cover;
-  height: -moz-calc(100% - 48px);
-  height: -webkit-calc(100% - 48px);
-  height: calc(100% - 48px);
+  height: 100%;
+  // height: -moz-calc(100% - 48px);
+  // height: -webkit-calc(100% - 48px);
+  // height: calc(100% - 48px);
 }
 
 #dropzone.v-card:hover {
@@ -307,6 +308,10 @@ export default {
 .fade-enter,
 .fade-leave {
   opacity: 0;
+}
+
+.text-body {
+  color: #D7CEA3;
 }
 
 </style>

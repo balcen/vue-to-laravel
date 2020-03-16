@@ -119,12 +119,16 @@ export default {
           this.$router.push('/index');
         })
         .catch((err) => {
-          if (typeof (err.response.status) !== 'undefined' && err.response.status === 401) {
-            this.upFlash({ type: 'error', content: '帳號密碼錯誤' });
-            this.user.password = '';
-            this.loginError = true;
+          if (err.response) {
+            if (typeof (err.response.status) !== 'undefined' && err.response.status === 401) {
+              this.upFlash({ type: 'error', content: '帳號密碼錯誤' });
+              this.user.password = '';
+              this.loginError = true;
+            } else {
+              this.upFlash({ type: 'error', content: '發生錯誤，請重新登入' });
+            }
           } else {
-            this.upFlash({ type: 'error', content: '發生錯誤，請重新登入' });
+            this.upFlash({ type: 'error', content: err.message });
           }
           this.loading = false;
         });

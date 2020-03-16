@@ -9,19 +9,21 @@
         align="center"
         justify="center"
       >
-        <transition name="fade">
+        <transition name="fade" mode="out-in">
           <v-col
             v-if="!dataType"
-            cols="5"
+            cols="8"
+            class="justify-center"
           >
-            <p class="display-3 red--text text--darken-1 text-center">
+            <p class="display-2 red--text text--darken-1 text-center">
               File Upload & Preview
             </p>
             <v-card
               id="dropzone"
               color="rgba(0, 0, 0, 0.2)"
-              class="d-flex align-center justify-center"
+              class="mx-auto d-flex align-center justify-center"
               min-height="212px"
+              max-width="550px"
             >
               <v-card-text
                 v-if="!loading"
@@ -43,8 +45,8 @@
                 <transition name="fade">
                   <v-row justify="center">
                     <v-col cols="12">
-                      <p class="subtitle-1 text-center font-regular">
-                        File Scanning...
+                      <p class="subtitle-2 text-center font-regular">
+                        Scanning...
                       </p>
                     </v-col>
                     <v-col cols="6">
@@ -115,7 +117,7 @@
                   </v-row>
                   <v-row justify="center">
                     <v-col cols="auto">
-                      <span>
+                      <span class="body-1">
                         總共<b v-text="dataLength" />筆資料
                       </span>
                     </v-col>

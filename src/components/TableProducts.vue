@@ -331,27 +331,6 @@ export default {
   watch: {
     options: {
       handler() {
-        // this.loading = true;
-        // let result;
-        // if (this.q || this.filterIsNotEmpty || this.queryId) {
-        //   await this.getSearch()
-        //     .then((data) => {
-        //       result = data;
-        //     });
-        // } else {
-        //   await this.getDataFromApi({ p: this.options, n: 'products' })
-        //     .then((data) => {
-        //       result = data;
-        //     })
-        //     .catch((error) => this.upFlash({ type: 'error', content: error.message }));
-        // }
-
-        // if (result) {
-        //   this.lastPage = result.last_page;
-        //   this.products = result.data;
-        //   this.totalItems = result.total;
-        // }
-        // this.loading = false;
         this.refreshData();
       },
       deep: true,
@@ -373,13 +352,6 @@ export default {
       getDataFromApi: 'crud/getDataFromApi',
       opChange: 'crud/optionChange',
     }),
-    // getDataFromApi() {
-    //   return new Promise((resolve, reject) => {
-    //     this.axios.get('products', { params: this.options })
-    //       .then((res) => resolve(res.data))
-    //       .catch((error) => reject(error));
-    //   });
-    // },
     editedItem(item) {
       this.editIndex = this.products.indexOf(item);
       this.editItem = { ...item };
@@ -459,23 +431,6 @@ export default {
     getSearch() {
       return this.search({ type: 'products', page: this.options, id: this.queryId });
     },
-    // dataAssign() {
-    //   if (this.options.page !== 1) {
-    //     this.options.page = 1;
-    //   } else {
-    //     this.loading = true;
-    //     this.getSearch()
-    //       .then((res) => {
-    //         this.products = res.data;
-    //         this.totalItems = res.total;
-    //         this.loading = false;
-    //       })
-    //       .catch((err) => {
-    //         this.upFlash({ type: 'error', content: err.message });
-    //         this.loading = false;
-    //       });
-    //   }
-    // },
     refreshData() {
       this.loading = true;
       this.opChange({ p: this.options, n: this.$route.name, q: this.queryId })

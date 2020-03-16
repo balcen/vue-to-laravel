@@ -69,10 +69,11 @@
               dense
               @keyup.enter="searchAll"
             >
-              <template v-slot:append>
+              <template slot="append">
                 <v-btn
                   text
                   icon
+                  class="align-self-center ma-0"
                   @click="searchAll"
                 >
                   <v-icon>search</v-icon>
@@ -246,5 +247,10 @@ export default {
 
 .v-text-field--rounded > .v-input__control > .v-input__slot {
   padding-right: 12px !important;
+}
+
+.v-input__append-inner {
+  margin: 0 !important;
+  align-self: center !important;
 }
 </style>

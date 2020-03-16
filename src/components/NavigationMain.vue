@@ -1,8 +1,10 @@
 <template>
-  <v-toolbar
+  <v-app-bar
     flat
     dense
+    :absolute="isUpload"
     class="shrink"
+    color="rgba(0,0,0,0)"
   >
     <v-toolbar-title
       to="/upload"
@@ -55,7 +57,7 @@
     >
       <v-icon>logout</v-icon>
     </v-btn>
-  </v-toolbar>
+  </v-app-bar>
 </template>
 
 <script>
@@ -70,6 +72,9 @@ export default {
     ...mapGetters({
       isLoggedIn: 'auth/isLoggedIn',
     }),
+    isUpload() {
+      return this.$route.name === 'upload';
+    },
   },
   methods: {
     ...mapActions({

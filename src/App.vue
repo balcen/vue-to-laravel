@@ -93,8 +93,12 @@ html {
   overflow-y: auto !important;
 }
 
-body {
-  font-family: 'Roboto', 'Noto Sans TC';
+html, body {
+  font-family: Roboto, "Microsoft Yahei", 微軟正黑體, "Noto Sans TC";
+}
+
+#app {
+  font-family: Roboto, "Microsoft Yahei", 微軟正黑體, "Noto Sans TC";
 }
 
 /* v-btn 加上 link 的底線 */

@@ -311,7 +311,12 @@ export default {
 }
 
 .text-body {
-  color: #D7CEA3;
+  color: #D9D9D9;
+  text-shadow: 1px 1px 2px #888;
+}
+
+.display-2.text-center {
+  text-shadow: 2px 2px 3px #888;
 }
 
 </style>

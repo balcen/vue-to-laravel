@@ -89,3 +89,9 @@ export default {
   },
 };
 </script>
+
+<style>
+a.red--text.text--darken-1:before {
+  background-color: transparent;
+}
+</style>
